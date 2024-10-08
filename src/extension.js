@@ -430,7 +430,7 @@ const Gemini = GObject.registerClass(
                 return GLib.base64_encode(contents);
             } catch (error) {
                 // eslint-disable-next-line prefer-template
-                log('Erro ao ler o arquivo: ' + error);
+                this.gnomeNotify('Erro ao ler o arquivo: ' + error);
                 return null;
             }
         }
