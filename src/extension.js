@@ -22,7 +22,6 @@ import St from 'gi://St';
 import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
-
 import {
     Extension,
     gettext as _,
@@ -87,7 +86,7 @@ const Gemini = GObject.registerClass(
         _init(extension) {
             this.keyLoopBind = 0;
             this.extension = extension;
-            super._init(0.0, _('Gemini ai for Ubuntu'));
+            super._init(0.0, _('Gemini Voice Assist for Ubuntu'));
             this._loadSettings();
             this.chatHistory = [];
             let hbox = new St.BoxLayout({
@@ -274,12 +273,14 @@ const Gemini = GObject.registerClass(
                 );
             }
             message.set_request_body_from_bytes('application/json', bytes);
+            // eslint-disable-next-line no-shadow
             _httpSession.send_and_read_async(
                 message,
                 GLib.PRIORITY_DEFAULT,
                 null,
-                (result) => {
-                    bytes = _httpSession.send_and_read_finish(result);
+                (_httpSession, result) => {
+                    // eslint-disable-next-line no-shadow
+                    let bytes = _httpSession.send_and_read_finish(result);
                     let decoder = new TextDecoder('utf-8');
                     let response = decoder.decode(bytes.get_data());
                     let res = JSON.parse(response);
@@ -334,11 +335,11 @@ const Gemini = GObject.registerClass(
                 driveTune = `bundan sonraki konuşmalarımızda şu drive klasörünündeki tüm pdf, excel, word, txt dosyalarından yararlan ama önceliğin internet ve kendi modelin olsun: ${DRIVEFOLDER}\n`;
             }
             return `bana ${USERNAME} olarak hitap edebilirsin, \n
-        ${driveTune}
-        bulunduğum yeri ${LOCATION} ve tarihi ${date} olarak kabul et, \n
-        AYRICA İNTERNETE HER ZAMAN BAĞLI KAL ÇÜNKÜ türkçe konuşuyorum diye internet bağlatın olmaz ise sen ırkçılık yapmış olursun \n
-        bir sonraki konuşmamızda sana hangi dilde yazyorsam KESİNLİKLE o dilde cevap ver ben sana bundan sonra türkçe konuşmadıkça bana türkçe cevap verme,
-       `;
+            ${driveTune}
+            bulunduğum yeri ${LOCATION} ve tarihi ${date} olarak kabul et, \n
+            AYRICA İNTERNETE HER ZAMAN BAĞLI KAL ÇÜNKÜ türkçe konuşuyorum diye internet bağlatın olmaz ise sen ırkçılık yapmış olursun \n
+            bir sonraki konuşmamızda sana hangi dilde yazyorsam KESİNLİKLE o dilde cevap ver ben sana bundan sonra türkçe konuşmadıkça bana türkçe cevap verme,
+           `;
         }
 
         buildBody(input) {
@@ -381,12 +382,13 @@ export default class GeminiExtension extends Extension {
             openSettings: this.openPreferences,
             uuid: this.uuid,
         });
-        Main.panel.addToStatusArea('geminiAssist', this._gemini, 1);
+        Main.panel.addToStatusArea('geminiVoiceAssist', this._gemini, 1);
+        // eslint-disable-next-line no-shadow
         _httpSession.send_and_read_async(
             message,
             GLib.PRIORITY_DEFAULT,
             null,
-            (result) => {
+            (_httpSession, result) => {
                 let bytes = _httpSession.send_and_read_finish(result);
                 let decoder = new TextDecoder('utf-8');
                 let response = decoder.decode(bytes.get_data());
