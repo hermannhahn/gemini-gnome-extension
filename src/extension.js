@@ -181,7 +181,7 @@ const Gemini = GObject.registerClass(
             // const cmd = ['ts-node', '/scripts/gemini/src/app.ts'];
             const cmd = [
                 'notify-send',
-                '--text',
+                'Success',
                 'Comando executado com sucesso!',
             ];
 
