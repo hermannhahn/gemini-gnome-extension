@@ -423,8 +423,7 @@ const Gemini = GObject.registerClass(
                 audioFile;
 
             // Converte o arquivo de áudio para base64
-            // eslint-disable-next-line no-undef
-            const audioBase64 = encodeFileToBase64(audioPath);
+            const audioBase64 = this.encodeFileToBase64(audioPath);
             if (!audioBase64) {
                 this.gnomeNotify('Falha ao converter arquivo de áudio.');
                 return;
