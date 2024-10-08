@@ -22,15 +22,8 @@ fi
 
 # Update version-name in metadata.json
 echo "Updating version in metadata.json..."
-# Update version in metadata.json
-# Reduce version to 2 digits
-major_version=$(echo $VERSION | cut -d. -f1)
-minor_version=$(echo $VERSION | cut -d. -f2)
-rversion="$major_version.$minor_version"
-jq ".version = \"$rversion\"" metadata.json > metadata.json.new
+jq ".version = \"$VERSION\"" metadata.json > metadata.json.new
 mv metadata.json.new metadata.json
-sed -i "s/version\-name:.*$/version-name: $VERSION/" metadata.json
-#jq ".version-name = \"$VERSION\"" metadata.json > metadata.json.new
 echo "Updated version in metadata.json"
 
 # Add, commit and push files
