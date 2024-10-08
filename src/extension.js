@@ -513,7 +513,6 @@ const Gemini = GObject.registerClass(
                         this.gnomeNotify('Erro na requisição: ' + stderr);
                     }
                 } catch (e) {
-                    // eslint-disable-next-line prefer-template
                     this.gnomeNotify(
                         // eslint-disable-next-line prefer-template
                         'Erro ao processar resposta: ' + e.message,
