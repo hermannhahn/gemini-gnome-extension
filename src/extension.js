@@ -218,7 +218,7 @@ const Gemini = GObject.registerClass(
         }
 
         aiResponse(text) {
-            let aiResponse = _(`<b>Gemini: </b> Thinking...`);
+            let aiResponse = _('<b>Gemini: </b> Thinking...');
             const inputCategory = new PopupMenu.PopupMenuItem('');
             const aiResponseItem = new PopupMenu.PopupMenuItem('');
             inputCategory.label.clutter_text.set_markup(
@@ -230,7 +230,7 @@ const Gemini = GObject.registerClass(
             inputCategory.style_class += ' m-w-100';
             aiResponseItem.style_class += ' m-w-100';
 
-            aiResponseItem.connect('activate', (_self) => {
+            aiResponseItem.connect('activate', (self) => {
                 this.extension.clipboard.set_text(
                     St.ClipboardType.CLIPBOARD,
                     aiResponseItem.label.text,
@@ -242,6 +242,7 @@ const Gemini = GObject.registerClass(
             );
             this.chatSection.addMenuItem(inputCategory);
             this.chatSection.addMenuItem(aiResponseItem);
+
             this.getAireponse(aiResponseItem, text);
         }
 
