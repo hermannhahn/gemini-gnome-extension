@@ -212,6 +212,8 @@ const Gemini = GObject.registerClass(
             this.executeCommand(
                 "notify-send -a 'Gemini Voice Assist' 'Thinking...'",
             );
+            const audioTranscribe = 'Ola, boa tarde!';
+            this.aiResponse(audioTranscribe);
             // Stop audio recording and send to Gemini
         }
 
