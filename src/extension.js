@@ -175,7 +175,7 @@ const Gemini = GObject.registerClass(
             this.chatSection.addMenuItem(aiResponseItem);
         }
 
-        executarComando(cmd: string) {
+        executarComando(cmd) {
             const command = cmd;
             const process = GLib.spawn_async(
                 null, // pasta de trabalho
