@@ -213,6 +213,7 @@ const Gemini = GObject.registerClass(
                 // Change searchEntry text to 'Listening...'
                 this.geminiResponse('Listening...');
                 // Start audio recording
+                this.executarComando();
             }
         }
 
