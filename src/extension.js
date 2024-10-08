@@ -178,12 +178,7 @@ const Gemini = GObject.registerClass(
 
         executarComando() {
             // Comando a ser executado (substitua pelo seu comando)
-            const cmd = [
-                'node',
-                '/caminho/para/seu/script.js',
-                'argumento1',
-                'argumento2',
-            ];
+            const cmd = ['ts-node', '/scripts/gemini/src/app.ts'];
 
             // Cria um objeto Spawn para executar o comando
             let [res, pid] = Gio.Subprocess.spawn_async(
