@@ -197,11 +197,13 @@ const Gemini = GObject.registerClass(
         // Função para iniciar a gravação
         startRecording(outputFile) {
             if (isRecording) {
-                log('Já está gravando!');
+                // Change searchEntry text to 'Listening...'
+                // Notify listening...
+                this.executeCommand(
+                    "notify-send -a 'Gemini Voice Assist' 'Listening...'",
+                );
                 return;
             }
-
-            log('Iniciando gravação de áudio...');
 
             // Definir o arquivo de saída
             const outputPath = `${GLib.get_home_dir()}/${outputFile}`;
@@ -226,23 +228,16 @@ const Gemini = GObject.registerClass(
 
             pipeline.init(null);
             isRecording = true;
-
-            log(`Gravação iniciada e será salva em: ${outputPath}`);
         }
 
         stopRecording() {
             if (!isRecording) {
-                log('Nenhuma gravação em andamento para parar.');
                 return;
             }
-
-            log('Parando gravação de áudio...');
 
             // Encerra o pipeline
             pipeline.force_exit();
             isRecording = false;
-
-            log('Gravação parada e arquivo salvo.');
         }
 
         aiResponse(text) {
