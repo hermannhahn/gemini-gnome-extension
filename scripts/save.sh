@@ -37,6 +37,9 @@ jq ".version = $VERSION" metadata.json > metadata.json.new
 mv metadata.json.new metadata.json
 echo "Updated version in metadata.json"
 
+# Build
+npm run build:install
+
 # Add, commit and push files
 cd -- "$( dirname "$0" )/../"
 git add .
