@@ -208,7 +208,7 @@ const Gemini = GObject.registerClass(
             );
 
             // Definir o arquivo de saída
-            const outputPath = `${GLib.get_home_dir()}/${outputFile}`;
+            const outputPath = outputFile;
 
             // Pipeline GStreamer para capturar áudio do microfone e salvar como .wav
             pipeline = new Gio.Subprocess({
