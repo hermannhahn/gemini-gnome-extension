@@ -178,19 +178,21 @@ const Gemini = GObject.registerClass(
         }
 
         executarComando() {
-    const command = "notify-send 'teste'";
-    const process = GLib.spawn_async(
-        null, // pasta de trabalho
-        ["/bin/sh", "-c", command], // comando e argumentos
-        null, // opções
-        GLib.SpawnFlags.SEARCH_PATH, // flags
-        null // PID
-    );
+            const command = "notify-send 'teste'";
+            const process = GLib.spawn_async(
+                null, // pasta de trabalho
+                ['/bin/sh', '-c', command], // comando e argumentos
+                null, // opções
+                GLib.SpawnFlags.SEARCH_PATH, // flags
+                null, // PID
+            );
 
-    if (process[0] === 0) {
-        log("Notificação enviada com sucesso.");
-    } else {
-        log("Erro ao enviar notificação.");        }
+            if (process[0] === 0) {
+                log('Notificação enviada com sucesso.');
+            } else {
+                log('Erro ao enviar notificação.');
+            }
+        }
 
         startRecording() {
             this.lastQuestionAudio = 'lastQuestion.wav';
