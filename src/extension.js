@@ -203,7 +203,6 @@ const Gemini = GObject.registerClass(
                 // Notify listening...
                 this.executeCommand(
                     "notify-send -a 'Gemini Voice Assist' 'teste'",
-                    //"notify-send -u 'critical' -a 'Gemini Voice Assist' 'teste'",
                 );
             }
         }
