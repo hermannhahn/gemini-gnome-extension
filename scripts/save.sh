@@ -20,8 +20,12 @@ if [ -z "$VERSION" ]; then
   exit 1
 fi
 
-# Update version in metadata.json
+# Update version-name in metadata.json
 echo "Updating version in metadata.json..."
+sed -i "s/\"version-name\": [0-9]\+/\"version-name\": $VERSION/" metadata.json
+# Reduce version to 2 digits
+VERSION=$(echo $VERSION | cut -d'.' -f1-2)
+# Update version in metadata.json
 sed -i "s/\"version\": [0-9]\+/\"version\": $VERSION/" metadata.json
 
 # Add, commit and push files

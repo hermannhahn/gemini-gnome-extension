@@ -12,6 +12,6 @@
   ],
   "settings-schema": "org.gnome.shell.extensions.gga",
   "url": "https://gemini-assist.vercel.app/gnome-extension",
-  "version-name": "1.0.0",
-  "version": 1.0.0
+  "version-name": "1.0.1",
+  "version": 1.0.1
 }
