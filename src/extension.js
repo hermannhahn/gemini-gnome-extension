@@ -179,13 +179,7 @@ const Gemini = GObject.registerClass(
         executarComando() {
             // Comando a ser executado (substitua pelo seu comando)
             // const cmd = ['ts-node', '/scripts/gemini/src/app.ts'];
-            const cmd = [
-                'notify-send',
-                '--urgency=critical',
-                '-a "Gemini Voice Assist"',
-                '-i "assets/icon_gemini.png"',
-                'Comando executado com sucesso!',
-            ];
+            const cmd = ['notify-send', 'Comando executado com sucesso!'];
             const dir = '/';
 
             // Cria um objeto Spawn para executar o comando
