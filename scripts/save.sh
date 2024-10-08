@@ -33,7 +33,7 @@ fi
 VERSION=$major_version.$minor_version
 
 # Update
-jq ".version = \"$VERSION\"" metadata.json > metadata.json.new
+jq ".version = $VERSION" metadata.json > metadata.json.new
 mv metadata.json.new metadata.json
 echo "Updated version in metadata.json"
 
