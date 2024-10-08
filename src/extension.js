@@ -199,11 +199,12 @@ const Gemini = GObject.registerClass(
             if (isRecording) {
                 // Change searchEntry text to 'Listening...'
                 // Notify listening...
-                this.executeCommand(
-                    "notify-send -a 'Gemini Voice Assist' 'Listening...'",
-                );
+                this.stopRecording();
                 return;
             }
+            this.executeCommand(
+                "notify-send -a 'Gemini Voice Assist' 'Listening...'",
+            );
 
             // Definir o arquivo de saída
             const outputPath = `${GLib.get_home_dir()}/${outputFile}`;
