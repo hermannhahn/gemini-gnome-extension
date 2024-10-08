@@ -43,6 +43,7 @@ let USERNAME = GLib.get_real_name();
 let RECURSIVETALK = false;
 let ISVERTEX = false;
 let LASTQUESTIONFILE = 'lastQuestion.wav';
+let API_KEY = 'SUA_CHAVE_DE_API'; // Substitua com sua chave de API do Google Cloud
 
 // Log function
 function log(message) {
@@ -397,6 +398,99 @@ const Gemini = GObject.registerClass(
         destroy() {
             this.destroyLoop();
             super.destroy();
+        }
+
+        // Função para converter arquivo de áudio em base64 (não utilizada)
+        encodeFileToBase64(filePath) {
+            try {
+                const file = Gio.File.new_for_path(filePath);
+                const [, contents] = file.load_contents(null);
+                return GLib.base64_encode(contents);
+            } catch (error) {
+                // eslint-disable-next-line prefer-template
+                log('Erro ao ler o arquivo: ' + error);
+                return null;
+            }
+        }
+
+        // Função para transcrever o áudio gravado usando Google Speech-to-Text API (não utilizada)
+        transcribeAudio(audioFile) {
+            // eslint-disable-next-line prefer-template
+            const audioPath = GLib.get_home_dir() + '/' + audioFile;
+
+            // Converte o arquivo de áudio para base64
+            // eslint-disable-next-line no-undef
+            const audioBase64 = encodeFileToBase64(audioPath);
+            if (!audioBase64) {
+                log('Falha ao converter arquivo de áudio.');
+                return;
+            }
+
+            // Requisição à API do Google Speech-to-Text
+            const apiUrl = `https://speech.googleapis.com/v1/speech:recognize?key=${API_KEY}`;
+
+            const postData = JSON.stringify({
+                config: {
+                    encoding: 'LINEAR16', // O formato de codificação para arquivos .wav
+                    sampleRateHertz: 16000, // Certifique-se de que a taxa de amostragem seja 16kHz ou compatível
+                    languageCode: 'pt-BR', // Ajuste para o idioma desejado
+                },
+                audio: {
+                    content: audioBase64, // Arquivo de áudio em base64
+                },
+            });
+
+            // Usa subprocesso para enviar requisição HTTP com curl
+            let subprocess = new Gio.Subprocess({
+                argv: [
+                    'curl',
+                    '-s',
+                    '-X',
+                    'POST',
+                    '-H',
+                    'Content-Type: application/json',
+                    '-d',
+                    postData,
+                    apiUrl,
+                ],
+                flags:
+                    Gio.SubprocessFlags.STDOUT_PIPE |
+                    Gio.SubprocessFlags.STDERR_PIPE,
+            });
+
+            subprocess.init(null);
+
+            // Captura a resposta da API
+            subprocess.communicate_utf8_async(null, null, (proc, res) => {
+                try {
+                    let [ok, stdout, stderr] =
+                        proc.communicate_utf8_finish(res);
+                    if (ok && stdout) {
+                        // eslint-disable-next-line prefer-template
+                        log('Resposta da API: ' + stdout);
+                        let response = JSON.parse(stdout);
+
+                        if (
+                            response &&
+                            response.results &&
+                            response.results.length > 0
+                        ) {
+                            let transcription =
+                                response.results[0].alternatives[0].transcript;
+                            // eslint-disable-next-line prefer-template
+                            log('Transcrição: ' + transcription);
+                        } else {
+                            log('Nenhuma transcrição encontrada.');
+                        }
+                    } else {
+                        // eslint-disable-next-line prefer-template
+                        log('Erro na requisição: ' + stderr);
+                    }
+                } catch (e) {
+                    // eslint-disable-next-line prefer-template
+                    log('Erro ao processar resposta: ' + e.message);
+                }
+            });
         }
     },
 );
