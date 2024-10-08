@@ -1,0 +1,57 @@
+/* Add your custom extension styling here */
+.chatLog {
+	color: black;
+}
+.chatType {
+	color: black;
+	font-weight: bold;
+}
+.ai-entry {
+	width: 250px;
+	height: 20px !important;
+	border-radius: 100px;
+}
+.clear-button {
+	width: 24px;
+}
+.copy-button {
+	width: 24px;
+}
+.m-w-100 {
+	max-width: 960px;
+	text-wrap: wrap;
+}
+.chat-scroll-section {
+	max-height: 800px;
+}
+.gemini-icon {
+	background-image: url("assets/icon_gemini.png");
+	background-size: 24px;
+	width: 24px;
+	height: 24px;
+	padding: 0px;
+}
+.mic-icon {
+	background-image: url("assets/icon_mic.png");
+	background-size: 24px;
+	width: 24px;
+	height: 24px;
+	padding: 0px;
+}
+.mic-icon:checked {
+	background-image: url("assets/icon_mic_on.png");
+}
+.settings-icon {
+	/*background-image: url("assets/settings.png");
+    background-size: 20px;*/
+	width: 15px;
+	height: 15px;
+	color: var(--headerbar-fg-color);
+	padding: 1px;
+}
+.trash-icon {
+	/*background-image: url("assets/trashcan.png");
+    background-size: 30px;*/
+	width: 20px;
+	height: 20px;
+}

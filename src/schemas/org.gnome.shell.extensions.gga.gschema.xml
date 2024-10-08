@@ -1,0 +1,43 @@
+<schemalist gettext-domain="gnome-shell-extensions">
+  <schema id="org.gnome.shell.extensions.geminiaiubuntu"
+      path="/org/gnome/shell/extensions/geminiaiubuntu/">
+
+    <key name="gemini-api-key" type="s">
+        <default>"KEY"</default>
+        <summary>Gemini api key for working</summary>
+        <description>
+            You need to set api key for this extention
+        </description>
+    </key>
+    <key name="vertex-project-id" type="s">
+        <default>""</default>
+        <summary>Vertex Project ID</summary>
+        <description>
+            Vertex Project ID on Google developer console ex:(gen-lang-client-012345678)
+        </description>
+    </key>
+     <key name="drive-folder" type="s">
+        <default>""</default>
+        <summary>Custom files folder for vertex</summary>
+        <description>
+            You can set drive folder for this extention
+        </description>
+    </key>
+    <key name="log-history" type="b">
+        <default>false</default>
+        <summary>Remember talk history</summary>
+        <description>
+           it will remeember talk history
+        </description>
+    </key>
+    <key name="vertex-enabled" type="b">
+        <default>false</default>
+        <summary>Enable Vertex</summary>
+        <description>
+           it will enables Vertex API instead of pur gemini
+        </description>
+    </key>
+
+   
+  </schema>
+</schemalist>

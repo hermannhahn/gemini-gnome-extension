@@ -1,7 +1,9 @@
 {
+  "name": "gemini-gnome-extension",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "save": "git add . && git commit -m '1.0.0' && git push",
+    "save": "./scripts/save.sh",
     "build": "./scripts/build.sh",
     "build:dev": "./scripts/build.sh --unsafe-reload",
     "build:install": "./scripts/build.sh --install",
@@ -9,6 +11,22 @@
     "check:format": "prettier --check src/**/*.js"
   },
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hermannhahn/gemini-gnome-extension.git"
+  },
+  "keywords": [
+    "AI",
+    "Voice",
+    "Assist",
+    "Gemini"
+  ],
+  "author": "Hermann Hahn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hermannhahn/gemini-gnome-extension/issues"
+  },
+  "homepage": "https://github.com/hermannhahn/gemini-gnome-extension#readme",
   "devDependencies": {
     "@eslint/js": "^9.3.0",
     "@girs/gjs": "^4.0.0-beta.14",
@@ -17,6 +35,17 @@
     "eslint-plugin-jsdoc": "^48.2.6",
     "eslint": "^9.3.0",
     "globals": "^15.6.0",
-    "prettier": "^3.2.5"
+    "prettier": "^3.2.5",
+    "@google/generative-ai": "^0.21.0",
+    "bcrypt": "^5.1.1",
+    "cheerio": "^1.0.0",
+    "child_process": "^1.0.2",
+    "dotenv": "^16.4.5",
+    "https-proxy-agent": "^3.0.0",
+    "keypress": "^0.2.1",
+    "microsoft-cognitiveservices-speech-sdk": "^1.40.0",
+    "node-record-lpcm16": "^1.0.1",
+    "readline": "^1.3.0",
+    "sqlite3": "^5.1.7"
   }
 }

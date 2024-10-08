@@ -1,0 +1,12 @@
+*.gresource*
+*.shell-extension/
+*.zip
+*~
+dist/
+gschemas.compiled
+locale/
+node_modules/
+last_answer.wav
+lastAnswer.wav
+lastQuestion.wav
+memory.db
