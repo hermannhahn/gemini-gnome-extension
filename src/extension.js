@@ -353,7 +353,7 @@ export default class GeminiExtension extends Extension {
             openSettings: this.openPreferences,
             uuid: this.uuid,
         });
-        Main.panel.addToStatusArea('geminiAiUbuntu', this._gemini, 1);
+        Main.panel.addToStatusArea('geminiAssist', this._gemini, 1);
         _httpSession.send_and_read_async(
             message,
             GLib.PRIORITY_DEFAULT,

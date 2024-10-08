@@ -21,6 +21,18 @@ if [ -z "$VERSION" ]; then
 fi
 
 # Update version-name in metadata.json
+minor_version=$(echo "$VERSION" | cut -d'.' -f2)
+major_version=($(echo "$VERSION" | cut -d'.' -f1))
+if [ "$minor_version" -eq 9 ]; then
+  minor_version=0
+  major_version=$((major_version + 1))
+else
+  minor_version=$((minor_version + 1))
+fi
+
+VERSION=$major_version;
+
+# Update
 jq ".version = \"$VERSION\"" metadata.json > metadata.json.new
 mv metadata.json.new metadata.json
 echo "Updated version in metadata.json"
