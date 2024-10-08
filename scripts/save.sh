@@ -29,7 +29,7 @@ minor_version=$(echo $VERSION | cut -d. -f2)
 rversion="$major_version.$minor_version"
 jq ".version = \"$rversion\"" metadata.json > metadata.json.new
 mv metadata.json.new metadata.json
-sed -i "s/version*name:.*$/version-name: $VERSION/" metadata.json
+sed -i "s/version\-name:.*$/version-name: $VERSION/" metadata.json
 #jq ".version-name = \"$VERSION\"" metadata.json > metadata.json.new
 echo "Updated version in metadata.json"
 
