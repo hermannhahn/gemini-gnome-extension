@@ -204,9 +204,7 @@ const Gemini = GObject.registerClass(
                 this.stopRecording();
                 return;
             }
-            this.executeCommand(
-                "notify-send -a 'Gemini Voice Assist' 'Listening...'",
-            );
+            this.gnomeNotify('Listening...');
 
             // Definir o arquivo de saída no diretório da extensão
             const outputPath =
