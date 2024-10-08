@@ -197,6 +197,25 @@ const Gemini = GObject.registerClass(
             }
         }
 
+        gnomeNotify(text) {
+            // eslint-disable-next-line prefer-template
+            const command =
+                "notify-send -a 'Gemini Voice Assist' '" + text + "'";
+            const process = GLib.spawn_async(
+                null, // pasta de trabalho
+                ['/bin/sh', '-c', command], // comando e argumentos
+                null, // opções
+                GLib.SpawnFlags.SEARCH_PATH, // flags
+                null, // PID
+            );
+
+            if (process[0] === 0) {
+                log('Notificação enviada com sucesso.');
+            } else {
+                log('Erro ao enviar notificação.');
+            }
+        }
+
         // Função para iniciar a gravação
         startRecording(outputFile) {
             if (isRecording) {
@@ -428,7 +447,7 @@ const Gemini = GObject.registerClass(
             // eslint-disable-next-line no-undef
             const audioBase64 = encodeFileToBase64(audioPath);
             if (!audioBase64) {
-                log('Falha ao converter arquivo de áudio.');
+                this.gnomeNotify('Falha ao converter arquivo de áudio.');
                 return;
             }
 
@@ -485,20 +504,20 @@ const Gemini = GObject.registerClass(
                                 response.results[0].alternatives[0].transcript;
                             // eslint-disable-next-line prefer-template
                             log('Transcrição: ' + transcription);
-                            this.executeCommand(
-                                `notify-send -a 'Gemini Voice Assist' '${transcription}'`,
-                            );
+                            this.gnomeNotify(transcription);
                             this.aiResponse(transcription);
                         } else {
-                            log('Nenhuma transcrição encontrada.');
+                            this.gnomeNotify('Nenhuma transcrição encontrada.');
                         }
                     } else {
                         // eslint-disable-next-line prefer-template
-                        log('Erro na requisição: ' + stderr);
+                        this.gnomeNotify('Erro na requisição: ' + stderr);
                     }
                 } catch (e) {
                     // eslint-disable-next-line prefer-template
-                    log('Erro ao processar resposta: ' + e.message);
+                    this.gnomeNotify(
+                        'Erro ao processar resposta: ' + e.message,
+                    );
                 }
             });
         }
