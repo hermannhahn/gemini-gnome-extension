@@ -51,7 +51,7 @@ class GeminiSettings {
         });
 
         const labelGoogle = new Gtk.Label({
-            label: _('Gemini API Key'),
+            label: _('Google API Key'),
             halign: Gtk.Align.START,
         });
         const googleApiKey = new Gtk.Entry({
