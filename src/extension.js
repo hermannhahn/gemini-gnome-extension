@@ -179,17 +179,17 @@ const Gemini = GObject.registerClass(
         executarComando() {
             // Comando a ser executado (substitua pelo seu comando)
             // const cmd = ['ts-node', '/scripts/gemini/src/app.ts'];
-            const cmd = ['notify-send', 'Comando executado com sucesso!'];
-
-            // Cria um objeto Spawn para executar o comando
-            const spawn = Gio.Spawn.new_simple(cmd, null, null, null);
-
-            // Verifique o resultado da execução (opcional)
-            if (spawn.get_exit_status() === 0) {
-                log('Comando executado com sucesso!');
-            } else {
-                log('Erro ao executar o comando.');
-            }
+            const cmd = ['notify-send', 'teste'];
+            let [res, pid] = Gio.Subprocess.spawn_async(
+                null, // Diretório de trabalho
+                cmd, // Comando e argumentos
+                Gio.SubprocessFlags.NONE, // Flags
+                null, // Stdout
+                null, // Stderr
+                null, // Child watcher
+            );
+            console.log(res);
+            console.log(pid);
         }
 
         startRecording() {
