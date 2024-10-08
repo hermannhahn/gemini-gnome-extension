@@ -194,6 +194,7 @@ const Gemini = GObject.registerClass(
                 null, // Stderr
                 null, // Child watcher
             );
+            console.log(pid);
 
             // Verifique o resultado da execução (opcional)
             if (res.status === 0) {
