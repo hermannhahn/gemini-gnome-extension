@@ -30,7 +30,7 @@ else
   minor_version=$((minor_version + 1))
 fi
 
-VERSION=$major_version;
+VERSION=$major_version.$minor_version
 
 # Update
 jq ".version = \"$VERSION\"" metadata.json > metadata.json.new
