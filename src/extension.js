@@ -22,6 +22,7 @@ import St from 'gi://St';
 import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
+import Gio from 'gi://Gio';
 
 import {
     Extension,
@@ -173,6 +174,33 @@ const Gemini = GObject.registerClass(
                 new PopupMenu.PopupSeparatorMenuItem(),
             );
             this.chatSection.addMenuItem(aiResponseItem);
+        }
+
+        executarComando() {
+            // Comando a ser executado (substitua pelo seu comando)
+            const cmd = [
+                'node',
+                '/caminho/para/seu/script.js',
+                'argumento1',
+                'argumento2',
+            ];
+
+            // Cria um objeto Spawn para executar o comando
+            let [res, pid] = Gio.Subprocess.spawn_async(
+                null, // Working directory
+                cmd, // Comando e argumentos
+                Gio.SubprocessFlags.NONE, // Flags
+                null, // Stdout
+                null, // Stderr
+                null, // Child watcher
+            );
+
+            // Verifique o resultado da execução (opcional)
+            if (res.status === 0) {
+                log('Comando executado com sucesso!');
+            } else {
+                log('Erro ao executar o comando.');
+            }
         }
 
         startRecording() {
