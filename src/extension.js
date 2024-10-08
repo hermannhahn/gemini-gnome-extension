@@ -34,9 +34,6 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import {convertMD} from './md2pango.js';
 import {generateAPIKey} from './auth.js';
 
-import recorder from 'node-record-lpcm16';
-import fs from 'fs';
-
 let GEMINIAPIKEY = '';
 let DRIVEFOLDER = '';
 let VERTEXPROJECTID = '';
@@ -187,23 +184,12 @@ const Gemini = GObject.registerClass(
                 // Change searchEntry text to 'Listening...'
                 this.geminiResponse('Listening...');
                 // Start audio recording
-                this.questionAudio = fs.createWriteStream(
-                    this.lastQuestionAudio,
-                    {
-                        encoding: 'binary',
-                    },
-                );
-                // Start recording
-                this.recording = recorder.record();
-                this.recording.stream().pipe(this.questionAudio);
             }
         }
 
         stopRecording() {
             recording = false;
             // Stop audio recording and send to Gemini
-            this.recording.stop();
-            this.questionAudio.end();
         }
 
         aiResponse(text) {
