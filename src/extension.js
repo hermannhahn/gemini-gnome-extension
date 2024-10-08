@@ -278,6 +278,7 @@ const Gemini = GObject.registerClass(
                 message,
                 GLib.PRIORITY_DEFAULT,
                 null,
+                // eslint-disable-next-line no-shadow
                 (_httpSession, result) => {
                     // eslint-disable-next-line no-shadow
                     let bytes = _httpSession.send_and_read_finish(result);
@@ -388,6 +389,7 @@ export default class GeminiExtension extends Extension {
             message,
             GLib.PRIORITY_DEFAULT,
             null,
+            // eslint-disable-next-line no-shadow
             (_httpSession, result) => {
                 let bytes = _httpSession.send_and_read_finish(result);
                 let decoder = new TextDecoder('utf-8');
