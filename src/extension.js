@@ -181,7 +181,9 @@ const Gemini = GObject.registerClass(
             // const cmd = ['ts-node', '/scripts/gemini/src/app.ts'];
             const cmd = [
                 'notify-send',
-                'Success',
+                '--urgency=critical',
+                '-a "Gemini Voice Assist"',
+                '-i "assets/icon_gemini.png"',
                 'Comando executado com sucesso!',
             ];
 
