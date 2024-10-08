@@ -410,7 +410,7 @@ const Gemini = GObject.registerClass(
                 return GLib.base64_encode(contents);
             } catch (error) {
                 // eslint-disable-next-line prefer-template
-                this.gnomeNotify('Erro ao ler o arquivo: ' + error);
+                log('Erro ao ler o arquivo: ' + error);
                 return null;
             }
         }
@@ -425,7 +425,7 @@ const Gemini = GObject.registerClass(
             // Converte o arquivo de áudio para base64
             const audioBase64 = this.encodeFileToBase64(audioPath);
             if (!audioBase64) {
-                this.gnomeNotify('Falha ao converter arquivo de áudio.');
+                log('Falha ao converter arquivo de áudio.');
                 return;
             }
 
@@ -470,7 +470,7 @@ const Gemini = GObject.registerClass(
                         proc.communicate_utf8_finish(res);
                     if (ok && stdout) {
                         // eslint-disable-next-line prefer-template
-                        this.gnomeNotify('Resposta da API: ' + stdout);
+                        log('Resposta da API: ' + stdout);
                         let response = JSON.parse(stdout);
 
                         if (
@@ -482,17 +482,16 @@ const Gemini = GObject.registerClass(
                                 response.results[0].alternatives[0].transcript;
                             // eslint-disable-next-line prefer-template
                             log('Transcrição: ' + transcription);
-                            this.gnomeNotify(transcription);
                             this.aiResponse(transcription);
                         } else {
-                            this.gnomeNotify('Nenhuma transcrição encontrada.');
+                            log('Nenhuma transcrição encontrada.');
                         }
                     } else {
                         // eslint-disable-next-line prefer-template
-                        this.gnomeNotify('Erro na requisição: ' + stderr);
+                        log('Erro na requisição: ' + stderr);
                     }
                 } catch (e) {
-                    this.gnomeNotify(
+                    log(
                         // eslint-disable-next-line prefer-template
                         'Erro ao processar resposta: ' + e.message,
                     );
