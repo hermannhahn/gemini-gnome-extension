@@ -230,7 +230,7 @@ const Gemini = GObject.registerClass(
             inputCategory.style_class += ' m-w-100';
             aiResponseItem.style_class += ' m-w-100';
 
-            aiResponseItem.connect('activate', (self) => {
+            aiResponseItem.connect('activate', (_self) => {
                 this.extension.clipboard.set_text(
                     St.ClipboardType.CLIPBOARD,
                     aiResponseItem.label.text,
