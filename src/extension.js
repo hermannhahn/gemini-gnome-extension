@@ -189,18 +189,10 @@ const Gemini = GObject.registerClass(
             const dir = '/';
 
             // Cria um objeto Spawn para executar o comando
-            let [res, pid] = Gio.Subprocess.spawn_async(
-                dir, // Working directory
-                cmd, // Comando e argumentos
-                Gio.SubprocessFlags.NONE, // Flags
-                null, // Stdout
-                null, // Stderr
-                null, // Child watcher
-            );
-            console.log(pid);
+            const spawn = Gio.Spawn.new_simple(cmd, dir, null, null);
 
             // Verifique o resultado da execução (opcional)
-            if (res.status === 0) {
+            if (spawn.get_exit_status() === 0) {
                 log('Comando executado com sucesso!');
             } else {
                 log('Erro ao executar o comando.');
