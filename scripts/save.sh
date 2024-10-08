@@ -21,7 +21,6 @@ if [ -z "$VERSION" ]; then
 fi
 
 # Update version-name in metadata.json
-echo "Updating version in metadata.json..."
 jq ".version = \"$VERSION\"" metadata.json > metadata.json.new
 mv metadata.json.new metadata.json
 echo "Updated version in metadata.json"
@@ -32,7 +31,7 @@ git add .
 git commit -m "$VERSION"
 git push
 
-echo "Saved version $VERSION and pushed to github."
+echo "All done."
 
 # Exit script
 exit 0
