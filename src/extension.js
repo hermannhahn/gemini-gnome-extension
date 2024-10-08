@@ -42,6 +42,7 @@ let LOCATION = '';
 let USERNAME = GLib.get_real_name();
 let RECURSIVETALK = false;
 let ISVERTEX = false;
+let LASTQUESTIONFILE = 'lastQuestion.wav';
 
 // Log function
 function log(message) {
@@ -141,7 +142,7 @@ const Gemini = GObject.registerClass(
                 searchEntry.clutter_text.set_text('');
             });
             micButton.connect('clicked', (_self) => {
-                this.startRecording();
+                this.startRecording(LASTQUESTIONFILE);
             });
             settingsButton.connect('clicked', (_self) => {
                 this.openSettings();
