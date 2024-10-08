@@ -22,8 +22,6 @@ import St from 'gi://St';
 import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
-import System from 'system';
-import Gtk from 'gi://Gtk';
 
 import {
     Extension,
