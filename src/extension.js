@@ -34,6 +34,13 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import {convertMD} from './md2pango.js';
 import {generateAPIKey} from './auth.js';
 
+import dotenv from 'dotenv';
+import recorder from 'node-record-lpcm16';
+import fs from 'fs';
+
+// Load environment variables from .env file
+dotenv.config();
+
 let GEMINIAPIKEY = '';
 let DRIVEFOLDER = '';
 let VERTEXPROJECTID = '';
@@ -42,6 +49,7 @@ let USERNAME = GLib.get_real_name();
 let RECURSIVETALK = false;
 let ISVERTEX = false;
 
+// Log function
 function log(message) {
     if (message) {
         console.log(message);
@@ -175,6 +183,7 @@ const Gemini = GObject.registerClass(
         }
 
         startRecording() {
+            this.lastQuestionAudio = 'lastQuestion.wav';
             if (recording) {
                 this.stopRecording();
             } else {
@@ -182,12 +191,23 @@ const Gemini = GObject.registerClass(
                 // Change searchEntry text to 'Listening...'
                 this.geminiResponse('Listening...');
                 // Start audio recording
+                this.questionAudio = fs.createWriteStream(
+                    this.lastQuestionAudio,
+                    {
+                        encoding: 'binary',
+                    },
+                );
+                // Start recording
+                this.recording = recorder.record();
+                this.recording.stream().pipe(this.questionAudio);
             }
         }
 
         stopRecording() {
             recording = false;
             // Stop audio recording and send to Gemini
+            this.recording.stop();
+            this.questionAudio.end();
         }
 
         aiResponse(text) {
