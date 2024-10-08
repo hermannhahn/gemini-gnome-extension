@@ -208,8 +208,8 @@ const Gemini = GObject.registerClass(
             );
 
             // Definir o arquivo de saída no diretório da extensão
-            // eslint-disable-next-line prefer-template
             const outputPath =
+                // eslint-disable-next-line prefer-template
                 GLib.get_home_dir() +
                 '/.local/share/gnome-shell/extensions/' +
                 this.uuid +
