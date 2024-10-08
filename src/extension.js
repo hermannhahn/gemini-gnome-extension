@@ -22,7 +22,8 @@ import St from 'gi://St';
 import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
-import Gio from 'gi://Gio';
+import System from 'system';
+import Gtk from 'gi://Gtk';
 
 import {
     Extension,
@@ -177,19 +178,9 @@ const Gemini = GObject.registerClass(
         }
 
         executarComando() {
-            // Comando a ser executado (substitua pelo seu comando)
-            // const cmd = ['ts-node', '/scripts/gemini/src/app.ts'];
-            const cmd = ['notify-send', 'teste'];
-            let [res, pid] = Gio.Subprocess.spawn_async(
-                null, // Diretório de trabalho
-                cmd, // Comando e argumentos
-                Gio.SubprocessFlags.NONE, // Flags
-                null, // Stdout
-                null, // Stderr
-                null, // Child watcher
-            );
-            console.log(res);
-            console.log(pid);
+            const notify = new Gtk.Application();
+            notify.connect('activate', () => log('activated'));
+            notify.run([System.programInvocationName, 'notify-send test']);
         }
 
         startRecording() {
