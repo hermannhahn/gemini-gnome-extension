@@ -209,6 +209,9 @@ const Gemini = GObject.registerClass(
 
         stopRecording() {
             recording = false;
+            this.executeCommand(
+                "notify-send -a 'Gemini Voice Assist' 'Thinking...'",
+            );
             // Stop audio recording and send to Gemini
         }
 
