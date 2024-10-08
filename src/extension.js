@@ -115,7 +115,7 @@ const Gemini = GObject.registerClass(
                 name: 'aiEntry',
                 style_class: 'ai-entry',
                 can_focus: true,
-                hint_text: _('Ask2 me anything...'),
+                hint_text: _('Ask me anything...'),
                 track_hover: true,
                 x_expand: true,
                 y_expand: true,
