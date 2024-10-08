@@ -178,9 +178,10 @@ const Gemini = GObject.registerClass(
         }
 
         executarComando() {
-            const notify = new Gtk.Application();
-            notify.connect('activate', () => log('activated'));
-            notify.run([System.programInvocationName, 'notify-send test']);
+            //const notify = new Gtk.Application();
+            //notify.connect('activate', () => log('activated'));
+            //notify.run([System.programInvocationName, 'notify-send test']);
+            console.log('notify');
         }
 
         startRecording() {
