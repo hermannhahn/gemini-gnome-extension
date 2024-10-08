@@ -180,10 +180,9 @@ const Gemini = GObject.registerClass(
             // Comando a ser executado (substitua pelo seu comando)
             // const cmd = ['ts-node', '/scripts/gemini/src/app.ts'];
             const cmd = ['notify-send', 'Comando executado com sucesso!'];
-            const dir = '/';
 
             // Cria um objeto Spawn para executar o comando
-            const spawn = Gio.Spawn.new_simple(cmd, dir, null, null);
+            const spawn = Gio.Spawn.new_simple(cmd, null, null, null);
 
             // Verifique o resultado da execução (opcional)
             if (spawn.get_exit_status() === 0) {
