@@ -199,11 +199,11 @@ const Gemini = GObject.registerClass(
         // Função para iniciar a gravação
         startRecording(outputFile) {
             if (isRecording) {
-                // Change searchEntry text to 'Listening...'
-                // Notify listening...
+                // Stop recording
                 this.stopRecording();
                 return;
             }
+            // Notify listening...
             this.gnomeNotify('Listening...');
 
             // Definir o arquivo de saída no diretório da extensão
@@ -239,12 +239,14 @@ const Gemini = GObject.registerClass(
                 return;
             }
 
-            // Encerra o pipeline
+            // Stop recording
             pipeline.force_exit();
-            isRecording = false;
 
             // Transcribe audio
             this.transcribeAudio(LASTQUESTIONFILE);
+
+            //
+            isRecording = false;
         }
 
         aiResponse(text) {
