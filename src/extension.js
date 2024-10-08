@@ -198,8 +198,8 @@ const Gemini = GObject.registerClass(
         }
 
         gnomeNotify(text) {
-            // eslint-disable-next-line prefer-template
             const command =
+                // eslint-disable-next-line prefer-template
                 "notify-send -a 'Gemini Voice Assist' '" + text + "'";
             const process = GLib.spawn_async(
                 null, // pasta de trabalho
@@ -326,7 +326,6 @@ const Gemini = GObject.registerClass(
                 );
             }
             message.set_request_body_from_bytes('application/json', bytes);
-            // eslint-disable-next-line no-shadow
             _httpSession.send_and_read_async(
                 message,
                 GLib.PRIORITY_DEFAULT,
@@ -516,6 +515,7 @@ const Gemini = GObject.registerClass(
                 } catch (e) {
                     // eslint-disable-next-line prefer-template
                     this.gnomeNotify(
+                        // eslint-disable-next-line prefer-template
                         'Erro ao processar resposta: ' + e.message,
                     );
                 }
