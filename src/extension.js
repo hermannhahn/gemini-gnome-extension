@@ -155,8 +155,8 @@ const Gemini = GObject.registerClass(
             this._initFirstResponse();
         }
 
-        geminiResponse(text) {
-            let aiResponse = _(`<b>Gemini: </b> ${text}`);
+        geminiResponse(_text) {
+            let aiResponse = _(`<b>Gemini: </b> Thinking...`);
             const aiResponseItem = new PopupMenu.PopupMenuItem('');
             aiResponseItem.label.clutter_text.set_markup(aiResponse);
             aiResponseItem.label.x_expand = true;
