@@ -471,7 +471,7 @@ const Gemini = GObject.registerClass(
                         proc.communicate_utf8_finish(res);
                     if (ok && stdout) {
                         // eslint-disable-next-line prefer-template
-                        log('Resposta da API: ' + stdout);
+                        this.gnomeNotify('Resposta da API: ' + stdout);
                         let response = JSON.parse(stdout);
 
                         if (
