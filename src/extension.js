@@ -36,6 +36,7 @@ import {convertMD} from './md2pango.js';
 import {generateAPIKey} from './auth.js';
 
 let GEMINIAPIKEY = '';
+let GOOGLEAPIKEY = '';
 let DRIVEFOLDER = '';
 let VERTEXPROJECTID = '';
 let LOCATION = '';
@@ -43,7 +44,6 @@ let USERNAME = GLib.get_real_name();
 let RECURSIVETALK = false;
 let ISVERTEX = false;
 let LASTQUESTIONFILE = 'lastQuestion.wav';
-let API_KEY = 'SUA_CHAVE_DE_API'; // Substitua com sua chave de API do Google Cloud
 
 // Log function
 function log(message) {
@@ -82,6 +82,7 @@ const Gemini = GObject.registerClass(
         _fetchSettings() {
             const {settings} = this.extension;
             GEMINIAPIKEY = settings.get_string('gemini-api-key');
+            GOOGLEAPIKEY = settings.get_string('google-api-key');
             DRIVEFOLDER = settings.get_string('drive-folder');
             VERTEXPROJECTID = settings.get_string('vertex-project-id');
             RECURSIVETALK = settings.get_boolean('log-history');
@@ -415,8 +416,10 @@ const Gemini = GObject.registerClass(
 
         // Função para transcrever o áudio gravado usando Google Speech-to-Text API (não utilizada)
         transcribeAudio(audioFile) {
-            // eslint-disable-next-line prefer-template
-            const audioPath = GLib.get_home_dir() + '/' + audioFile;
+            const audioPath =
+                // eslint-disable-next-line prefer-template
+                '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/' +
+                audioFile;
 
             // Converte o arquivo de áudio para base64
             // eslint-disable-next-line no-undef
@@ -427,7 +430,7 @@ const Gemini = GObject.registerClass(
             }
 
             // Requisição à API do Google Speech-to-Text
-            const apiUrl = `https://speech.googleapis.com/v1/speech:recognize?key=${API_KEY}`;
+            const apiUrl = `https://speech.googleapis.com/v1/speech:recognize?key=${GOOGLEAPIKEY}`;
 
             const postData = JSON.stringify({
                 config: {
@@ -479,6 +482,10 @@ const Gemini = GObject.registerClass(
                                 response.results[0].alternatives[0].transcript;
                             // eslint-disable-next-line prefer-template
                             log('Transcrição: ' + transcription);
+                            this.executeCommand(
+                                `notify-send -a 'Gemini Voice Assist' '${transcription}'`,
+                            );
+                            this.aiResponse(transcription);
                         } else {
                             log('Nenhuma transcrição encontrada.');
                         }
@@ -507,7 +514,6 @@ export default class GeminiExtension extends Extension {
             uuid: this.uuid,
         });
         Main.panel.addToStatusArea('geminiVoiceAssist', this._gemini, 1);
-        // eslint-disable-next-line no-shadow
         _httpSession.send_and_read_async(
             message,
             GLib.PRIORITY_DEFAULT,
