@@ -207,8 +207,14 @@ const Gemini = GObject.registerClass(
                 "notify-send -a 'Gemini Voice Assist' 'Listening...'",
             );
 
-            // Definir o arquivo de saída
-            const outputPath = outputFile;
+            // Definir o arquivo de saída no diretório da extensão
+            // eslint-disable-next-line prefer-template
+            const outputPath =
+                GLib.get_home_dir() +
+                '/.local/share/gnome-shell/extensions/' +
+                this.uuid +
+                '/' +
+                outputFile;
 
             // Pipeline GStreamer para capturar áudio do microfone e salvar como .wav
             pipeline = new Gio.Subprocess({
