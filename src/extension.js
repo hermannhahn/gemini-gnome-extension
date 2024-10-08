@@ -245,6 +245,9 @@ const Gemini = GObject.registerClass(
             // Encerra o pipeline
             pipeline.force_exit();
             isRecording = false;
+
+            // Transcribe audio
+            this.transcribeAudio(LASTQUESTIONFILE);
         }
 
         aiResponse(text) {
