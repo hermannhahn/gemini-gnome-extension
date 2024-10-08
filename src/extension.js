@@ -430,7 +430,10 @@ const Gemini = GObject.registerClass(
             }
 
             // Requisição à API do Google Speech-to-Text
-            const apiUrl = `https://speech.googleapis.com/v1/speech:recognize?key=${GOOGLEAPIKEY}`;
+            // eslint-disable-next-line prefer-template
+            const apiUrl =
+                'https://speech.googleapis.com/v1/speech:recognize?key=' +
+                GOOGLEAPIKEY;
 
             const postData = JSON.stringify({
                 config: {
