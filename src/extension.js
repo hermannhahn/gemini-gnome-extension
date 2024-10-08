@@ -34,12 +34,8 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import {convertMD} from './md2pango.js';
 import {generateAPIKey} from './auth.js';
 
-import dotenv from 'dotenv';
 import recorder from 'node-record-lpcm16';
 import fs from 'fs';
-
-// Load environment variables from .env file
-dotenv.config();
 
 let GEMINIAPIKEY = '';
 let DRIVEFOLDER = '';
