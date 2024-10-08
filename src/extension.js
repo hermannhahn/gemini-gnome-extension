@@ -186,10 +186,11 @@ const Gemini = GObject.registerClass(
                 '-i "assets/icon_gemini.png"',
                 'Comando executado com sucesso!',
             ];
+            const dir = '/';
 
             // Cria um objeto Spawn para executar o comando
             let [res, pid] = Gio.Subprocess.spawn_async(
-                null, // Working directory
+                dir, // Working directory
                 cmd, // Comando e argumentos
                 Gio.SubprocessFlags.NONE, // Flags
                 null, // Stdout
