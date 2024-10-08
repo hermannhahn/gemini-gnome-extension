@@ -175,7 +175,7 @@ const Gemini = GObject.registerClass(
             this.chatSection.addMenuItem(aiResponseItem);
         }
 
-        executarComando(cmd) {
+        commandRunner(cmd) {
             const command = cmd;
             const process = GLib.spawn_async(
                 null, // pasta de trabalho
@@ -201,7 +201,7 @@ const Gemini = GObject.registerClass(
                 // Change searchEntry text to 'Listening...'
                 this.geminiResponse('Listening...');
                 // Start audio recording
-                this.executarComando("notify-send 'teste'");
+                this.commandRunner("notify-send 'teste'");
             }
         }
 
