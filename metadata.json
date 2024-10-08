@@ -1,7 +1,7 @@
 {
   "name": "Gemini Voice Assistant",
   "description": "Gemini Voice Assistant for Ubuntu",
-  "uuid": "gnome@gemini-assist.vercel.app",
+  "uuid": "gnome-extension@gemini-assist.vercel.app",
   "donations": {
     "pix": "hermann.h.hahn@gmail.com"
   },
@@ -10,7 +10,7 @@
     "46",
     "47"
   ],
-  "settings-schema": "org.gnome.shell.extensions.gga",
+  "settings-schema": "org.gnome.shell.extensions.gva",
   "url": "https://gemini-assist.vercel.app/gnome-extension",
   "version": 1.1
 }

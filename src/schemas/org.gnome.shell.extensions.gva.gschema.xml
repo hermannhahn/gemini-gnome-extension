@@ -1,6 +1,6 @@
 <schemalist gettext-domain="gnome-shell-extensions">
-  <schema id="org.gnome.shell.extensions.gga"
-      path="/org/gnome/shell/extensions/gga/">
+  <schema id="org.gnome.shell.extensions.gva"
+      path="/org/gnome/shell/extensions/gva/">
 
     <key name="gemini-api-key" type="s">
         <default>"KEY"</default>
