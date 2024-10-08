@@ -22,6 +22,8 @@ import St from 'gi://St';
 import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
+import Gio from 'gi://Gio';
+
 import {
     Extension,
     gettext as _,
@@ -48,8 +50,9 @@ function log(message) {
     }
 }
 
-// Audio recording setup
-let recording = false;
+// Variáveis globais para controle do pipeline e do estado de gravação
+let pipeline;
+let isRecording = false;
 
 const Gemini = GObject.registerClass(
     class Gemini extends PanelMenu.Button {
@@ -191,29 +194,55 @@ const Gemini = GObject.registerClass(
             }
         }
 
-        startRecording() {
-            this.lastQuestionAudio = 'lastQuestion.wav';
-            if (recording) {
-                this.stopRecording();
-            } else {
-                recording = true;
-                // Change searchEntry text to 'Listening...'
-                this.geminiResponse('Listening...');
-                // Notify listening...
-                this.executeCommand(
-                    "notify-send -a 'Gemini Voice Assist' 'Listening...'",
-                );
+        // Função para iniciar a gravação
+        startRecording(outputFile) {
+            if (isRecording) {
+                log('Já está gravando!');
+                return;
             }
+
+            log('Iniciando gravação de áudio...');
+
+            // Definir o arquivo de saída
+            const outputPath = `${GLib.get_home_dir()}/${outputFile}`;
+
+            // Pipeline GStreamer para capturar áudio do microfone e salvar como .wav
+            pipeline = new Gio.Subprocess({
+                argv: [
+                    'gst-launch-1.0',
+                    'pulsesrc',
+                    '!',
+                    'audioconvert',
+                    '!',
+                    'wavenc',
+                    '!',
+                    'filesink',
+                    `location=${outputPath}`,
+                ],
+                flags:
+                    Gio.SubprocessFlags.STDOUT_PIPE |
+                    Gio.SubprocessFlags.STDERR_PIPE,
+            });
+
+            pipeline.init(null);
+            isRecording = true;
+
+            log(`Gravação iniciada e será salva em: ${outputPath}`);
         }
 
         stopRecording() {
-            recording = false;
-            this.executeCommand(
-                "notify-send -a 'Gemini Voice Assist' 'Thinking...'",
-            );
-            const audioTranscribe = 'Ola, boa tarde!';
-            this.aiResponse(audioTranscribe);
-            // Stop audio recording and send to Gemini
+            if (!isRecording) {
+                log('Nenhuma gravação em andamento para parar.');
+                return;
+            }
+
+            log('Parando gravação de áudio...');
+
+            // Encerra o pipeline
+            pipeline.force_exit();
+            isRecording = false;
+
+            log('Gravação parada e arquivo salvo.');
         }
 
         aiResponse(text) {
