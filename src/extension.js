@@ -21,7 +21,6 @@ let AZURE_SPEECH_KEY = '';
 let AZURE_SPEECH_REGION = ''; // Ex: "eastus"
 let AZURE_SPEECH_LANGUAGE = ''; // Ex: "en-US"
 let AZURE_SPEECH_VOICE = ''; // Ex: "en-US-JennyNeural"
-let VOICE_ACTIVATION_KEY = 'F8';
 let LOCATION = '';
 let USERNAME = GLib.get_real_name();
 let RECURSIVETALK = true;
