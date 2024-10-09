@@ -309,22 +309,23 @@ const Gemini = GObject.registerClass(
                         return;
                     }
                     let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
+                    let answer = this.extractCodeFromText(aiResponse);
                     if (RECURSIVETALK) {
                         this.chatHistory.push({
                             role: 'user',
                             parts: [{text: question}],
                         });
-                        this.chatHistory.push({
-                            role: 'model',
-                            parts: [{text: aiResponse}],
-                        });
+                        if (answer && answer.textoRestante !== undefined) {
+                            this.chatHistory.push({
+                                role: 'model',
+                                parts: [{text: answer.textoRestante}],
+                            });
+                        }
                     }
                     if (inputItem !== undefined) {
                         let htmlResponse = convertMD(aiResponse);
                         inputItem.label.clutter_text.set_markup(htmlResponse);
                     }
-
-                    let answer = this.extractCodeFromText(aiResponse);
 
                     // Speech response
                     if (answer && answer.textoRestante !== undefined) {
