@@ -4,10 +4,6 @@ import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
 
-// Variável para armazenar o ID da ligação de tecla F1
-
-// Importações necessárias
-
 import {
     Extension,
     gettext as _,
