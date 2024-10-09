@@ -493,7 +493,7 @@ const Gemini = GObject.registerClass(
 
             // Estrutura SSML (Speech Synthesis Markup Language) para definir o texto e a voz
             const ssml = `
-        <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='pt-BR'>
+        <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${AZURE_SPEECH_LANGUAGE}'>
             <voice name='pt-BR-FranciscaNeural'>${text}</voice>
         </speak>
     `;
