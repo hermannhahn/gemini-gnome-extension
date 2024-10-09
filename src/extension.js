@@ -2,7 +2,7 @@ import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
-import {St, Clutter} from 'gi://St'; // Importa o módulo St
+import {St} from 'gi://St'; // Importa o módulo St
 import {Meta} from 'gi://Meta'; // Importa o módulo Meta
 import {Shell} from 'gi://Shell'; // Importa o módulo Shell
 
@@ -138,6 +138,7 @@ const Gemini = GObject.registerClass(
         // Função que será executada quando a tecla configurada for pressionada
         onKeyPressed(key) {
             log(`Key pressed: ${key}`);
+            this.startRecording(LASTQUESTIONFILE);
             // Adicione aqui a função que deseja executar
             // Exemplo: this.textToSpeech('Olá, isso é um teste de F1!');
         }
