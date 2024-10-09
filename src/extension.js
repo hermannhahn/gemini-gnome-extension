@@ -65,7 +65,7 @@ const Gemini = GObject.registerClass(
             const {settings} = this.extension;
             GEMINIAPIKEY = settings.get_string('gemini-api-key');
             AZURE_SPEECH_KEY = settings.get_string('azure-speech-key');
-            AZURE_REGION = settings.get_string('azure-region');
+            AZURE_REGION = settings.get_string('azure-speech-region');
             AZURE_SPEECH_LANGUAGE = settings.get_string(
                 'azure-speech-language',
             );
