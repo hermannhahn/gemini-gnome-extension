@@ -518,6 +518,8 @@ const Gemini = GObject.registerClass(
                             let transcription = response.DisplayText;
                             // eslint-disable-next-line prefer-template
                             log('Transcrição: ' + transcription);
+                            // eslint-disable-next-line prefer-template
+                            log('Voice' + AZURE_SPEECH_VOICE);
                             this.aiResponse(transcription); // Função para processar a resposta da transcrição
                         } else {
                             log('Nenhuma transcrição encontrada.');
