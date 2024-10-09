@@ -16,7 +16,8 @@ import {convertMD} from './md2pango.js';
 import {generateAPIKey} from './auth.js';
 
 let GEMINIAPIKEY = '';
-let GOOGLEAPIKEY = '';
+let AZURE_SPEECH_KEY = '';
+let AZURE_REGION = ''; // Ex: "eastus"
 let DRIVEFOLDER = '';
 let VERTEXPROJECTID = '';
 let LOCATION = '';
@@ -24,9 +25,6 @@ let USERNAME = GLib.get_real_name();
 let RECURSIVETALK = false;
 let ISVERTEX = false;
 let LASTQUESTIONFILE = 'lastQuestion.wav';
-// Informações da API da Microsoft (chave e região)
-let AZURE_SPEECH_KEY = 'SUA_CHAVE_DE_API';
-let AZURE_REGION = 'SUA_REGIAO'; // Ex: "eastus"
 
 // Log function
 function log(message) {
