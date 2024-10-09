@@ -3,11 +3,8 @@ import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
 import St from 'gi://St';
-import Meta from 'gi://Meta';
-import Shell from 'gi://Shell';
 
 // Variável para armazenar o ID da ligação de tecla F1
-let f1BindingId = null;
 
 import {
     Extension,
