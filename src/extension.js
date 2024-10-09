@@ -315,7 +315,12 @@ const Gemini = GObject.registerClass(
                             role: 'user',
                             parts: [{text: question}],
                         });
-                        if (answer && answer.textoRestante !== undefined) {
+                        if (
+                            answer &&
+                            answer.textoRestante &&
+                            answer.textoRestante !== undefined &&
+                            answer.textoRestante !== ''
+                        ) {
                             this.chatHistory.push({
                                 role: 'model',
                                 parts: [{text: answer.textoRestante}],
@@ -368,7 +373,13 @@ const Gemini = GObject.registerClass(
                             const gnomeWindow =
                                 '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/gnome-window.py';
                             this.executeCommand(
-                                `python3 ${gnomeWindow} ${titulo} ${codeExample}`,
+                                // eslint-disable-next-line prefer-template
+                                'python3 ' +
+                                    gnomeWindow +
+                                    ' ' +
+                                    titulo +
+                                    ' ' +
+                                    codeExample,
                             );
                         }
                     }
