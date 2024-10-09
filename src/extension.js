@@ -342,9 +342,24 @@ const Gemini = GObject.registerClass(
                                 x_align: Clutter.ActorAlign.START,
                             });
                             this.box = box;
+
                             box.add_child(label);
-                            this.add_child(box);
-                            this.menu.box.add_child(this.scrollView);
+                            let popup = new St.Bin({
+                                style_class: 'popup-menu-item',
+                            });
+                            popup.add_child(box);
+                            this.chatSection.addMenuItem(
+                                new PopupMenu.PopupSeparatorMenuItem(),
+                            );
+                            this.chatSection.addMenuItem(popup);
+                            this.chatSection.addMenuItem(
+                                new PopupMenu.PopupSeparatorMenuItem(),
+                            );
+                            this.chatSection.addMenuItem(
+                                new PopupMenu.PopupMenuItem({
+                                    label: codeExample,
+                                }),
+                            );
                         }
                     } else {
                         this.chatHistory = [];
