@@ -63,7 +63,8 @@ const Gemini = GObject.registerClass(
         _fetchSettings() {
             const {settings} = this.extension;
             GEMINIAPIKEY = settings.get_string('gemini-api-key');
-            GOOGLEAPIKEY = settings.get_string('google-api-key');
+            AZURE_SPEECH_KEY = settings.get_string('azure-speech-key');
+            AZURE_REGION = settings.get_string('azure-region');
             DRIVEFOLDER = settings.get_string('drive-folder');
             VERTEXPROJECTID = settings.get_string('vertex-project-id');
             RECURSIVETALK = settings.get_boolean('log-history');
@@ -473,8 +474,8 @@ const Gemini = GObject.registerClass(
                     headers[1], // Ocp-Apim-Subscription-Key
                     '-H',
                     headers[2], // Accept
-                    // eslint-disable-next-line prefer-template
                     '--data-binary',
+                    // eslint-disable-next-line prefer-template
                     '@' + tempFilePath, // Enviar o arquivo de áudio binário
                     apiUrl,
                 ],
