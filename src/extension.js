@@ -267,16 +267,16 @@ const Gemini = GObject.registerClass(
             this.getAireponse(aiResponseItem, text);
         }
 
-        extractCodeFromText() {
+        extractCodeFromText(answer) {
             const regex = /`{3}([\s\S]*?)`{3}/;
-            const matches = this.answer.match(regex);
+            const matches = answer.match(regex);
 
             if (matches) {
                 const textoExtraido = matches[1];
-                const textoRestante = this.answer.replace(regex, '');
+                const textoRestante = answer.replace(regex, '');
                 return {textoExtraido, textoRestante};
             } else {
-                return {textoExtraido: null, textoRestante: this.answer};
+                return {textoExtraido: null, textoRestante: answer};
             }
         }
 
