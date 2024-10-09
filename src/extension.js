@@ -64,7 +64,22 @@ const Gemini = GObject.registerClass(
             this.extension = extension;
             super._init(0.0, _('Gemini Voice Assist for Ubuntu'));
             this._loadSettings();
+
+            // Create history.json if not exist
             this.chatHistory = [];
+            if (RECURSIVETALK) {
+                try {
+                    const file = Gio.File.new_for_path(
+                        '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/history.json',
+                    );
+                    const [, contents] = file.load_contents(null);
+                    this.chatHistory = JSON.parse(contents);
+                } catch (error) {
+                    // eslint-disable-next-line prefer-template
+                    log('Erro ao ler o arquivo: ' + error);
+                }
+            }
+
             let hbox = new St.BoxLayout({
                 style_class: 'panel-status-menu-box',
             });
@@ -315,7 +330,6 @@ const Gemini = GObject.registerClass(
                     if (answer.tts !== null) {
                         // eslint-disable-next-line prefer-template
                         log('Text to speech: ' + answer.tts);
-
                         this.textToSpeech(answer.tts);
                     }
 
