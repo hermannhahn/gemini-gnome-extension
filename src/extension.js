@@ -335,6 +335,8 @@ const Gemini = GObject.registerClass(
 
                     // Code response
                     if (answer.code !== null) {
+                        // eslint-disable-next-line prefer-template
+                        log('Code response: ' + answer.code);
                         this.gnomeNotify(_('Code example copied to clipboard'));
                         this.extension.clipboard.set_text(
                             St.ClipboardType.CLIPBOARD,
