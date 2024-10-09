@@ -3,7 +3,6 @@ import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
-import Clutter from 'gi://Clutter';
 
 import {
     Extension,
@@ -327,50 +326,20 @@ const Gemini = GObject.registerClass(
                             role: 'model',
                             parts: [{text: aiResponse}],
                         });
-
-                        if (answer.code !== null) {
-                            let codeExample = convertMD(answer.code);
-                            log(`codeExample: ${codeExample}`);
-                            // Open new Gtk Window to show codeExample
-                            let box = new St.BoxLayout({
-                                vertical: true,
-                                style_class: 'popup-menu-item',
-                            });
-
-                            let label = new St.Label({
-                                text: codeExample,
-                                x_align: Clutter.ActorAlign.START,
-                            });
-                            this.box = box;
-
-                            box.add_child(label);
-                            let popup = new St.Bin({
-                                style_class: 'popup-menu-item',
-                            });
-                            popup.add_child(box);
-                            popup.show_all();
-
-                            let codeSection = new PopupMenu.PopupMenuSection();
-
-                            codeSection.addMenuItem(
-                                new PopupMenu.PopupMenuItem({
-                                    label: codeExample,
-                                    reactive: false,
-                                    can_focus: false,
-                                }),
-                            );
-                            this.chatSection.addMenuItem(
-                                new PopupMenu.PopupSeparatorMenuItem(),
-                            );
-                            this.chatSection.addMenuItem(codeSection.actor);
-                        }
-                    } else {
-                        this.chatHistory = [];
                     }
 
                     if (inputItem !== undefined) {
                         let htmlResponse = convertMD(aiResponse);
                         inputItem.label.clutter_text.set_markup(htmlResponse);
+                    }
+
+                    // Code response
+                    if (answer.code !== null) {
+                        this.gnomeNotify(_('Code example copied to clipboard'));
+                        this.extension.clipboard.set_text(
+                            St.ClipboardType.CLIPBOARD,
+                            answer.code,
+                        );
                     }
                 },
             );
