@@ -1,15 +1,14 @@
+import St from 'gi://St';
 import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
-import St from 'gi://St';
 
 // Variável para armazenar o ID da ligação de tecla F1
 
-import {
-    Extension,
-    gettext as _,
-} from 'resource:///org/gnome/shell/extensions/extension.js';
+// Importações necessárias
+import Extension from 'resource:///org/gnome/Shell/Extensions/js/extensions/extension.js';
+import {gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
