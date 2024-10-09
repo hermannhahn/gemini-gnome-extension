@@ -339,7 +339,6 @@ const Gemini = GObject.registerClass(
                     // Show window with extract code if exist
                     if (answer.textoExtraido !== null) {
                         const gnomeWindow =
-                            // eslint-disable-next-line prefer-template
                             '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/gnome-window.py';
 
                         this.gnomeNotify(
