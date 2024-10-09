@@ -278,21 +278,12 @@ const Gemini = GObject.registerClass(
             }
         }
 
-        getAireponse(
-            inputItem,
-            question,
-            newKey = undefined,
-            destroyLoop = false,
-        ) {
+        getAireponse(inputItem, question, destroyLoop = false) {
             if (destroyLoop) {
                 this.destroyLoop();
             }
             let _httpSession = new Soup.Session();
             let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${GEMINIAPIKEY}`;
-            if (newKey !== undefined) {
-                this.extension.settings.set_string('gemini-api-key', newKey);
-                GEMINIAPIKEY = newKey;
-            }
             var body = this.buildBody(question);
             let message = Soup.Message.new('POST', url);
             let bytes = GLib.Bytes.new(body);
@@ -374,9 +365,6 @@ const Gemini = GObject.registerClass(
 
         getTuneString() {
             const date = new Date();
-            // PLEASE DO NOT TRANSLATE FINE TUNE BECAUSE
-            // VERTEX SOMETIMES DOESNT SUPPORT INTERNET CONNECTION
-            //  IF YOU TRANSLATE TO ENGLISH
             let driveTune = '';
             return `bana ${USERNAME} olarak hitap edebilirsin, \n
             ${driveTune}
