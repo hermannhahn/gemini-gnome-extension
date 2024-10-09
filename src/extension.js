@@ -327,11 +327,7 @@ const Gemini = GObject.registerClass(
                     let answer = this.extractCodeFromText(aiResponse);
 
                     // Speech response
-                    if (
-                        answer.textoRestante !== null &&
-                        answer.textoRestante !== '' &&
-                        answer.textoRestante !== undefined
-                    ) {
+                    if (answer && answer.textoRestante !== undefined) {
                         // eslint-disable-next-line prefer-template
                         log('Answer: ' + answer.textoRestante);
                         this.textToSpeech(answer.textoRestante);
@@ -340,11 +336,7 @@ const Gemini = GObject.registerClass(
                     let codeName = 'Desconhecido';
                     let codeExample = 'no';
 
-                    if (
-                        answer.textoExtraido !== null &&
-                        answer.textoExtraido !== '' &&
-                        answer.textoExtraido !== undefined
-                    ) {
+                    if (answer && answer.textoExtraido !== undefined) {
                         let codeResult = answer.textoExtraido;
                         if (codeResult) {
                             codeName = codeResult.split('\n')[0];
