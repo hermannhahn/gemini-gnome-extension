@@ -125,7 +125,6 @@ const Gemini = GObject.registerClass(
             item.add_child(settingsButton);
             this.menu.addMenuItem(item);
             this.menu.box.add_child(this.scrollView);
-            this._initFirstResponse();
         }
 
         geminiResponse(text) {
@@ -590,7 +589,6 @@ export default class GeminiExtension extends Extension {
                 let response = decoder.decode(bytes.get_data());
                 const res = JSON.parse(response);
                 LOCATION = `${res.countryName}/${res.cityName}`;
-                this._gemini._initFirstResponse();
             },
         );
     }
