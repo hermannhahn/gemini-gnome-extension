@@ -265,6 +265,19 @@ const Gemini = GObject.registerClass(
             this.getAireponse(aiResponseItem, text);
         }
 
+        extractCodeFromText() {
+            const regex = /`{3}([\s\S]*?)`{3}/;
+            const matches = this.answer.match(regex);
+
+            if (matches) {
+                const textoExtraido = matches[1];
+                const textoRestante = this.answer.replace(regex, '');
+                return {textoExtraido, textoRestante};
+            } else {
+                return {textoExtraido: null, textoRestante: this.answer};
+            }
+        }
+
         getAireponse(
             inputItem,
             question,
@@ -317,8 +330,25 @@ const Gemini = GObject.registerClass(
                         let htmlResponse = convertMD(aiResponse);
                         inputItem.label.clutter_text.set_markup(htmlResponse);
                     }
+
+                    let answer = this.extractCodeFromText(aiResponse);
+
                     // Speech response
-                    this.textToSpeech(aiResponse);
+                    this.textToSpeech(answer.textoRestante);
+
+                    // Show window with extract code if exist
+                    if (answer.textoExtraido !== null) {
+                        const gnomeWindow =
+                            // eslint-disable-next-line prefer-template
+                            '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/gnome-window.py';
+
+                        this.gnomeNotify(
+                            `Code extracted: ${answer.textoExtraido}`,
+                        );
+                        this.executeCommand(
+                            `gnome-terminal --tab -x sh -c 'echo "${answer.textoExtraido}"'`,
+                        );
+                    }
                 },
             );
         }
