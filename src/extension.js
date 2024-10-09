@@ -331,7 +331,12 @@ const Gemini = GObject.registerClass(
                     }
 
                     // Speech response
-                    if (answer && answer.textoRestante !== undefined) {
+                    if (
+                        answer &&
+                        answer.textoRestante &&
+                        answer.textoRestante !== undefined &&
+                        answer.textoRestante !== ''
+                    ) {
                         // eslint-disable-next-line prefer-template
                         log('Answer: ' + answer.textoRestante);
                         this.textToSpeech(answer.textoRestante);
@@ -340,7 +345,11 @@ const Gemini = GObject.registerClass(
                     let codeName = 'Desconhecido';
                     let codeExample = 'no';
 
-                    if (answer && answer.textoExtraido !== undefined) {
+                    if (
+                        answer &&
+                        answer.textoExtraido &&
+                        answer.textoExtraido !== undefined
+                    ) {
                         let codeResult = answer.textoExtraido;
                         if (codeResult) {
                             codeName = codeResult.split('\n')[0];
