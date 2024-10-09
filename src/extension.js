@@ -3,6 +3,7 @@ import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
+import Gtk from 'gi://Gtk';
 
 import {
     Extension,
@@ -322,21 +323,30 @@ const Gemini = GObject.registerClass(
                             role: 'user',
                             parts: [{text: question}],
                         });
+                        this.chatHistory.push({
+                            role: 'model',
+                            parts: [{text: aiResponse}],
+                        });
+
                         if (answer.code !== null) {
                             let codeExample = convertMD(answer.code);
                             log(`codeExample: ${codeExample}`);
-                            this.chatHistory.push({
-                                role: 'model',
-                                parts: [{text: answer.tts}],
+                            // Open new Gtk Window to show codeExample
+                            let window = new Gtk.Window({
+                                title: _('Code Example'),
+                                default_width: 600,
+                                default_height: 400,
                             });
-                            this.chatHistory.push({
-                                role: 'model',
-                                parts: [{text: codeExample}],
+                            let label = new Gtk.Label({
+                                label: codeExample,
+                                use_markup: true,
+                                halign: Gtk.Align.START,
+                                valign: Gtk.Align.START,
                             });
-                        } else {
-                            this.chatHistory.push({
-                                role: 'model',
-                                parts: [{text: aiResponse}],
+                            window.add(label);
+                            window.show_all();
+                            window.connect('destroy', () => {
+                                window.destroy();
                             });
                         }
                     } else {
