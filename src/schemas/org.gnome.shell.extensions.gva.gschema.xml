@@ -30,7 +30,7 @@
             You need to set language for voice working in this extention
         </description>
     </key>
-    <key name="azure-speech-voice" type="s">
+    <key name="azure-voice-name" type="s">
         <default>"en-US-Neural"</default>
         <summary>Azure speech voice for voice working</summary>
         <description>
