@@ -341,14 +341,10 @@ const Gemini = GObject.registerClass(
                                 text: codeExample,
                                 x_align: Clutter.ActorAlign.START,
                             });
-
-                            box.add(label);
-
-                            // Adiciona o container à interface do usuário
-                            Main.uiGroup.add_child(box);
-
-                            // Configura a posição e o tamanho do container
-                            box.set_position(600, 400);
+                            this.box = box;
+                            box.add_child(label);
+                            this.add_child(box);
+                            this.menu.box.add_child(this.scrollView);
                         }
                     } else {
                         this.chatHistory = [];
