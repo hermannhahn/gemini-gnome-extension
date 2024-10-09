@@ -429,6 +429,8 @@ const Gemini = GObject.registerClass(
                 return;
             }
 
+            log(GOOGLEAPIKEY);
+
             // Requisição à API do Google Speech-to-Text
             const apiUrl =
                 // eslint-disable-next-line prefer-template
