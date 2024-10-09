@@ -34,6 +34,7 @@ class GeminiSettings {
         const defaultSpeechKey = this.schema.get_string('azure-speech-key');
         const defaultRegion = this.schema.get_string('azure-speech-region');
         const defaultLanguage = this.schema.get_string('azure-speech-language');
+        const defaultVoice = this.schema.get_string('azure-speech-voice');
         const defaultLog = this.schema.get_boolean('log-history');
 
         const label = new Gtk.Label({
@@ -57,7 +58,7 @@ class GeminiSettings {
         });
         const howToButtonAzure = new Gtk.LinkButton({
             label: _('How to get API key?'),
-            uri: 'https://github.com/wwardaww/gnome-gemini-ai?tab=readme-ov-file#using-gemini-api-key',
+            uri: 'https://learn.microsoft.com/en-us/azure/cognitive-services/speech-service/get-started-speech-to-text',
         });
 
         const labelRegion = new Gtk.Label({
@@ -82,6 +83,18 @@ class GeminiSettings {
             label: _('e.g. en-US'),
         });
 
+        const labelVoice = new Gtk.Label({
+            label: _('Speech Language'),
+            halign: Gtk.Align.START,
+        });
+        const azureVoice = new Gtk.Entry({
+            buffer: new Gtk.EntryBuffer(),
+        });
+        const howToVoice = new Gtk.LinkButton({
+            label: _('All voices'),
+            uri: 'https://learn.microsoft.com/en-us/azure/cognitive-services/speech-service/rest-api-reference-speech-to-text#supported-voices',
+        });
+
         const histroyLabel = new Gtk.Label({
             label: _('Remember talk history'),
             halign: Gtk.Align.START,
@@ -102,6 +115,8 @@ class GeminiSettings {
         azureSpeechKey.set_text(defaultSpeechKey);
         azureRegion.set_text(defaultRegion);
         azureLanguage.set_text(defaultLanguage);
+        azureVoice.set_text(defaultVoice);
+
         save.connect('clicked', () => {
             this.schema.set_string(
                 'gemini-api-key',
@@ -118,6 +133,10 @@ class GeminiSettings {
             this.schema.set_string(
                 'azure-speech-language',
                 azureLanguage.get_buffer().get_text(),
+            );
+            this.schema.set_string(
+                'azure-speech-voice',
+                azureVoice.get_buffer().get_text(),
             );
             this.schema.set_boolean('log-history', histroyButton.state);
             statusLabel.set_markup(_('Your preferences have been saved'));
@@ -140,11 +159,15 @@ class GeminiSettings {
         this.main.attach(azureLanguage, 2, 3, 2, 1);
         this.main.attach(howToLanguage, 4, 3, 1, 1);
 
-        this.main.attach(histroyLabel, 0, 4, 1, 1);
-        this.main.attach(histroyButton, 2, 4, 1, 1);
+        this.main.attach(labelVoice, 0, 4, 1, 1);
+        this.main.attach(azureVoice, 2, 4, 2, 1);
+        this.main.attach(howToVoice, 4, 4, 1, 1);
 
-        this.main.attach(save, 0, 5, 5, 1);
-        this.main.attach(statusLabel, 0, 6, 5, 1);
+        this.main.attach(histroyLabel, 0, 5, 1, 1);
+        this.main.attach(histroyButton, 2, 5, 1, 1);
+
+        this.main.attach(save, 0, 6, 5, 1);
+        this.main.attach(statusLabel, 0, 7, 5, 1);
 
         this.ui.add(this.main);
     }
