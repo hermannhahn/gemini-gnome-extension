@@ -334,19 +334,39 @@ const Gemini = GObject.registerClass(
                     let answer = this.extractCodeFromText(aiResponse);
 
                     // Speech response
-                    this.textToSpeech(answer.textoRestante);
+                    if (answer.textoRestante !== null) {
+                        this.textToSpeech(answer.textoRestante);
+                    }
 
-                    // Show window with extract code if exist
-                    if (answer.textoExtraido !== null) {
-                        const gnomeWindow =
-                            '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/gnome-window.py';
+                    let codeName = 'Desconhecido';
+                    let codeExample = '';
+                    let codeResult = this.extractCodeFromText().textoExtraido;
+                    if (codeResult) {
+                        codeName = codeResult.split('\n')[0];
+                        codeExample = codeResult.substring(
+                            codeResult.indexOf('\n') + 1,
+                        );
+                    }
 
-                        this.gnomeNotify(
-                            `Code extracted: ${answer.textoExtraido}`,
-                        );
-                        this.executeCommand(
-                            `gnome-terminal --tab -x sh -c 'echo "${answer.textoExtraido}"'`,
-                        );
+                    // Notify gnome
+                    // eslint-disable-next-line prefer-template
+                    const titulo = 'Exemplo de Código ' + codeName;
+
+                    // If answer has code, show in gnome window
+                    if (codeExample !== undefined) {
+                        if (codeExample.length > 0) {
+                            const gnomeWindow =
+                                '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/gnome-window.py';
+                            this.executeCommand(
+                                // eslint-disable-next-line prefer-template
+                                'python3 ' +
+                                    gnomeWindow +
+                                    ' ' +
+                                    titulo +
+                                    ' ' +
+                                    codeExample,
+                            );
+                        }
                     }
                 },
             );
