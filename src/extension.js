@@ -350,7 +350,7 @@ const Gemini = GObject.registerClass(
                     if (codeExample !== 'no') {
                         if (codeExample.length > 0) {
                             // eslint-disable-next-line prefer-template
-                            const titulo = 'Exemplo de Código ' + codeName;
+                            const titulo = `${codeName} example`;
                             log(`titulo: ${titulo}`);
                             log(`codeExample: ${codeExample}`);
                             const gnomeWindow =
