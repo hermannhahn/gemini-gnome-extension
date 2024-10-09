@@ -321,9 +321,18 @@ const Gemini = GObject.registerClass(
                             answer.textoRestante !== undefined &&
                             answer.textoRestante !== ''
                         ) {
+                            // Speech response
+                            // eslint-disable-next-line prefer-template
+                            log('Answer: ' + answer.textoRestante);
+                            this.textToSpeech(answer.textoRestante);
                             this.chatHistory.push({
                                 role: 'model',
                                 parts: [{text: answer.textoRestante}],
+                            });
+                        } else {
+                            this.chatHistory.push({
+                                role: 'model',
+                                parts: [{text: aiResponse}],
                             });
                         }
                     } else {
@@ -335,37 +344,16 @@ const Gemini = GObject.registerClass(
                         inputItem.label.clutter_text.set_markup(htmlResponse);
                     }
 
-                    // Speech response
-                    if (
-                        answer &&
-                        answer.textoRestante &&
-                        answer.textoRestante !== undefined &&
-                        answer.textoRestante !== ''
-                    ) {
-                        // eslint-disable-next-line prefer-template
-                        log('Answer: ' + answer.textoRestante);
-                        this.textToSpeech(answer.textoRestante);
-                    }
-
-                    let codeName = 'Desconhecido';
-                    let codeExample = 'no';
-
                     if (
                         answer &&
                         answer.textoExtraido &&
                         answer.textoExtraido !== undefined
                     ) {
                         let codeResult = answer.textoExtraido;
-                        if (codeResult) {
-                            codeName = codeResult.split('\n')[0];
-                            codeExample = codeResult.substring(
-                                codeResult.indexOf('\n') + 1,
-                            );
-                        }
-                    }
-
-                    // If answer has code, show in gnome window
-                    if (codeExample !== 'no') {
+                        let codeName = codeResult.split('\n')[0] || 'Unknown';
+                        let codeExample = codeResult.substring(
+                            codeResult.indexOf('\n') + 1,
+                        );
                         if (codeExample.length > 0) {
                             const titulo = `${codeName} example`;
                             log(`titulo: ${titulo}`);
