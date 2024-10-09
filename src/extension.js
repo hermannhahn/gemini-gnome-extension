@@ -630,7 +630,6 @@ const Gemini = GObject.registerClass(
 
 export default class GeminiExtension extends Extension {
     enable() {
-        this.registerKeybinding(VOICE_ACTIVATION_KEY);
         let url = 'https://thisipcan.cyou/json';
         let _httpSession = new Soup.Session();
         let message = Soup.Message.new('GET', url);
@@ -657,7 +656,6 @@ export default class GeminiExtension extends Extension {
     }
 
     disable() {
-        this.unregisterKeybinding(VOICE_ACTIVATION_KEY);
         this._gemini.destroy();
         this._gemini = null;
     }
