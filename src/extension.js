@@ -124,7 +124,8 @@ const Gemini = GObject.registerClass(
                 }),
             });
             this.scrollView.add_child(this.chatSection.actor);
-            searchEntry.clutter_text.connect('activate', () => {
+            searchEntry.clutter_text.connect('activate', (actor) => {
+                this.aiResponse(actor.text);
                 searchEntry.clutter_text.set_text('');
             });
             micButton.connect('clicked', (_self) => {
