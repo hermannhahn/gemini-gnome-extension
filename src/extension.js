@@ -145,25 +145,12 @@ const Gemini = GObject.registerClass(
 
         // Registrar o atalho da tecla configurada
         registerKeybinding(key) {
-            f1BindingId = global.display.add_keybinding(
-                `${key}-keybinding`, // Nome do atalho (deve ser único)
-                new Gio.Settings({schema: 'org.gnome.desktop.wm.keybindings'}), // Configurações de teclado do GNOME
-                Meta.KeyBindingFlags.NONE, // Sem flags adicionais
-                Shell.ActionMode.ALL, // Atalho disponível em todos os modos
-                () => {
-                    // Função callback para ser executada ao pressionar a tecla configurada
-                    this.onKeyPressed(key);
-                },
-            );
+            log(key);
         }
 
         // Remover o atalho da tecla F1
         unregisterKeybinding(key) {
-            if (f1BindingId) {
-                global.display.remove_keybinding(`${key}-keybinding`);
-                log(`Keybinding ${key}`);
-                f1BindingId = null;
-            }
+            log(key);
         }
 
         geminiResponse(text) {
