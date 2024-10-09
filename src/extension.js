@@ -310,32 +310,33 @@ const Gemini = GObject.registerClass(
                     }
                     let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
                     let answer = this.extractCodeFromText(aiResponse);
+
+                    // Speech response
+                    // eslint-disable-next-line prefer-template
+                    log('Text to speech: ' + answer.tts);
+                    this.textToSpeech(answer.tts);
+
+                    // Add to chat
                     if (RECURSIVETALK) {
                         this.chatHistory.push({
                             role: 'user',
                             parts: [{text: question}],
                         });
-                        if (answer) {
-                            // Speech response
-                            // eslint-disable-next-line prefer-template
-                            log('Text to speech: ' + answer.tts);
-                            this.textToSpeech(answer.tts);
-                            if (
-                                answer &&
-                                answer.textoExtraido &&
-                                answer.textoExtraido !== undefined
-                            ) {
-                                let codeResult = answer.textoExtraido;
-                                let codeExample = codeResult.substring(
-                                    codeResult.indexOf('\n') + 1,
-                                );
-                                if (codeExample.length > 0) {
-                                    log(`codeExample: ${codeExample}`);
-                                    this.chatHistory.push({
-                                        role: 'model',
-                                        parts: [{text: codeExample}],
-                                    });
-                                }
+                        if (answer.code !== null) {
+                            let codeResult = answer.textoExtraido;
+                            let codeExample = codeResult.substring(
+                                codeResult.indexOf('\n') + 1,
+                            );
+                            if (codeExample.length > 0) {
+                                log(`codeExample: ${codeExample}`);
+                                this.chatHistory.push({
+                                    role: 'model',
+                                    parts: [{text: answer.tts}],
+                                });
+                                this.chatHistory.push({
+                                    role: 'model',
+                                    parts: [{text: codeExample}],
+                                });
                             }
                         } else {
                             this.chatHistory.push({
