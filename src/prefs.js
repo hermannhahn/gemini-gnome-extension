@@ -31,7 +31,8 @@ class GeminiSettings {
             row_homogeneous: false,
         });
         const defaultKey = this.schema.get_string('gemini-api-key');
-        const defaultGKey = this.schema.get_string('google-api-key');
+        const defaultSpeechKey = this.schema.get_string('azure-speech-key');
+        const defaultRegion = this.schema.get_string('azure-region');
         const defaultFolder = this.schema.get_string('drive-folder');
         const defaultLog = this.schema.get_boolean('log-history');
         const defaultVertex = this.schema.get_boolean('vertex-enabled');
@@ -50,16 +51,27 @@ class GeminiSettings {
             uri: 'https://github.com/wwardaww/gnome-gemini-ai?tab=readme-ov-file#using-gemini-api-key',
         });
 
-        const labelGoogle = new Gtk.Label({
-            label: _('Google API Key'),
+        const labelAzure = new Gtk.Label({
+            label: _('Azure Speech API Key'),
             halign: Gtk.Align.START,
         });
-        const googleApiKey = new Gtk.Entry({
+        const azureSpeechKey = new Gtk.Entry({
             buffer: new Gtk.EntryBuffer(),
         });
-        const howToButtonGoogle = new Gtk.LinkButton({
+        const howToButtonAzure = new Gtk.LinkButton({
             label: _('How to get API key?'),
             uri: 'https://github.com/wwardaww/gnome-gemini-ai?tab=readme-ov-file#using-gemini-api-key',
+        });
+
+        const labelRegion = new Gtk.Label({
+            label: _('Azure Speech Region'),
+            halign: Gtk.Align.START,
+        });
+        const azureRegion = new Gtk.Entry({
+            buffer: new Gtk.EntryBuffer(),
+        });
+        const howToRegion = new Gtk.Label({
+            label: _('e.g. eastus'),
         });
 
         const labelFolder = new Gtk.Label({
@@ -101,7 +113,8 @@ class GeminiSettings {
         histroyButton.set_active(defaultLog);
         VertexButton.set_active(defaultVertex);
         apiKey.set_text(defaultKey);
-        googleApiKey.set_text(defaultGKey);
+        azureSpeechKey.set_text(defaultSpeechKey);
+        azureRegion.set_text(defaultRegion);
         VertexProject.set_text(defaultVertexProject);
         folderUrl.set_text(defaultFolder);
         save.connect('clicked', () => {
@@ -110,8 +123,12 @@ class GeminiSettings {
                 apiKey.get_buffer().get_text(),
             );
             this.schema.set_string(
-                'google-api-key',
-                googleApiKey.get_buffer().get_text(),
+                'azure-speech-key',
+                azureSpeechKey.get_buffer().get_text(),
+            );
+            this.schema.set_string(
+                'azure-region',
+                azureRegion.get_buffer().get_text(),
             );
             this.schema.set_string(
                 'drive-folder',
@@ -131,24 +148,28 @@ class GeminiSettings {
         this.main.attach(apiKey, 2, 0, 2, 1);
         this.main.attach(howToButton, 4, 0, 1, 1);
 
-        this.main.attach(labelGoogle, 0, 1, 1, 1);
-        this.main.attach(googleApiKey, 2, 1, 2, 1);
-        this.main.attach(howToButtonGoogle, 4, 1, 1, 1);
+        this.main.attach(labelAzure, 0, 1, 1, 1);
+        this.main.attach(azureSpeechKey, 2, 1, 2, 1);
+        this.main.attach(howToButtonAzure, 4, 1, 1, 1);
 
-        this.main.attach(labelFolder, 0, 2, 1, 1);
-        this.main.attach(folderUrl, 2, 2, 2, 1);
+        this.main.attach(labelRegion, 0, 2, 1, 1);
+        this.main.attach(azureRegion, 2, 2, 2, 1);
+        this.main.attach(howToRegion, 4, 2, 1, 1);
 
-        this.main.attach(histroyLabel, 0, 3, 1, 1);
-        this.main.attach(histroyButton, 2, 3, 1, 1);
+        this.main.attach(labelFolder, 0, 3, 1, 1);
+        this.main.attach(folderUrl, 2, 3, 2, 1);
 
-        this.main.attach(vertexLabel, 0, 4, 1, 1);
-        this.main.attach(VertexButton, 2, 4, 1, 1);
+        this.main.attach(histroyLabel, 0, 4, 1, 1);
+        this.main.attach(histroyButton, 2, 4, 1, 1);
 
-        this.main.attach(vertexProjectLabel, 0, 5, 1, 1);
-        this.main.attach(VertexProject, 2, 5, 2, 1);
+        this.main.attach(vertexLabel, 0, 5, 1, 1);
+        this.main.attach(VertexButton, 2, 5, 1, 1);
 
-        this.main.attach(save, 2, 6, 1, 1);
-        this.main.attach(statusLabel, 0, 7, 5, 1);
+        this.main.attach(vertexProjectLabel, 0, 6, 1, 1);
+        this.main.attach(VertexProject, 2, 6, 2, 1);
+
+        this.main.attach(save, 0, 7, 4, 1);
+        this.main.attach(statusLabel, 0, 8, 4, 1);
 
         this.ui.add(this.main);
     }
