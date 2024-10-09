@@ -24,6 +24,9 @@ let USERNAME = GLib.get_real_name();
 let RECURSIVETALK = false;
 let ISVERTEX = false;
 let LASTQUESTIONFILE = 'lastQuestion.wav';
+// Informações da API da Microsoft (chave e região)
+let AZURE_SPEECH_KEY = 'SUA_CHAVE_DE_API';
+let AZURE_REGION = 'SUA_REGIAO'; // Ex: "eastus"
 
 // Log function
 function log(message) {
@@ -415,68 +418,66 @@ const Gemini = GObject.registerClass(
             }
         }
 
-        // Função para transcrever o áudio gravado usando Google Speech-to-Text API (não utilizada)
+        // Função para transcrever o áudio gravado usando Microsoft Speech-to-Text API
         transcribeAudio(audioFile) {
             const audioPath =
                 // eslint-disable-next-line prefer-template
                 '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/' +
                 audioFile;
 
-            // Converte o arquivo de áudio para base64
-            const audioBase64 = this.encodeFileToBase64(audioPath);
-            if (!audioBase64) {
-                log('Falha ao converter arquivo de áudio.');
+            // Carregar o arquivo de áudio em formato binário
+            let file = Gio.File.new_for_path(audioPath);
+            let [, audioBinary] = file.load_contents(null);
+
+            if (!audioBinary) {
+                log('Falha ao carregar o arquivo de áudio.');
                 return;
             }
 
-            // eslint-disable-next-line prefer-template
-            log('API KEY: ' + GOOGLEAPIKEY);
+            // Requisição à API do Microsoft Speech-to-Text
+            const apiUrl = `https://${AZURE_REGION}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR`;
 
-            // Requisição à API do Google Speech-to-Text
-            const apiUrl =
+            // Headers necessários para a requisição
+            const headers = [
+                'Content-Type: audio/wav', // O arquivo será enviado em formato .wav
                 // eslint-disable-next-line prefer-template
-                'https://speech.googleapis.com/v1/speech:recognize?key=' +
-                GOOGLEAPIKEY;
+                'Ocp-Apim-Subscription-Key: ' + AZURE_SPEECH_KEY, // Chave de autenticação
+                'Accept: application/json', // A resposta será em JSON
+            ];
 
-            const postData = JSON.stringify({
-                config: {
-                    encoding: 'LINEAR16', // O formato de codificação para arquivos .wav
-                    sampleRateHertz: 16000, // Certifique-se de que a taxa de amostragem seja 16kHz ou compatível
-                    languageCode: 'pt-BR', // Ajuste para o idioma desejado
-                },
-                audio: {
-                    content: audioBase64, // Arquivo de áudio em base64
-                },
-            });
-
-            // Criar um arquivo temporário para armazenar o conteúdo do POST data
+            // Criar um arquivo temporário para armazenar o áudio binário (opcional)
             const [success, tempFilePath] = GLib.file_open_tmp(
-                'google_speech_post_data_XXXXXX.json',
+                'azure_speech_audio_XXXXXX.wav',
             );
             if (!success) {
                 log('Falha ao criar arquivo temporário.');
                 return;
             }
 
-            // Escrever o postData no arquivo temporário
+            // Escrever o áudio binário no arquivo temporário
             try {
-                GLib.file_set_contents(tempFilePath, postData);
+                GLib.file_set_contents(tempFilePath, audioBinary);
             } catch (e) {
                 // eslint-disable-next-line prefer-template
                 log('Erro ao escrever no arquivo temporário: ' + e.message);
                 return;
             }
 
-            // Usa subprocesso para enviar requisição HTTP com curl, lendo os dados do arquivo
+            // Usa subprocesso para enviar requisição HTTP com curl, lendo o áudio do arquivo
             let subprocess = new Gio.Subprocess({
                 argv: [
                     'curl',
-                    '-s',
+                    '-X',
+                    'POST',
                     '-H',
-                    'Content-Type: application/json',
-                    '-d',
+                    headers[0], // Content-Type
+                    '-H',
+                    headers[1], // Ocp-Apim-Subscription-Key
+                    '-H',
+                    headers[2], // Accept
                     // eslint-disable-next-line prefer-template
-                    '@' + tempFilePath, // @ indica que o curl deve ler os dados de um arquivo
+                    '--data-binary',
+                    '@' + tempFilePath, // Enviar o arquivo de áudio binário
                     apiUrl,
                 ],
                 flags:
@@ -496,16 +497,11 @@ const Gemini = GObject.registerClass(
                         log('Resposta da API: ' + stdout);
                         let response = JSON.parse(stdout);
 
-                        if (
-                            response &&
-                            response.results &&
-                            response.results.length > 0
-                        ) {
-                            let transcription =
-                                response.results[0].alternatives[0].transcript;
+                        if (response && response.DisplayText) {
+                            let transcription = response.DisplayText;
                             // eslint-disable-next-line prefer-template
                             log('Transcrição: ' + transcription);
-                            this.aiResponse(transcription);
+                            this.aiResponse(transcription); // Função para processar a resposta da transcrição
                         } else {
                             log('Nenhuma transcrição encontrada.');
                         }
