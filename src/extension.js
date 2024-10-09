@@ -16,8 +16,9 @@ import {convertMD} from './md2pango.js';
 
 let GEMINIAPIKEY = '';
 let AZURE_SPEECH_KEY = '';
-let AZURE_REGION = ''; // Ex: "eastus"
+let AZURE_SPEECH_REGION = ''; // Ex: "eastus"
 let AZURE_SPEECH_LANGUAGE = ''; // Ex: "en-US"
+let AZURE_SPEECH_VOICE = ''; // Ex: "en-US-Neural"
 let LOCATION = '';
 let USERNAME = GLib.get_real_name();
 let RECURSIVETALK = true;
@@ -50,10 +51,11 @@ const Gemini = GObject.registerClass(
             const {settings} = this.extension;
             GEMINIAPIKEY = settings.get_string('gemini-api-key');
             AZURE_SPEECH_KEY = settings.get_string('azure-speech-key');
-            AZURE_REGION = settings.get_string('azure-speech-region');
+            AZURE_SPEECH_REGION = settings.get_string('azure-speech-region');
             AZURE_SPEECH_LANGUAGE = settings.get_string(
                 'azure-speech-language',
             );
+            AZURE_SPEECH_VOICE = settings.get_string('azure-speech-voice');
             RECURSIVETALK = settings.get_boolean('log-history');
         }
 
@@ -431,7 +433,7 @@ const Gemini = GObject.registerClass(
             }
 
             // Requisição à API do Microsoft Speech-to-Text
-            const apiUrl = `https://${AZURE_REGION}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${AZURE_SPEECH_LANGUAGE}`;
+            const apiUrl = `https://${AZURE_SPEECH_REGION}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${AZURE_SPEECH_LANGUAGE}`;
 
             // Headers necessários para a requisição
             const headers = [
@@ -517,7 +519,7 @@ const Gemini = GObject.registerClass(
 
         // Função para converter texto em áudio usando Microsoft Text-to-Speech API
         textToSpeech(text) {
-            const apiUrl = `https://${AZURE_REGION}.tts.speech.microsoft.com/cognitiveservices/v1`;
+            const apiUrl = `https://${AZURE_SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/v1`;
 
             // Headers para a requisição
             const headers = [
@@ -530,7 +532,7 @@ const Gemini = GObject.registerClass(
             // Estrutura SSML (Speech Synthesis Markup Language) para definir o texto e a voz
             const ssml = `
         <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${AZURE_SPEECH_LANGUAGE}'>
-            <voice name='pt-BR-FranciscaNeural'>${text}</voice>
+            <voice name='${AZURE_SPEECH_VOICE}'>${text}</voice>
         </speak>
     `;
 
