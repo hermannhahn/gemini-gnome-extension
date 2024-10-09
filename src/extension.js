@@ -135,10 +135,24 @@ const Gemini = GObject.registerClass(
         }
 
         // Função que será executada quando F1 for pressionada
-        onPressed(key) {
+        onKeyPressed(key) {
             log(`Key pressed: ${key}`);
             // Adicione aqui a função que deseja executar
             // Exemplo: this.textToSpeech('Olá, isso é um teste de F1!');
+        }
+
+        // Registrar o atalho da tecla F1
+        registerKeybinding(key) {
+            f1BindingId = global.display.add_keybinding(
+                `${key}-keybinding`, // Nome do atalho (deve ser único)
+                new Gio.Settings({schema: 'org.gnome.desktop.wm.keybindings'}), // Configurações de teclado do GNOME
+                Meta.KeyBindingFlags.NONE, // Sem flags adicionais
+                Shell.ActionMode.ALL, // Atalho disponível em todos os modos
+                () => {
+                    // Função callback para ser executada ao pressionar F1
+                    this.onKeyPressed(key);
+                },
+            );
         }
 
         geminiResponse(text) {
