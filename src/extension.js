@@ -317,6 +317,8 @@ const Gemini = GObject.registerClass(
                         let htmlResponse = convertMD(aiResponse);
                         inputItem.label.clutter_text.set_markup(htmlResponse);
                     }
+                    // Speech response
+                    this.textToSpeech(aiResponse);
                 },
             );
         }
