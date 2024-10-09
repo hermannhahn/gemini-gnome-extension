@@ -140,7 +140,7 @@ class GeminiSettings {
                 azureSpeechKey.get_buffer().get_text(),
             );
             this.schema.set_string(
-                'azure-region',
+                'azure-speech-region',
                 azureRegion.get_buffer().get_text(),
             );
             this.schema.set_string(
