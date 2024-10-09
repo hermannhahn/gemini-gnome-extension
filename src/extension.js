@@ -323,21 +323,16 @@ const Gemini = GObject.registerClass(
                             parts: [{text: question}],
                         });
                         if (answer.code !== null) {
-                            let codeResult = answer.textoExtraido;
-                            let codeExample = codeResult.substring(
-                                codeResult.indexOf('\n') + 1,
-                            );
-                            if (codeExample.length > 0) {
-                                log(`codeExample: ${codeExample}`);
-                                this.chatHistory.push({
-                                    role: 'model',
-                                    parts: [{text: answer.tts}],
-                                });
-                                this.chatHistory.push({
-                                    role: 'model',
-                                    parts: [{text: codeExample}],
-                                });
-                            }
+                            let codeExample = convertMD(answer.code);
+                            log(`codeExample: ${codeExample}`);
+                            this.chatHistory.push({
+                                role: 'model',
+                                parts: [{text: answer.tts}],
+                            });
+                            this.chatHistory.push({
+                                role: 'model',
+                                parts: [{text: codeExample}],
+                            });
                         } else {
                             this.chatHistory.push({
                                 role: 'model',
