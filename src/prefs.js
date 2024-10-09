@@ -34,11 +34,7 @@ class GeminiSettings {
         const defaultSpeechKey = this.schema.get_string('azure-speech-key');
         const defaultRegion = this.schema.get_string('azure-speech-region');
         const defaultLanguage = this.schema.get_string('azure-speech-language');
-        const defaultFolder = this.schema.get_string('drive-folder');
         const defaultLog = this.schema.get_boolean('log-history');
-        const defaultVertex = this.schema.get_boolean('vertex-enabled');
-        const defaultVertexProject =
-            this.schema.get_string('vertex-project-id');
 
         const label = new Gtk.Label({
             label: _('Gemini API Key'),
@@ -86,33 +82,12 @@ class GeminiSettings {
             label: _('e.g. en-US'),
         });
 
-        const labelFolder = new Gtk.Label({
-            label: _('Drive Folder for Vertex \n (optional)'),
-            halign: Gtk.Align.START,
-        });
-        const folderUrl = new Gtk.Entry({
-            buffer: new Gtk.EntryBuffer(),
-        });
-
         const histroyLabel = new Gtk.Label({
             label: _('Remember talk history'),
             halign: Gtk.Align.START,
         });
         const histroyButton = new Gtk.Switch();
 
-        const vertexLabel = new Gtk.Label({
-            label: _('Enable Vertex API'),
-            halign: Gtk.Align.START,
-        });
-        const VertexButton = new Gtk.Switch();
-
-        const vertexProjectLabel = new Gtk.Label({
-            label: _('Vertex Project ID'),
-            halign: Gtk.Align.START,
-        });
-        const VertexProject = new Gtk.Entry({
-            buffer: new Gtk.EntryBuffer(),
-        });
         const save = new Gtk.Button({
             label: _('Save'),
         });
@@ -123,13 +98,10 @@ class GeminiSettings {
         });
 
         histroyButton.set_active(defaultLog);
-        VertexButton.set_active(defaultVertex);
         apiKey.set_text(defaultKey);
         azureSpeechKey.set_text(defaultSpeechKey);
         azureRegion.set_text(defaultRegion);
         azureLanguage.set_text(defaultLanguage);
-        VertexProject.set_text(defaultVertexProject);
-        folderUrl.set_text(defaultFolder);
         save.connect('clicked', () => {
             this.schema.set_string(
                 'gemini-api-key',
@@ -147,16 +119,7 @@ class GeminiSettings {
                 'azure-speech-language',
                 azureLanguage.get_buffer().get_text(),
             );
-            this.schema.set_string(
-                'drive-folder',
-                folderUrl.get_buffer().get_text(),
-            );
-            this.schema.set_string(
-                'vertex-project-id',
-                VertexProject.get_buffer().get_text(),
-            );
             this.schema.set_boolean('log-history', histroyButton.state);
-            this.schema.set_boolean('vertex-enabled', VertexButton.state);
             statusLabel.set_markup(_('Your preferences have been saved'));
         });
 
@@ -177,20 +140,11 @@ class GeminiSettings {
         this.main.attach(azureLanguage, 2, 3, 2, 1);
         this.main.attach(howToLanguage, 4, 3, 1, 1);
 
-        this.main.attach(labelFolder, 0, 4, 1, 1);
-        this.main.attach(folderUrl, 2, 4, 2, 1);
+        this.main.attach(histroyLabel, 0, 4, 1, 1);
+        this.main.attach(histroyButton, 2, 4, 1, 1);
 
-        this.main.attach(histroyLabel, 0, 5, 1, 1);
-        this.main.attach(histroyButton, 2, 5, 1, 1);
-
-        this.main.attach(vertexLabel, 0, 6, 1, 1);
-        this.main.attach(VertexButton, 2, 6, 1, 1);
-
-        this.main.attach(vertexProjectLabel, 0, 7, 1, 1);
-        this.main.attach(VertexProject, 2, 7, 2, 1);
-
-        this.main.attach(save, 0, 8, 5, 1);
-        this.main.attach(statusLabel, 0, 9, 5, 1);
+        this.main.attach(save, 0, 5, 5, 1);
+        this.main.attach(statusLabel, 0, 6, 5, 1);
 
         this.ui.add(this.main);
     }
