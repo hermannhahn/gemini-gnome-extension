@@ -329,6 +329,23 @@ const Gemini = GObject.registerClass(
                                 role: 'model',
                                 parts: [{text: answer.textoRestante}],
                             });
+                            if (
+                                answer &&
+                                answer.textoExtraido &&
+                                answer.textoExtraido !== undefined
+                            ) {
+                                let codeResult = answer.textoExtraido;
+                                let codeExample = codeResult.substring(
+                                    codeResult.indexOf('\n') + 1,
+                                );
+                                if (codeExample.length > 0) {
+                                    log(`codeExample: ${codeExample}`);
+                                    this.chatHistory.push({
+                                        role: 'model',
+                                        parts: [{text: codeExample}],
+                                    });
+                                }
+                            }
                         } else {
                             this.chatHistory.push({
                                 role: 'model',
@@ -342,34 +359,6 @@ const Gemini = GObject.registerClass(
                     if (inputItem !== undefined) {
                         let htmlResponse = convertMD(aiResponse);
                         inputItem.label.clutter_text.set_markup(htmlResponse);
-                    }
-
-                    if (
-                        answer &&
-                        answer.textoExtraido &&
-                        answer.textoExtraido !== undefined
-                    ) {
-                        let codeResult = answer.textoExtraido;
-                        let codeName = codeResult.split('\n')[0] || 'Unknown';
-                        let codeExample = codeResult.substring(
-                            codeResult.indexOf('\n') + 1,
-                        );
-                        if (codeExample.length > 0) {
-                            const titulo = `${codeName} example`;
-                            log(`titulo: ${titulo}`);
-                            log(`codeExample: ${codeExample}`);
-                            const gnomeWindow =
-                                '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/gnome-window.py';
-                            this.executeCommand(
-                                // eslint-disable-next-line prefer-template
-                                'python3 ' +
-                                    gnomeWindow +
-                                    ' ' +
-                                    titulo +
-                                    ' ' +
-                                    codeExample,
-                            );
-                        }
                     }
                 },
             );
