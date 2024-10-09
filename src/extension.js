@@ -339,20 +339,28 @@ const Gemini = GObject.registerClass(
 
                     let codeName = 'Desconhecido';
                     let codeExample = 'no';
-                    let codeResult = answer.textoExtraido;
-                    if (codeResult) {
-                        codeName = codeResult.split('\n')[0];
-                        codeExample = codeResult.substring(
-                            codeResult.indexOf('\n') + 1,
-                        );
+
+                    if (
+                        answer.textoExtraido !== null &&
+                        answer.textoExtraido !== '' &&
+                        answer.textoExtraido !== undefined
+                    ) {
+                        let codeResult = answer.textoExtraido;
+                        if (codeResult) {
+                            codeName = codeResult.split('\n')[0];
+                            codeExample = codeResult.substring(
+                                codeResult.indexOf('\n') + 1,
+                            );
+                        }
                     }
 
                     // If answer has code, show in gnome window
                     if (codeExample !== 'no') {
                         if (codeExample.length > 0) {
-                            // Notify gnome
                             // eslint-disable-next-line prefer-template
                             const titulo = 'Exemplo de Código ' + codeName;
+                            log(`titulo: ${titulo}`);
+                            log(`codeExample: ${codeExample}`);
                             const gnomeWindow =
                                 '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/gnome-window.py';
                             this.executeCommand(
