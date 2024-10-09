@@ -353,7 +353,6 @@ const Gemini = GObject.registerClass(
                     // If answer has code, show in gnome window
                     if (codeExample !== 'no') {
                         if (codeExample.length > 0) {
-                            // eslint-disable-next-line prefer-template
                             const titulo = `${codeName} example`;
                             log(`titulo: ${titulo}`);
                             log(`codeExample: ${codeExample}`);
