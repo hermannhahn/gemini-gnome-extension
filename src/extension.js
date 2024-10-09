@@ -24,6 +24,7 @@ let AZURE_SPEECH_KEY = '';
 let AZURE_SPEECH_REGION = ''; // Ex: "eastus"
 let AZURE_SPEECH_LANGUAGE = ''; // Ex: "en-US"
 let AZURE_SPEECH_VOICE = ''; // Ex: "en-US-JennyNeural"
+let VOICE_ACTIVATION_KEY = 'F8';
 let LOCATION = '';
 let USERNAME = GLib.get_real_name();
 let RECURSIVETALK = true;
@@ -134,14 +135,14 @@ const Gemini = GObject.registerClass(
             this.menu.box.add_child(this.scrollView);
         }
 
-        // Função que será executada quando F1 for pressionada
+        // Função que será executada quando a tecla configurada for pressionada
         onKeyPressed(key) {
             log(`Key pressed: ${key}`);
             // Adicione aqui a função que deseja executar
             // Exemplo: this.textToSpeech('Olá, isso é um teste de F1!');
         }
 
-        // Registrar o atalho da tecla F1
+        // Registrar o atalho da tecla configurada
         registerKeybinding(key) {
             f1BindingId = global.display.add_keybinding(
                 `${key}-keybinding`, // Nome do atalho (deve ser único)
@@ -149,10 +150,19 @@ const Gemini = GObject.registerClass(
                 Meta.KeyBindingFlags.NONE, // Sem flags adicionais
                 Shell.ActionMode.ALL, // Atalho disponível em todos os modos
                 () => {
-                    // Função callback para ser executada ao pressionar F1
+                    // Função callback para ser executada ao pressionar a tecla configurada
                     this.onKeyPressed(key);
                 },
             );
+        }
+
+        // Remover o atalho da tecla F1
+        unregisterKeybinding(key) {
+            if (f1BindingId) {
+                global.display.remove_keybinding(`${key}-keybinding`);
+                log(`Keybinding ${key}`);
+                f1BindingId = null;
+            }
         }
 
         geminiResponse(text) {
@@ -635,6 +645,7 @@ const Gemini = GObject.registerClass(
 
 export default class GeminiExtension extends Extension {
     enable() {
+        this.registerKeybinding(VOICE_ACTIVATION_KEY);
         let url = 'https://thisipcan.cyou/json';
         let _httpSession = new Soup.Session();
         let message = Soup.Message.new('GET', url);
@@ -661,6 +672,7 @@ export default class GeminiExtension extends Extension {
     }
 
     disable() {
+        this.unregisterKeybinding(VOICE_ACTIVATION_KEY);
         this._gemini.destroy();
         this._gemini = null;
     }
