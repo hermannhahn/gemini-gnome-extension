@@ -1,8 +1,13 @@
-import St from 'gi://St';
 import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
+import {St, Clutter} from 'gi://St'; // Importa o módulo St
+import {Meta} from 'gi://Meta'; // Importa o módulo Meta
+import {Shell} from 'gi://Shell'; // Importa o módulo Shell
+
+// Variável para armazenar o ID da ligação de tecla F1
+let f1BindingId = null;
 
 import {
     Extension,
@@ -127,6 +132,13 @@ const Gemini = GObject.registerClass(
             item.add_child(settingsButton);
             this.menu.addMenuItem(item);
             this.menu.box.add_child(this.scrollView);
+        }
+
+        // Função que será executada quando F1 for pressionada
+        onPressed(key) {
+            log(`Key pressed: ${key}`);
+            // Adicione aqui a função que deseja executar
+            // Exemplo: this.textToSpeech('Olá, isso é um teste de F1!');
         }
 
         geminiResponse(text) {
