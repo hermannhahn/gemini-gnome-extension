@@ -4,7 +4,6 @@ import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
 import Clutter from 'gi://Clutter';
-import Mainloop from 'gi://Mainloop';
 
 import {
     Extension,
@@ -350,12 +349,6 @@ const Gemini = GObject.registerClass(
 
                             // Configura a posição e o tamanho do container
                             box.set_position(600, 400);
-
-                            // Opcional: Remove o container após algum tempo ou um evento
-                            Mainloop.timeout_add_seconds(5, () => {
-                                Main.uiGroup.remove_child(box);
-                                return false; // para parar o timeout
-                            });
                         }
                     } else {
                         this.chatHistory = [];
