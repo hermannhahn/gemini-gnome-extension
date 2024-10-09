@@ -272,11 +272,11 @@ const Gemini = GObject.registerClass(
             const matches = question.match(regex);
 
             if (matches) {
-                const textoExtraido = matches[1];
-                const textoRestante = question.replace(regex, '');
-                return {textoExtraido, textoRestante};
+                const code = matches[1];
+                const tts = question.replace(regex, '');
+                return {code, tts};
             } else {
-                return {textoExtraido: null, textoRestante: question};
+                return {code: null, tts: question};
             }
         }
 
@@ -315,20 +315,11 @@ const Gemini = GObject.registerClass(
                             role: 'user',
                             parts: [{text: question}],
                         });
-                        if (
-                            answer &&
-                            answer.textoRestante &&
-                            answer.textoRestante !== undefined &&
-                            answer.textoRestante !== ''
-                        ) {
+                        if (answer) {
                             // Speech response
                             // eslint-disable-next-line prefer-template
-                            log('Answer: ' + answer.textoRestante);
-                            this.textToSpeech(answer.textoRestante);
-                            this.chatHistory.push({
-                                role: 'model',
-                                parts: [{text: answer.textoRestante}],
-                            });
+                            log('Text to speech: ' + answer.tts);
+                            this.textToSpeech(answer.tts);
                             if (
                                 answer &&
                                 answer.textoExtraido &&
