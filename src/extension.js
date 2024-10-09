@@ -129,24 +129,6 @@ const Gemini = GObject.registerClass(
             this.menu.box.add_child(this.scrollView);
         }
 
-        // Função que será executada quando a tecla configurada for pressionada
-        onKeyPressed(key) {
-            log(`Key pressed: ${key}`);
-            this.startRecording(LASTQUESTIONFILE);
-            // Adicione aqui a função que deseja executar
-            // Exemplo: this.textToSpeech('Olá, isso é um teste de F1!');
-        }
-
-        // Registrar o atalho da tecla configurada
-        registerKeybinding(key) {
-            log(key);
-        }
-
-        // Remover o atalho da tecla F1
-        unregisterKeybinding(key) {
-            log(key);
-        }
-
         geminiResponse(text) {
             let aiResponse = _(`<b>Gemini: </b> ${text}`);
             const aiResponseItem = new PopupMenu.PopupMenuItem('');
@@ -517,8 +499,6 @@ const Gemini = GObject.registerClass(
                             let transcription = response.DisplayText;
                             // eslint-disable-next-line prefer-template
                             log('Transcrição: ' + transcription);
-                            // eslint-disable-next-line prefer-template
-                            log('Voice' + AZURE_SPEECH_VOICE);
                             this.aiResponse(transcription); // Função para processar a resposta da transcrição
                         } else {
                             log('Nenhuma transcrição encontrada.');
