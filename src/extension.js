@@ -348,18 +348,15 @@ const Gemini = GObject.registerClass(
                                 style_class: 'popup-menu-item',
                             });
                             popup.add_child(box);
-                            this.chatSection.addMenuItem(
+                            popup.show_all();
+
+                            let codeSection = new PopupMenu.PopupMenuSection();
+
+                            codeSection.addMenuItem(
                                 new PopupMenu.PopupSeparatorMenuItem(),
                             );
-                            this.chatSection.addMenuItem(popup);
-                            this.chatSection.addMenuItem(
-                                new PopupMenu.PopupSeparatorMenuItem(),
-                            );
-                            this.chatSection.addMenuItem(
-                                new PopupMenu.PopupMenuItem({
-                                    label: codeExample,
-                                }),
-                            );
+                            codeSection.addMenuItem(popup);
+                            this.chatSection.addMenuItem(codeSection);
                         }
                     } else {
                         this.chatHistory = [];
