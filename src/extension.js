@@ -312,9 +312,12 @@ const Gemini = GObject.registerClass(
                     let answer = this.extractCodeFromText(aiResponse);
 
                     // Speech response
-                    // eslint-disable-next-line prefer-template
-                    log('Text to speech: ' + answer.tts);
-                    this.textToSpeech(answer.tts);
+                    if (answer.tts !== null) {
+                        // eslint-disable-next-line prefer-template
+                        log('Text to speech: ' + answer.tts);
+
+                        this.textToSpeech(answer.tts);
+                    }
 
                     // Add to chat
                     if (RECURSIVETALK) {
