@@ -18,6 +18,7 @@ import {generateAPIKey} from './auth.js';
 let GEMINIAPIKEY = '';
 let AZURE_SPEECH_KEY = '';
 let AZURE_REGION = ''; // Ex: "eastus"
+let AZURE_SPEECH_LANGUAGE = ''; // Ex: "en-US"
 let DRIVEFOLDER = '';
 let VERTEXPROJECTID = '';
 let LOCATION = '';
@@ -65,6 +66,9 @@ const Gemini = GObject.registerClass(
             GEMINIAPIKEY = settings.get_string('gemini-api-key');
             AZURE_SPEECH_KEY = settings.get_string('azure-speech-key');
             AZURE_REGION = settings.get_string('azure-region');
+            AZURE_SPEECH_LANGUAGE = settings.get_string(
+                'azure-speech-language',
+            );
             DRIVEFOLDER = settings.get_string('drive-folder');
             VERTEXPROJECTID = settings.get_string('vertex-project-id');
             RECURSIVETALK = settings.get_boolean('log-history');
@@ -434,7 +438,7 @@ const Gemini = GObject.registerClass(
             }
 
             // Requisição à API do Microsoft Speech-to-Text
-            const apiUrl = `https://${AZURE_REGION}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR`;
+            const apiUrl = `https://${AZURE_REGION}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${AZURE_SPEECH_LANGUAGE}`;
 
             // Headers necessários para a requisição
             const headers = [
