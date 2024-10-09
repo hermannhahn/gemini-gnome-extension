@@ -418,6 +418,7 @@ const Gemini = GObject.registerClass(
         // Função para transcrever o áudio gravado usando Google Speech-to-Text API (não utilizada)
         transcribeAudio(audioFile) {
             const audioPath =
+                // eslint-disable-next-line prefer-template
                 '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/' +
                 audioFile;
 
@@ -430,6 +431,7 @@ const Gemini = GObject.registerClass(
 
             // Requisição à API do Google Speech-to-Text
             const apiUrl =
+                // eslint-disable-next-line prefer-template
                 'https://speech.googleapis.com/v1/speech:recognize?key=' +
                 GOOGLEAPIKEY;
 
@@ -457,6 +459,7 @@ const Gemini = GObject.registerClass(
             try {
                 GLib.file_set_contents(tempFilePath, postData);
             } catch (e) {
+                // eslint-disable-next-line prefer-template
                 log('Erro ao escrever no arquivo temporário: ' + e.message);
                 return;
             }
@@ -469,6 +472,7 @@ const Gemini = GObject.registerClass(
                     '-H',
                     'Content-Type: application/json',
                     '-d',
+                    // eslint-disable-next-line prefer-template
                     '@' + tempFilePath, // @ indica que o curl deve ler os dados de um arquivo
                     apiUrl,
                 ],
@@ -485,6 +489,7 @@ const Gemini = GObject.registerClass(
                     let [ok, stdout, stderr] =
                         proc.communicate_utf8_finish(res);
                     if (ok && stdout) {
+                        // eslint-disable-next-line prefer-template
                         log('Resposta da API: ' + stdout);
                         let response = JSON.parse(stdout);
 
@@ -495,15 +500,18 @@ const Gemini = GObject.registerClass(
                         ) {
                             let transcription =
                                 response.results[0].alternatives[0].transcript;
+                            // eslint-disable-next-line prefer-template
                             log('Transcrição: ' + transcription);
                             this.aiResponse(transcription);
                         } else {
                             log('Nenhuma transcrição encontrada.');
                         }
                     } else {
+                        // eslint-disable-next-line prefer-template
                         log('Erro na requisição: ' + stderr);
                     }
                 } catch (e) {
+                    // eslint-disable-next-line prefer-template
                     log('Erro ao processar resposta: ' + e.message);
                 } finally {
                     // Remover o arquivo temporário após a requisição
