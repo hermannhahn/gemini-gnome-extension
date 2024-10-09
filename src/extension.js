@@ -124,8 +124,7 @@ const Gemini = GObject.registerClass(
                 }),
             });
             this.scrollView.add_child(this.chatSection.actor);
-            searchEntry.clutter_text.connect('activate', (actor) => {
-                this.aiResponse(actor.text);
+            searchEntry.clutter_text.connect('activate', () => {
                 searchEntry.clutter_text.set_text('');
             });
             micButton.connect('clicked', (_self) => {
@@ -175,7 +174,7 @@ const Gemini = GObject.registerClass(
             );
 
             if (process) {
-                log('Notificação enviada com sucesso.');
+                log('Comando executado com sucesso.');
             } else {
                 log('Erro ao enviar notificação.');
             }
@@ -193,7 +192,7 @@ const Gemini = GObject.registerClass(
                 null, // PID
             );
 
-            if (process[0] === 0) {
+            if (process) {
                 log('Notificação enviada com sucesso.');
             } else {
                 log('Erro ao enviar notificação.');
