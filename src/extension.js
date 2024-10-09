@@ -328,6 +328,8 @@ const Gemini = GObject.registerClass(
 
                     // Speech response
                     if (answer.textoRestante !== null) {
+                        // eslint-disable-next-line prefer-template
+                        log('Answer: ' + answer.textoRestante);
                         this.textToSpeech(answer.textoRestante);
                     }
 
