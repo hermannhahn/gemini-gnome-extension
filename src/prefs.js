@@ -32,7 +32,7 @@ class GeminiSettings {
         });
         const defaultKey = this.schema.get_string('gemini-api-key');
         const defaultSpeechKey = this.schema.get_string('azure-speech-key');
-        const defaultRegion = this.schema.get_string('azure-region');
+        const defaultRegion = this.schema.get_string('azure-speech-region');
         const defaultLanguage = this.schema.get_string('azure-speech-language');
         const defaultFolder = this.schema.get_string('drive-folder');
         const defaultLog = this.schema.get_boolean('log-history');
@@ -173,12 +173,12 @@ class GeminiSettings {
         this.main.attach(azureRegion, 2, 2, 2, 1);
         this.main.attach(howToRegion, 4, 2, 1, 1);
 
-        this.main.attach(labelFolder, 0, 3, 1, 1);
-        this.main.attach(folderUrl, 2, 3, 2, 1);
+        this.main.attach(labelLanguage, 0, 3, 1, 1);
+        this.main.attach(azureLanguage, 2, 3, 2, 1);
+        this.main.attach(howToLanguage, 4, 3, 1, 1);
 
-        this.main.attach(labelLanguage, 0, 4, 1, 1);
-        this.main.attach(azureLanguage, 2, 4, 2, 1);
-        this.main.attach(howToLanguage, 4, 4, 1, 1);
+        this.main.attach(labelFolder, 0, 4, 1, 1);
+        this.main.attach(folderUrl, 2, 4, 2, 1);
 
         this.main.attach(histroyLabel, 0, 5, 1, 1);
         this.main.attach(histroyButton, 2, 5, 1, 1);
@@ -189,8 +189,8 @@ class GeminiSettings {
         this.main.attach(vertexProjectLabel, 0, 7, 1, 1);
         this.main.attach(VertexProject, 2, 7, 2, 1);
 
-        this.main.attach(save, 2, 8, 1, 1);
-        this.main.attach(statusLabel, 2, 9, 1, 1);
+        this.main.attach(save, 0, 8, 5, 1);
+        this.main.attach(statusLabel, 0, 9, 5, 1);
 
         this.ui.add(this.main);
     }
