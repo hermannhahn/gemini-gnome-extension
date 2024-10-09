@@ -14,8 +14,6 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import {convertMD} from './md2pango.js';
 
-const Player = imports.misc.mediaPlayer; // Para tocar o áudio
-
 let GEMINIAPIKEY = '';
 let AZURE_SPEECH_KEY = '';
 let AZURE_REGION = ''; // Ex: "eastus"
@@ -551,9 +549,8 @@ const Gemini = GObject.registerClass(
                         log(stdout);
 
                         // Tocar o áudio gerado
-                        let player = new Player.MediaPlayer();
-                        player.open(tempFilePath);
-                        player.play();
+                        // eslint-disable-next-line prefer-template
+                        this.executeCommand('play ' + tempFilePath);
                     } else {
                         // eslint-disable-next-line prefer-template
                         log('Erro na requisição: ' + stderr);
