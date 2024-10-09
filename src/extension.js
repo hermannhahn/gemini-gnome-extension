@@ -356,13 +356,7 @@ const Gemini = GObject.registerClass(
                             const gnomeWindow =
                                 '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/gnome-window.py';
                             this.executeCommand(
-                                // eslint-disable-next-line prefer-template
-                                'python3 ' +
-                                    gnomeWindow +
-                                    ' ' +
-                                    titulo +
-                                    ' ' +
-                                    codeExample,
+                                `python3 ${gnomeWindow} ${titulo} ${codeExample}`,
                             );
                         }
                     }
