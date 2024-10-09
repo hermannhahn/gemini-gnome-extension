@@ -418,7 +418,6 @@ const Gemini = GObject.registerClass(
         // Função para transcrever o áudio gravado usando Google Speech-to-Text API (não utilizada)
         transcribeAudio(audioFile) {
             const audioPath =
-                // eslint-disable-next-line prefer-template
                 '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/' +
                 audioFile;
 
@@ -431,7 +430,6 @@ const Gemini = GObject.registerClass(
 
             // Requisição à API do Google Speech-to-Text
             const apiUrl =
-                // eslint-disable-next-line prefer-template
                 'https://speech.googleapis.com/v1/speech:recognize?key=' +
                 GOOGLEAPIKEY;
 
@@ -446,7 +444,24 @@ const Gemini = GObject.registerClass(
                 },
             });
 
-            // Usa subprocesso para enviar requisição HTTP com curl
+            // Criar um arquivo temporário para armazenar o conteúdo do POST data
+            const [success, tempFilePath] = GLib.file_open_tmp(
+                'google_speech_post_data_XXXXXX.json',
+            );
+            if (!success) {
+                log('Falha ao criar arquivo temporário.');
+                return;
+            }
+
+            // Escrever o postData no arquivo temporário
+            try {
+                GLib.file_set_contents(tempFilePath, postData);
+            } catch (e) {
+                log('Erro ao escrever no arquivo temporário: ' + e.message);
+                return;
+            }
+
+            // Usa subprocesso para enviar requisição HTTP com curl, lendo os dados do arquivo
             let subprocess = new Gio.Subprocess({
                 argv: [
                     'curl',
@@ -454,7 +469,7 @@ const Gemini = GObject.registerClass(
                     '-H',
                     'Content-Type: application/json',
                     '-d',
-                    postData,
+                    '@' + tempFilePath, // @ indica que o curl deve ler os dados de um arquivo
                     apiUrl,
                 ],
                 flags:
@@ -470,7 +485,6 @@ const Gemini = GObject.registerClass(
                     let [ok, stdout, stderr] =
                         proc.communicate_utf8_finish(res);
                     if (ok && stdout) {
-                        // eslint-disable-next-line prefer-template
                         log('Resposta da API: ' + stdout);
                         let response = JSON.parse(stdout);
 
@@ -481,21 +495,19 @@ const Gemini = GObject.registerClass(
                         ) {
                             let transcription =
                                 response.results[0].alternatives[0].transcript;
-                            // eslint-disable-next-line prefer-template
                             log('Transcrição: ' + transcription);
                             this.aiResponse(transcription);
                         } else {
                             log('Nenhuma transcrição encontrada.');
                         }
                     } else {
-                        // eslint-disable-next-line prefer-template
                         log('Erro na requisição: ' + stderr);
                     }
                 } catch (e) {
-                    log(
-                        // eslint-disable-next-line prefer-template
-                        'Erro ao processar resposta: ' + e.message,
-                    );
+                    log('Erro ao processar resposta: ' + e.message);
+                } finally {
+                    // Remover o arquivo temporário após a requisição
+                    GLib.unlink(tempFilePath);
                 }
             });
         }
