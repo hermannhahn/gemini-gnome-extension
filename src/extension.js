@@ -3,7 +3,8 @@ import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
-import Gtk from 'gi://Gtk';
+import Clutter from 'gi://Clutter';
+import Mainloop from 'gi://Mainloop';
 
 import {
     Extension,
@@ -332,21 +333,28 @@ const Gemini = GObject.registerClass(
                             let codeExample = convertMD(answer.code);
                             log(`codeExample: ${codeExample}`);
                             // Open new Gtk Window to show codeExample
-                            let window = new Gtk.Window({
-                                title: _('Code Example'),
-                                default_width: 600,
-                                default_height: 400,
+                            let box = new St.BoxLayout({
+                                vertical: true,
+                                style_class: 'popup-menu-item',
                             });
-                            let label = new Gtk.Label({
-                                label: codeExample,
-                                use_markup: true,
-                                halign: Gtk.Align.START,
-                                valign: Gtk.Align.START,
+
+                            let label = new St.Label({
+                                text: codeExample,
+                                x_align: Clutter.ActorAlign.START,
                             });
-                            window.add(label);
-                            window.show_all();
-                            window.connect('destroy', () => {
-                                window.destroy();
+
+                            box.add(label);
+
+                            // Adiciona o container à interface do usuário
+                            Main.uiGroup.add_child(box);
+
+                            // Configura a posição e o tamanho do container
+                            box.set_position(600, 400);
+
+                            // Opcional: Remove o container após algum tempo ou um evento
+                            Mainloop.timeout_add_seconds(5, () => {
+                                Main.uiGroup.remove_child(box);
+                                return false; // para parar o timeout
                             });
                         }
                     } else {
