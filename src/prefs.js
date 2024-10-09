@@ -33,6 +33,7 @@ class GeminiSettings {
         const defaultKey = this.schema.get_string('gemini-api-key');
         const defaultSpeechKey = this.schema.get_string('azure-speech-key');
         const defaultRegion = this.schema.get_string('azure-region');
+        const defaultLanguage = this.schema.get_string('azure-speech-language');
         const defaultFolder = this.schema.get_string('drive-folder');
         const defaultLog = this.schema.get_boolean('log-history');
         const defaultVertex = this.schema.get_boolean('vertex-enabled');
@@ -72,6 +73,17 @@ class GeminiSettings {
         });
         const howToRegion = new Gtk.Label({
             label: _('e.g. eastus'),
+        });
+
+        const labelLanguage = new Gtk.Label({
+            label: _('Speech Language'),
+            halign: Gtk.Align.START,
+        });
+        const azureLanguage = new Gtk.Entry({
+            buffer: new Gtk.EntryBuffer(),
+        });
+        const howToLanguage = new Gtk.Label({
+            label: _('e.g. en-US'),
         });
 
         const labelFolder = new Gtk.Label({
@@ -115,6 +127,7 @@ class GeminiSettings {
         apiKey.set_text(defaultKey);
         azureSpeechKey.set_text(defaultSpeechKey);
         azureRegion.set_text(defaultRegion);
+        azureLanguage.set_text(defaultLanguage);
         VertexProject.set_text(defaultVertexProject);
         folderUrl.set_text(defaultFolder);
         save.connect('clicked', () => {
@@ -129,6 +142,10 @@ class GeminiSettings {
             this.schema.set_string(
                 'azure-region',
                 azureRegion.get_buffer().get_text(),
+            );
+            this.schema.set_string(
+                'azure-speech-language',
+                azureLanguage.get_buffer().get_text(),
             );
             this.schema.set_string(
                 'drive-folder',
@@ -159,17 +176,21 @@ class GeminiSettings {
         this.main.attach(labelFolder, 0, 3, 1, 1);
         this.main.attach(folderUrl, 2, 3, 2, 1);
 
-        this.main.attach(histroyLabel, 0, 4, 1, 1);
-        this.main.attach(histroyButton, 2, 4, 1, 1);
+        this.main.attach(labelLanguage, 0, 4, 1, 1);
+        this.main.attach(azureLanguage, 2, 4, 2, 1);
+        this.main.attach(howToLanguage, 4, 4, 1, 1);
 
-        this.main.attach(vertexLabel, 0, 5, 1, 1);
-        this.main.attach(VertexButton, 2, 5, 1, 1);
+        this.main.attach(histroyLabel, 0, 5, 1, 1);
+        this.main.attach(histroyButton, 2, 5, 1, 1);
 
-        this.main.attach(vertexProjectLabel, 0, 6, 1, 1);
-        this.main.attach(VertexProject, 2, 6, 2, 1);
+        this.main.attach(vertexLabel, 0, 6, 1, 1);
+        this.main.attach(VertexButton, 2, 6, 1, 1);
 
-        this.main.attach(save, 0, 7, 4, 1);
-        this.main.attach(statusLabel, 0, 8, 4, 1);
+        this.main.attach(vertexProjectLabel, 0, 7, 1, 1);
+        this.main.attach(VertexProject, 2, 7, 2, 1);
+
+        this.main.attach(save, 2, 8, 1, 1);
+        this.main.attach(statusLabel, 2, 9, 1, 1);
 
         this.ui.add(this.main);
     }
