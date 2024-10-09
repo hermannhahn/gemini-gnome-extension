@@ -327,14 +327,18 @@ const Gemini = GObject.registerClass(
                     let answer = this.extractCodeFromText(aiResponse);
 
                     // Speech response
-                    if (answer.textoRestante !== null) {
+                    if (
+                        answer.textoRestante !== null &&
+                        answer.textoRestante !== '' &&
+                        answer.textoRestante !== undefined
+                    ) {
                         // eslint-disable-next-line prefer-template
                         log('Answer: ' + answer.textoRestante);
                         this.textToSpeech(answer.textoRestante);
                     }
 
                     let codeName = 'Desconhecido';
-                    let codeExample = '';
+                    let codeExample = 'no';
                     let codeResult = answer.textoExtraido;
                     if (codeResult) {
                         codeName = codeResult.split('\n')[0];
@@ -343,13 +347,12 @@ const Gemini = GObject.registerClass(
                         );
                     }
 
-                    // Notify gnome
-                    // eslint-disable-next-line prefer-template
-                    const titulo = 'Exemplo de Código ' + codeName;
-
                     // If answer has code, show in gnome window
-                    if (codeExample !== undefined) {
+                    if (codeExample !== 'no') {
                         if (codeExample.length > 0) {
+                            // Notify gnome
+                            // eslint-disable-next-line prefer-template
+                            const titulo = 'Exemplo de Código ' + codeName;
                             const gnomeWindow =
                                 '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/gnome-window.py';
                             this.executeCommand(
