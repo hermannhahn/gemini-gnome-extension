@@ -174,7 +174,7 @@ const Gemini = GObject.registerClass(
                 null, // PID
             );
 
-            if (process[0] === 0) {
+            if (process) {
                 log('Notificação enviada com sucesso.');
             } else {
                 log('Erro ao enviar notificação.');
