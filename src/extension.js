@@ -321,7 +321,10 @@ const Gemini = GObject.registerClass(
                                 parts: [{text: answer.textoRestante}],
                             });
                         }
+                    } else {
+                        this.chatHistory = [];
                     }
+
                     if (inputItem !== undefined) {
                         let htmlResponse = convertMD(aiResponse);
                         inputItem.label.clutter_text.set_markup(htmlResponse);
