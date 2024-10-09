@@ -353,10 +353,16 @@ const Gemini = GObject.registerClass(
                             let codeSection = new PopupMenu.PopupMenuSection();
 
                             codeSection.addMenuItem(
+                                new PopupMenu.PopupMenuItem({
+                                    label: codeExample,
+                                    reactive: false,
+                                    can_focus: false,
+                                }),
+                            );
+                            this.chatSection.addMenuItem(
                                 new PopupMenu.PopupSeparatorMenuItem(),
                             );
-                            codeSection.addMenuItem(popup);
-                            codeSection.actor.style_class = 'm-w-100';
+                            this.chatSection.addMenuItem(codeSection.actor);
                         }
                     } else {
                         this.chatHistory = [];
