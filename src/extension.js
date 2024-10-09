@@ -14,6 +14,8 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import {convertMD} from './md2pango.js';
 
+const Player = imports.misc.mediaPlayer; // Para tocar o áudio
+
 let GEMINIAPIKEY = '';
 let AZURE_SPEECH_KEY = '';
 let AZURE_REGION = ''; // Ex: "eastus"
@@ -473,6 +475,95 @@ const Gemini = GObject.registerClass(
                 } finally {
                     // Remover o arquivo temporário após a requisição
                     GLib.unlink(tempFilePath);
+                }
+            });
+        }
+
+        // Função para converter texto em áudio usando Microsoft Text-to-Speech API
+        textToSpeech(text) {
+            const apiUrl = `https://${AZURE_REGION}.tts.speech.microsoft.com/cognitiveservices/v1`;
+
+            // Headers para a requisição
+            const headers = [
+                'Content-Type: application/ssml+xml', // O conteúdo será enviado em formato SSML
+                'X-Microsoft-OutputFormat: riff-24khz-16bit-mono-pcm', // Especifica o formato do áudio
+                // eslint-disable-next-line prefer-template
+                'Ocp-Apim-Subscription-Key: ' + AZURE_SPEECH_KEY, // Chave da API da Azure
+            ];
+
+            // Estrutura SSML (Speech Synthesis Markup Language) para definir o texto e a voz
+            const ssml = `
+        <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='pt-BR'>
+            <voice name='pt-BR-FranciscaNeural'>${text}</voice>
+        </speak>
+    `;
+
+            // Criar um arquivo temporário para salvar o áudio gerado
+            const [success, tempFilePath] = GLib.file_open_tmp(
+                'azure_tts_audio_XXXXXX.wav',
+            );
+            if (!success) {
+                log('Falha ao criar arquivo temporário para áudio.');
+                return;
+            }
+
+            // Escrever o SSML no arquivo temporário
+            try {
+                GLib.file_set_contents(tempFilePath, ssml);
+            } catch (e) {
+                // eslint-disable-next-line prefer-template
+                log('Erro ao escrever no arquivo temporário: ' + e.message);
+                return;
+            }
+
+            // Usa subprocesso para enviar requisição HTTP com curl, e salvar a resposta (áudio) em um arquivo
+            let subprocess = new Gio.Subprocess({
+                argv: [
+                    'curl',
+                    '-X',
+                    'POST',
+                    '-H',
+                    headers[0], // Content-Type
+                    '-H',
+                    headers[1], // X-Microsoft-OutputFormat
+                    '-H',
+                    headers[2], // Ocp-Apim-Subscription-Key
+                    '--data',
+                    ssml, // Dados a serem enviados (SSML)
+                    '--output',
+                    tempFilePath, // Salva o áudio gerado no arquivo temporário
+                    apiUrl,
+                ],
+                flags:
+                    Gio.SubprocessFlags.STDOUT_PIPE |
+                    Gio.SubprocessFlags.STDERR_PIPE,
+            });
+
+            subprocess.init(null);
+
+            // Captura o status da requisição
+            subprocess.communicate_utf8_async(null, null, (proc, res) => {
+                try {
+                    let [ok, stdout, stderr] =
+                        proc.communicate_utf8_finish(res);
+                    if (ok) {
+                        log('Áudio gerado com sucesso.');
+                        log(stdout);
+
+                        // Tocar o áudio gerado
+                        let player = new Player.MediaPlayer();
+                        player.open(tempFilePath);
+                        player.play();
+                    } else {
+                        // eslint-disable-next-line prefer-template
+                        log('Erro na requisição: ' + stderr);
+                    }
+                } catch (e) {
+                    // eslint-disable-next-line prefer-template
+                    log('Erro ao processar resposta: ' + e.message);
+                } finally {
+                    // Limpeza: pode optar por remover o arquivo temporário após tocar o áudio, se necessário
+                    // GLib.unlink(tempFilePath);
                 }
             });
         }
