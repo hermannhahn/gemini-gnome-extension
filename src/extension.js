@@ -356,7 +356,7 @@ const Gemini = GObject.registerClass(
                                 new PopupMenu.PopupSeparatorMenuItem(),
                             );
                             codeSection.addMenuItem(popup);
-                            this.chatSection.addMenuItem(codeSection);
+                            codeSection.actor.style_class = 'm-w-100';
                         }
                     } else {
                         this.chatHistory = [];
