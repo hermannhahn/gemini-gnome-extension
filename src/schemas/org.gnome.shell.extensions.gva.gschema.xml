@@ -9,11 +9,32 @@
             You need to set api key for this extention
         </description>
     </key>
-    <key name="google-api-key" type="s">
-        <default>"GOOGLE_API_KEY"</default>
-        <summary>Google api key for working</summary>
+    <key name="azure-speech-key" type="s">
+        <default>"AZURE_SPEECH_KEY"</default>
+        <summary>Azure speech api key for voice working</summary>
         <description>
-            You need to set api key for this extention
+            You need to set api key for voice working in this extention
+        </description>
+    </key>
+    <key name="azure-speech-region" type="s">
+        <default>"eastus"</default>
+        <summary>Azure speech region for voice working</summary>
+        <description>
+            You need to set region for voice working in this extention
+        </description>
+    </key>
+    <key name="azure-speech-language" type="s">
+        <default>"en-US"</default>
+        <summary>Azure speech language for voice working</summary>
+        <description>
+            You need to set language for voice working in this extention
+        </description>
+    </key>
+    <key name="azure-speech-voice" type="s">
+        <default>"en-US-Neural"</default>
+        <summary>Azure speech voice for voice working</summary>
+        <description>
+            You need to set voice for voice working in this extention
         </description>
     </key>
     <key name="vertex-project-id" type="s">
