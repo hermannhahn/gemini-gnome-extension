@@ -59,6 +59,49 @@ const Gemini = GObject.registerClass(
             RECURSIVETALK = settings.get_boolean('log-history');
         }
 
+        createHistoryFile() {
+            // Caminho do diretório e arquivo
+            let extensionDir = GLib.build_filenamev([
+                GLib.get_home_dir(),
+                '.local',
+                'share',
+                'gnome-shell',
+                'extensions',
+                'gnome-extension@gemini-assist.vercel.app',
+            ]);
+            let historyFilePath = GLib.build_filenamev([
+                extensionDir,
+                'history.json',
+            ]);
+
+            // Verifica se o diretório existe, caso contrário, cria o diretório
+            if (!GLib.file_test(extensionDir, GLib.FileTest.IS_DIR)) {
+                try {
+                    GLib.mkdir_with_parents(extensionDir, 0o755); // Cria o diretório com permissão padrão
+                    log(`Diretório criado: ${extensionDir}`);
+                } catch (e) {
+                    logError(e, `Falha ao criar diretório: ${extensionDir}`);
+                    return;
+                }
+            }
+
+            // Verifica se o arquivo history.json existe, caso contrário, cria o arquivo
+            if (!GLib.file_test(historyFilePath, GLib.FileTest.IS_REGULAR)) {
+                try {
+                    // Conteúdo inicial do arquivo JSON
+                    let initialContent = JSON.stringify({history: []}, null, 2); // Formata o JSON com um array de histórico vazio
+
+                    // Escreve o arquivo no diretório
+                    GLib.file_set_contents(historyFilePath, initialContent);
+                    log(`Arquivo criado: ${historyFilePath}`);
+                } catch (e) {
+                    logError(e, `Falha ao criar o arquivo: ${historyFilePath}`);
+                }
+            } else {
+                log(`O arquivo history.json já existe: ${historyFilePath}`);
+            }
+        }
+
         _init(extension) {
             this.keyLoopBind = 0;
             this.extension = extension;
@@ -69,6 +112,7 @@ const Gemini = GObject.registerClass(
             if (RECURSIVETALK) {
                 try {
                     // Create history.json if not exist
+                    this.createHistoryFile();
                     const file = Gio.File.new_for_path(
                         '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/history.json',
                     );
