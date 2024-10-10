@@ -292,8 +292,13 @@ const Gemini = GObject.registerClass(
             const matches = question.match(regex);
 
             if (matches) {
-                const code = matches[1];
-                const tts = question.replace(regex, '');
+                let code = matches[1];
+                // Remove the first word from code
+                code = code.split(' ')[0];
+                let tts = question.replace(regex, '');
+                // Replace * char with space
+                tts = tts.replace(/\*/g, ' ');
+
                 return {code, tts};
             } else {
                 return {code: null, tts: question};
