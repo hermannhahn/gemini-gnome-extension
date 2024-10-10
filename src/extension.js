@@ -124,14 +124,11 @@ const Gemini = GObject.registerClass(
                         '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/history.json',
                     );
                     const [, contents] = file.load_contents(null);
-                    // eslint-disable-next-line prefer-template
                     log('Contents: ' + contents);
                     this.chatHistory = JSON.parse(contents);
-                    // eslint-disable-next-line prefer-template
                     log('Chat history: ' + this.chatHistory);
                     this.saveHistory();
                 } catch (error) {
-                    // eslint-disable-next-line prefer-template
                     log('Erro ao ler o arquivo: ' + error);
                 }
             }
@@ -261,7 +258,6 @@ const Gemini = GObject.registerClass(
 
         gnomeNotify(text, type = 'normal') {
             const command =
-                // eslint-disable-next-line prefer-template
                 'notify-send -t ' +
                 type +
                 "-a 'Gemini Voice Assist' '" +
@@ -439,7 +435,6 @@ const Gemini = GObject.registerClass(
 
                     // Speech response
                     if (answer.tts !== null) {
-                        // eslint-disable-next-line prefer-template
                         log('Text to speech: ' + answer.tts);
                         this.textToSpeech(answer.tts);
                     }
@@ -463,7 +458,6 @@ const Gemini = GObject.registerClass(
 
                     // Code response
                     if (answer.code !== null) {
-                        // eslint-disable-next-line prefer-template
                         log('Code response: ' + answer.code);
                         this.gnomeNotify(_('Code example copied to clipboard'));
                         this.extension.clipboard.set_text(
@@ -520,7 +514,6 @@ const Gemini = GObject.registerClass(
                 const [, contents] = file.load_contents(null);
                 return GLib.base64_encode(contents);
             } catch (error) {
-                // eslint-disable-next-line prefer-template
                 log('Erro ao ler o arquivo: ' + error);
                 return null;
             }
@@ -545,7 +538,6 @@ const Gemini = GObject.registerClass(
             // Headers necessários para a requisição
             const headers = [
                 'Content-Type: audio/wav', // O arquivo será enviado em formato .wav
-                // eslint-disable-next-line prefer-template
                 'Ocp-Apim-Subscription-Key: ' + AZURE_SPEECH_KEY, // Chave de autenticação
                 'Accept: application/json', // A resposta será em JSON
             ];
@@ -563,7 +555,6 @@ const Gemini = GObject.registerClass(
             try {
                 GLib.file_set_contents(tempFilePath, audioBinary);
             } catch (e) {
-                // eslint-disable-next-line prefer-template
                 log('Erro ao escrever no arquivo temporário: ' + e.message);
                 return;
             }
@@ -581,7 +572,6 @@ const Gemini = GObject.registerClass(
                     '-H',
                     headers[2], // Accept
                     '--data-binary',
-                    // eslint-disable-next-line prefer-template
                     '@' + tempFilePath, // Enviar o arquivo de áudio binário
                     apiUrl,
                 ],
@@ -598,24 +588,20 @@ const Gemini = GObject.registerClass(
                     let [ok, stdout, stderr] =
                         proc.communicate_utf8_finish(res);
                     if (ok && stdout) {
-                        // eslint-disable-next-line prefer-template
                         log('Resposta da API: ' + stdout);
                         let response = JSON.parse(stdout);
 
                         if (response && response.DisplayText) {
                             let transcription = response.DisplayText;
-                            // eslint-disable-next-line prefer-template
                             log('Transcrição: ' + transcription);
                             this.aiResponse(transcription); // Função para processar a resposta da transcrição
                         } else {
                             log('Nenhuma transcrição encontrada.');
                         }
                     } else {
-                        // eslint-disable-next-line prefer-template
                         log('Erro na requisição: ' + stderr);
                     }
                 } catch (e) {
-                    // eslint-disable-next-line prefer-template
                     log('Erro ao processar resposta: ' + e.message);
                 } finally {
                     // Remover arquivo tmp_audio.wav
@@ -634,7 +620,6 @@ const Gemini = GObject.registerClass(
             const headers = [
                 'Content-Type: application/ssml+xml', // O conteúdo será enviado em formato SSML
                 'X-Microsoft-OutputFormat: riff-24khz-16bit-mono-pcm', // Especifica o formato do áudio
-                // eslint-disable-next-line prefer-template
                 'Ocp-Apim-Subscription-Key: ' + AZURE_SPEECH_KEY, // Chave da API da Azure
             ];
 
@@ -658,7 +643,6 @@ const Gemini = GObject.registerClass(
             try {
                 GLib.file_set_contents(tempFilePath, ssml);
             } catch (e) {
-                // eslint-disable-next-line prefer-template
                 log('Erro ao escrever no arquivo temporário: ' + e.message);
                 return;
             }
@@ -698,14 +682,11 @@ const Gemini = GObject.registerClass(
                         log(stdout);
 
                         // Tocar o áudio gerado
-                        // eslint-disable-next-line prefer-template
                         this.playAudio(tempFilePath);
                     } else {
-                        // eslint-disable-next-line prefer-template
                         log('Erro na requisição: ' + stderr);
                     }
                 } catch (e) {
-                    // eslint-disable-next-line prefer-template
                     log('Erro ao processar resposta: ' + e.message);
                 } finally {
                     // Limpeza: pode optar por remover o arquivo temporário após tocar o áudio, se necessário
