@@ -14,6 +14,14 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import {convertMD} from './md2pango.js';
 
+// Log function
+function log(message) {
+    if (message) {
+        console.log(message);
+    }
+}
+
+// Global variables
 let GEMINIAPIKEY = '';
 let AZURE_SPEECH_KEY = '';
 let AZURE_SPEECH_REGION = ''; // Ex: "eastus"
@@ -23,17 +31,18 @@ let LOCATION = '';
 let USERNAME = GLib.get_real_name();
 let RECURSIVETALK = true;
 let LASTQUESTIONFILE = 'lastQuestion.wav';
-
-// Log function
-function log(message) {
-    if (message) {
-        console.log(message);
-    }
-}
-
-// Global variables for pipeline control
 let pipeline;
 let isRecording = false;
+// Caminho do diretório e arquivo
+let extensionDir = GLib.build_filenamev([
+    GLib.get_home_dir(),
+    '.local',
+    'share',
+    'gnome-shell',
+    'extensions',
+    'gnome-extension@gemini-assist.vercel.app',
+]);
+let historyFilePath = GLib.build_filenamev([extensionDir, 'history.json']);
 
 const Gemini = GObject.registerClass(
     class Gemini extends PanelMenu.Button {
@@ -60,20 +69,6 @@ const Gemini = GObject.registerClass(
         }
 
         createHistoryFile() {
-            // Caminho do diretório e arquivo
-            let extensionDir = GLib.build_filenamev([
-                GLib.get_home_dir(),
-                '.local',
-                'share',
-                'gnome-shell',
-                'extensions',
-                'gnome-extension@gemini-assist.vercel.app',
-            ]);
-            let historyFilePath = GLib.build_filenamev([
-                extensionDir,
-                'history.json',
-            ]);
-
             // Verifica se o diretório existe, caso contrário, cria o diretório
             if (!GLib.file_test(extensionDir, GLib.FileTest.IS_DIR)) {
                 try {
