@@ -290,17 +290,17 @@ const Gemini = GObject.registerClass(
         extractCodeFromText(question) {
             const regex = /`{3}([\s\S]*?)`{3}/;
             const matches = question.match(regex);
+            let tts = question.replace(regex, '');
+            // Replace * char with space
+            tts = tts.replace(/\*/g, ' ');
 
             if (matches) {
                 let code = matches[1];
                 // Remove the first word from code
                 code = code.split(' ')[0];
-                let tts = question.replace(regex, '');
-                // Replace * char with space
-                tts = tts.replace(/\*/g, ' ');
                 return {code, tts};
             } else {
-                return {code: null, tts: question};
+                return {code: null, tts};
             }
         }
 
