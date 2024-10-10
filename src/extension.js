@@ -298,7 +298,6 @@ const Gemini = GObject.registerClass(
                 let tts = question.replace(regex, '');
                 // Replace * char with space
                 tts = tts.replace(/\*/g, ' ');
-
                 return {code, tts};
             } else {
                 return {code: null, tts: question};
