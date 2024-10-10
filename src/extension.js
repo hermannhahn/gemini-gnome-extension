@@ -41,19 +41,11 @@ let extensionDir = GLib.build_filenamev([
     'extensions',
     'gnome-extension@gemini-assist.vercel.app',
 ]);
-let tempDir = GLib.build_filenamev([
-    '.local',
-    'share',
-    'gnome-shell',
-    'extensions',
-    'gnome-extension@gemini-assist.vercel.app',
-]);
 let historyFilePath = GLib.build_filenamev([extensionDir, 'history.json']);
 let questionAudioPath = GLib.build_filenamev([
     extensionDir,
     'lastQuestion.wav',
 ]);
-let answerAudioPath = GLib.build_filenamev([tempDir, 'lastAnswer.wav']);
 
 const Gemini = GObject.registerClass(
     class Gemini extends PanelMenu.Button {
@@ -507,7 +499,7 @@ const Gemini = GObject.registerClass(
 
             // Criar um arquivo temporário para armazenar o áudio binário (opcional)
             const [success, tempFilePath] = GLib.file_open_tmp(
-                'azure_speech_audio_XXXXXX.wav',
+                'question_speech_audio_XXXXXX.wav',
             );
             if (!success) {
                 log('Falha ao criar arquivo temporário.');
@@ -599,7 +591,9 @@ const Gemini = GObject.registerClass(
     `;
 
             // Criar um arquivo temporário para salvar o áudio gerado
-            const [success, tempFilePath] = GLib.file_open_tmp(answerAudioPath);
+            const [success, tempFilePath] = GLib.file_open_tmp(
+                'azure_speech_audio_XXXXXX.wav',
+            );
             if (!success) {
                 log('Falha ao criar arquivo temporário para áudio.');
                 return;
@@ -660,7 +654,7 @@ const Gemini = GObject.registerClass(
                     log('Erro ao processar resposta: ' + e.message);
                 } finally {
                     // Limpeza: pode optar por remover o arquivo temporário após tocar o áudio, se necessário
-                    // GLib.unlink(tempFilePath);
+                    GLib.unlink(tempFilePath);
                 }
             });
         }
