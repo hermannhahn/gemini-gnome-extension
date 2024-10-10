@@ -248,6 +248,7 @@ const Gemini = GObject.registerClass(
             );
             if (process) {
                 log('Audio played successfully.');
+                GLib.unlink(audiofile);
             } else {
                 log('Error playing audio.');
             }
@@ -614,8 +615,8 @@ const Gemini = GObject.registerClass(
                     log('Erro ao processar resposta: ' + e.message);
                 } finally {
                     // Remover arquivo tmp_audio.wav
-                    GLib.unlink(audioPath);
-                    GLib.unlink(tempFilePath);
+                    // GLib.unlink(audioPath);
+                    // GLib.unlink(tempFilePath);
                 }
             });
         }
