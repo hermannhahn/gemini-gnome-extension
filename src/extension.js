@@ -89,7 +89,7 @@ const Gemini = GObject.registerClass(
             if (!GLib.file_test(historyFilePath, GLib.FileTest.IS_REGULAR)) {
                 try {
                     // Conteúdo inicial do arquivo JSON
-                    let initialContent = JSON.stringify({history: []}, null, 2); // Formata o JSON com um array de histórico vazio
+                    let initialContent = JSON.stringify([], null, 2); // Formata o JSON com um array de histórico vazio
 
                     // Escreve o arquivo no diretório
                     GLib.file_set_contents(historyFilePath, initialContent);
