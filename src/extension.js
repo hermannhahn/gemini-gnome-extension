@@ -437,7 +437,7 @@ const Gemini = GObject.registerClass(
                     ];
                 return randomPhrase;
             } else {
-                return 'Idioma não suportado.';
+                return 'Not supported language.';
             }
         }
 
