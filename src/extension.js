@@ -615,7 +615,7 @@ const Gemini = GObject.registerClass(
                     log('Erro ao processar resposta: ' + e.message);
                 } finally {
                     // Remover arquivo tmp_audio.wav
-                    // GLib.unlink(audioPath);
+                    GLib.unlink(audioPath);
                     // GLib.unlink(tempFilePath);
                 }
             });
