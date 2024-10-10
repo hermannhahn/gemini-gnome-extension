@@ -397,23 +397,19 @@ const Gemini = GObject.registerClass(
         extractCodeFromText(question) {
             const regex = /`{3}([\s\S]*?)`{3}/;
             const matches = question.match(regex);
-            let tts = question.replace(regex, '');
-            // Replace * char with space
-            tts = tts.replace(/\*/g, ' ');
-            if (tts.length > 100) {
-                if (AZURE_SPEECH_LANGUAGE === 'en-US') {
-                    tts = 'I found this!';
-                } else if (AZURE_SPEECH_LANGUAGE === 'pt-BR') {
-                    tts = 'Encontrei isso!';
-                }
-            }
-
+            let tts = question;
             if (matches) {
                 let code = matches[1];
                 // Remove the first word from code
                 code = code.split(' ')[0];
+                // Get all text before and after code
+                tts = question.split(code)[0];
+                // Replace all * char from tts with space
+                tts = matches.split('*').join(' ');
                 return {code, tts};
             } else {
+                // Replace all * char from tts with space
+                tts = question.split('*').join(' ');
                 return {code: null, tts};
             }
         }
