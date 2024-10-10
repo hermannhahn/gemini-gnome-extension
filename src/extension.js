@@ -246,13 +246,11 @@ const Gemini = GObject.registerClass(
                 GLib.SpawnFlags.SEARCH_PATH, // flags
                 null, // PID
             );
-
-            // Delete temporary audio file
-            GLib.unlink('temp_audio.wav');
-            GLib.unlink(audiofile);
-
             if (process) {
-                log(`Playing audio: ${audiofile}`);
+                // Delete temporary audio file
+                log('Audio played successfully.');
+                GLib.unlink('temp_audio.wav');
+                GLib.unlink(audiofile);
             } else {
                 log('Error playing audio.');
             }
@@ -274,9 +272,9 @@ const Gemini = GObject.registerClass(
             );
 
             if (process) {
-                log('Successfully sent notification.');
+                log('Notification sent successfully.');
             } else {
-                log('Erro ao enviar notificação.');
+                log('Error sending notification.');
             }
         }
 
@@ -565,7 +563,7 @@ const Gemini = GObject.registerClass(
                 'azure_att_audio_XXXXXX.wav',
             );
             if (!success) {
-                log('Falha ao criar arquivo temporário.');
+                log('Error creating temporary audio file.');
                 return;
             }
             tempFilePath.set_attribute_uint32(
