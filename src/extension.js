@@ -138,23 +138,35 @@ const Gemini = GObject.registerClass(
                 style_class: 'panel-status-menu-box',
             });
             this.hbox = hbox;
-
+            
             this.icon = new St.Icon({
                 style_class: 'gemini-icon',
             });
             hbox.add_child(this.icon);
             this.add_child(hbox);
             this.menu.actor.style_class = 'm-w-100';
-
+            
             let item = new PopupMenu.PopupBaseMenuItem({
                 reactive: false,
                 can_focus: false,
             });
             this.chatSection = new PopupMenu.PopupMenuSection();
+            
+            // Configurar o ScrollView corretamente com políticas de rolagem
             this.scrollView = new St.ScrollView({
                 style_class: 'chat-scroll-section',
+                hscrollbar_policy: Clutter.ScrollPolicy.NEVER,  // Não queremos rolagem horizontal
+                vscrollbar_policy: Clutter.ScrollPolicy.AUTOMATIC,  // Rolagem vertical automática
             });
-
+            
+            // Configurar o comportamento da seção de chat
+            this.chatSection.actor.x_expand = true;  // Expandir horizontalmente
+            this.chatSection.actor.y_expand = true;  // Expandir verticalmente
+            this.chatSection.actor.style_class = 'chat-content';  // Classe CSS opcional para customização
+            
+            // Adicionar a seção ao ScrollView
+            this.scrollView.add_child(this.chatSection.actor);
+            
             let searchEntry = new St.Entry({
                 name: 'aiEntry',
                 style_class: 'ai-entry',
@@ -177,7 +189,7 @@ const Gemini = GObject.registerClass(
                     style_class: 'settings-icon',
                 }),
             });
-            this.scrollView.add_child(this.chatSection.actor);
+            
             searchEntry.clutter_text.connect('activate', (actor) => {
                 if (actor.text === '') {
                     return;
@@ -185,21 +197,26 @@ const Gemini = GObject.registerClass(
                 this.aiResponse(actor.text);
                 searchEntry.clutter_text.set_text('');
             });
+            
             micButton.connect('clicked', (_self) => {
                 this.startRecording();
             });
             settingsButton.connect('clicked', (_self) => {
                 this.openSettings();
             });
+            
             if (GEMINIAPIKEY === '') {
                 this.openSettings();
             }
+            
             item.add_child(searchEntry);
             item.add_child(micButton);
             item.add_child(settingsButton);
+            
+            // Adicionar item e scrollView ao menu
             this.menu.addMenuItem(item);
             this.menu.box.add_child(this.scrollView);
-        }
+                    }
 
         geminiResponse(text) {
             let aiResponse = _(`<b>Gemini: </b> ${text}`);
@@ -215,11 +232,31 @@ const Gemini = GObject.registerClass(
                 );
             });
 
-            this.chatSection.addMenuItem(
-                new PopupMenu.PopupSeparatorMenuItem(),
-            );
-            this.chatSection.addMenuItem(aiResponseItem);
-        }
+    // Criação de um container para os itens roláveis
+    const scrollView = new St.ScrollView({
+        style_class: 'chat-scroll-section',
+        hscrollbar_policy: Clutter.ScrollPolicy.NEVER,
+        vscrollbar_policy: Clutter.ScrollPolicy.AUTOMATIC,
+    });
+
+    // Container para os itens dentro da ScrollView
+    const contentBox = new St.BoxLayout({
+        vertical: true,
+        x_expand: true,
+        y_expand: true
+    });
+
+    // Adicionando os itens na ScrollView
+    contentBox.add(new PopupMenu.PopupSeparatorMenuItem());
+    contentBox.add(inputCategory);
+    contentBox.add(aiResponseItem);
+
+    scrollView.add_actor(contentBox);
+
+    // Adicionando a ScrollView na seção de chat
+    this.chatSection.addMenuItem(scrollView);
+
+    this.getAireponse(aiResponseItem, text);
 
         executeCommand(cmd) {
             const command = cmd;
