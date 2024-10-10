@@ -73,6 +73,8 @@ const Gemini = GObject.registerClass(
                         '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/history.json',
                     );
                     const [, contents] = file.load_contents(null);
+                    // eslint-disable-next-line prefer-template
+                    log('Contents: ' + contents);
                     this.chatHistory = JSON.parse(contents);
                 } catch (error) {
                     // eslint-disable-next-line prefer-template
