@@ -182,13 +182,15 @@ const Gemini = GObject.registerClass(
                 this.aiResponse(actor.text);
                 searchEntry.clutter_text.set_text('');
             });
+            // eslint-disable-next-line no-unused-vars
             micButton.connect('clicked', (self) => {
                 this.startRecording();
             });
+            // eslint-disable-next-line no-unused-vars
             settingsButton.connect('clicked', (self) => {
                 this.openSettings();
             });
-            if (GEMINIAPIKEY == '') {
+            if (GEMINIAPIKEY === '') {
                 this.openSettings();
             }
             item.add_child(searchEntry);
@@ -196,7 +198,6 @@ const Gemini = GObject.registerClass(
             item.add_child(settingsButton);
             this.menu.addMenuItem(item);
             this.menu.box.add_child(this.scrollView);
-            this._initFirstResponse();
         }
 
         geminiResponse(text) {
