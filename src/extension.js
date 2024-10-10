@@ -583,12 +583,21 @@ const Gemini = GObject.registerClass(
                 'Ocp-Apim-Subscription-Key: ' + AZURE_SPEECH_KEY, // Chave da API da Azure
             ];
 
+            // If text lenght > 100 change texto to default text
+            if (text.length > 100) {
+                if (AZURE_SPEECH_LANGUAGE === 'en-US') {
+                    text = 'Answer on screen!';
+                } else if (AZURE_SPEECH_LANGUAGE === 'pt-BR') {
+                    text = 'Resposta na tela!';
+                }
+            }
+
             // Estrutura SSML (Speech Synthesis Markup Language) para definir o texto e a voz
             const ssml = `
-        <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${AZURE_SPEECH_LANGUAGE}'>
-            <voice name='${AZURE_SPEECH_VOICE}'>${text}</voice>
-        </speak>
-    `;
+                <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${AZURE_SPEECH_LANGUAGE}'>
+                    <voice name='${AZURE_SPEECH_VOICE}'>${text}</voice>
+                </speak>
+            `;
 
             // Criar um arquivo temporário para salvar o áudio gerado
             const [success, tempFilePath] = GLib.file_open_tmp(
