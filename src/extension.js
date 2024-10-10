@@ -635,7 +635,7 @@ const Gemini = GObject.registerClass(
                 'azure_tts_audio_XXXXXX.wav',
             );
             if (!success) {
-                log('Falha ao criar arquivo temporário para áudio.');
+                log('Error creating temporary audio file.');
                 return;
             }
 
@@ -643,7 +643,7 @@ const Gemini = GObject.registerClass(
             try {
                 GLib.file_set_contents(tempFilePath, ssml);
             } catch (e) {
-                log('Erro ao escrever no arquivo temporário: ' + e.message);
+                log('Error writing to temporary audio file: ' + e.message);
                 return;
             }
 
@@ -675,19 +675,19 @@ const Gemini = GObject.registerClass(
             // Captura o status da requisição
             subprocess.communicate_utf8_async(null, null, (proc, res) => {
                 try {
+                    // eslint-disable-next-line no-unused-vars
                     let [ok, stdout, stderr] =
                         proc.communicate_utf8_finish(res);
                     if (ok) {
-                        log('Áudio gerado com sucesso.');
-                        log(stdout);
+                        log('Audio file saved to: ' + tempFilePath);
 
                         // Tocar o áudio gerado
                         this.playAudio(tempFilePath);
                     } else {
-                        log('Erro na requisição: ' + stderr);
+                        log('Requisition error: ' + stderr);
                     }
                 } catch (e) {
-                    log('Erro ao processar resposta: ' + e.message);
+                    log('Error processing response: ' + e.message);
                 } finally {
                     // Limpeza: pode optar por remover o arquivo temporário após tocar o áudio, se necessário
                     // GLib.unlink(tempFilePath);
