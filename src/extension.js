@@ -42,10 +42,6 @@ let extensionDir = GLib.build_filenamev([
     'gnome-extension@gemini-assist.vercel.app',
 ]);
 let historyFilePath = GLib.build_filenamev([extensionDir, 'history.json']);
-let questionAudioPath = GLib.build_filenamev([
-    extensionDir,
-    'lastQuestion.wav',
-]);
 
 const Gemini = GObject.registerClass(
     class Gemini extends PanelMenu.Button {
@@ -281,7 +277,7 @@ const Gemini = GObject.registerClass(
                     'wavenc',
                     '!',
                     'filesink',
-                    `location=${questionAudioPath}`,
+                    'location=lastQuestion.wav',
                 ],
                 flags:
                     Gio.SubprocessFlags.STDOUT_PIPE |
@@ -478,7 +474,7 @@ const Gemini = GObject.registerClass(
         // Função para transcrever o áudio gravado usando Microsoft Speech-to-Text API
         transcribeAudioQuestion() {
             // Carregar o arquivo de áudio em formato binário
-            let file = Gio.File.new_for_path(questionAudioPath);
+            let file = Gio.File.new_for_path('lastQuestion.wav');
             let [, audioBinary] = file.load_contents(null);
 
             if (!audioBinary) {
@@ -497,24 +493,6 @@ const Gemini = GObject.registerClass(
                 'Accept: application/json', // A resposta será em JSON
             ];
 
-            // Criar um arquivo temporário para armazenar o áudio binário (opcional)
-            const [success, tempFilePath] = GLib.file_open_tmp(
-                'question_speech_audio_XXXXXX.wav',
-            );
-            if (!success) {
-                log('Falha ao criar arquivo temporário.');
-                return;
-            }
-
-            // Escrever o áudio binário no arquivo temporário
-            try {
-                GLib.file_set_contents(tempFilePath, audioBinary);
-            } catch (e) {
-                // eslint-disable-next-line prefer-template
-                log('Erro ao escrever no arquivo temporário: ' + e.message);
-                return;
-            }
-
             // Usa subprocesso para enviar requisição HTTP com curl, lendo o áudio do arquivo
             let subprocess = new Gio.Subprocess({
                 argv: [
@@ -528,8 +506,7 @@ const Gemini = GObject.registerClass(
                     '-H',
                     headers[2], // Accept
                     '--data-binary',
-                    // eslint-disable-next-line prefer-template
-                    '@' + tempFilePath, // Enviar o arquivo de áudio binário
+                    audioBinary, // Dados binários do arquivo de áudio
                     apiUrl,
                 ],
                 flags:
@@ -566,7 +543,7 @@ const Gemini = GObject.registerClass(
                     log('Erro ao processar resposta: ' + e.message);
                 } finally {
                     // Remover o arquivo temporário após a requisição
-                    GLib.unlink(tempFilePath);
+                    GLib.unlink('lastQuestion.wav');
                 }
             });
         }
@@ -600,9 +577,8 @@ const Gemini = GObject.registerClass(
             `;
 
             // Criar um arquivo temporário para salvar o áudio gerado
-            const [success, tempFilePath] = GLib.file_open_tmp(
-                'azure_speech_audio_XXXXXX.wav',
-            );
+            const [success, tempFilePath] =
+                GLib.file_open_tmp('lastAnswer.wav');
             if (!success) {
                 log('Falha ao criar arquivo temporário para áudio.');
                 return;
