@@ -276,7 +276,7 @@ const Gemini = GObject.registerClass(
 
         gnomeNotify(text, type = 'normal') {
             const command =
-                'notify-send -t ' +
+                'notify-send -u ' +
                 type +
                 "-a 'Gemini Voice Assist' '" +
                 text +
@@ -389,9 +389,7 @@ const Gemini = GObject.registerClass(
                 Pango.WrapMode.WORD_CHAR,
             ); // Quebra entre palavras
             inputCategory.label.x_expand = true;
-            inputCategory.y_expand = true;
             aiResponseItem.label.x_expand = true;
-            aiResponseItem.y_expand = true;
             inputCategory.style_class += ' m-w-100';
             aiResponseItem.style_class += ' m-w-100';
 
@@ -533,7 +531,10 @@ const Gemini = GObject.registerClass(
                     // Code response
                     if (answer.code !== null) {
                         log('Code response: ' + answer.code);
-                        this.gnomeNotify(_('Code example copied to clipboard'));
+                        this.gnomeNotify(
+                            _('Code example copied to clipboard'),
+                            'normal',
+                        );
                         this.extension.clipboard.set_text(
                             St.ClipboardType.CLIPBOARD,
                             answer.code,
