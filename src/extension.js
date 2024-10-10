@@ -390,23 +390,23 @@ const Gemini = GObject.registerClass(
             this.getAireponse(aiResponseItem, text);
         }
 
-        extractCodeFromText(question) {
+        extractCodeAndTTS(text) {
+            // Expressão regular para capturar o código entre triplo acento grave
             const regex = /`{3}([\s\S]*?)`{3}/;
-            const matches = question.match(regex);
-            let tts = question;
-            if (matches) {
-                let code = matches[1];
-                // Remove the first word from code
-                code = code.split(' ')[0];
-                // Get all text before and after code
-                tts = question.slice(0, matches.index);
-                tts += question.slice(matches.index + matches[0].length);
-                // Replace all * char from tts with space
+            const match = text.match(regex);
+            let tts = text;
+
+            if (match) {
+                const code = match[1]; // Captura o conteúdo entre os acentos graves
+                // Remove o bloco de código do texto original para formar o TTS
+                tts = text.replace(regex, '').trim();
+                // Replace * char with space
                 tts = tts.split('*').join(' ');
                 return {code, tts};
             } else {
-                // Replace all * char from tts with space
-                tts = question.split('*').join(' ');
+                // Se não encontrar código, retorna apenas o texto original no campo tts
+                // Replace * char with space
+                tts = tts.split('*').join(' ');
                 return {code: null, tts};
             }
         }
@@ -440,7 +440,7 @@ const Gemini = GObject.registerClass(
                         return;
                     }
                     let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
-                    let answer = this.extractCodeFromText(aiResponse);
+                    let answer = this.extractCodeAndTTS(aiResponse);
 
                     // Speech response
                     if (answer.tts !== null) {
