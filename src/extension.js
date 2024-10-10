@@ -698,7 +698,7 @@ const Gemini = GObject.registerClass(
                     log('Error processing response: ' + e.message);
                 } finally {
                     // Limpeza: pode optar por remover o arquivo temporário após tocar o áudio, se necessário
-                    GLib.unlink(tempFilePath);
+                    // GLib.unlink(tempFilePath);
                 }
             });
         }
