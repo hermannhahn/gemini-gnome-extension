@@ -152,20 +152,30 @@ const Gemini = GObject.registerClass(
             });
             this.chatSection = new PopupMenu.PopupMenuSection();
 
-            // Usar valores diretos para ScrollPolicy
-            this.scrollView = new St.ScrollView({
-                style_class: 'chat-scroll-section',
-                hscrollbar_policy: 0, // 0 = NEVER (nunca exibir barra horizontal)
-                vscrollbar_policy: 1, // 1 = AUTOMATIC (exibir barra vertical quando necessário)
+            // Use um St.BoxLayout para garantir que os itens sejam posicionados verticalmente
+            let contentBox = new St.BoxLayout({
+                vertical: true, // Garantir que os itens sejam colocados verticalmente
+                x_expand: true,
+                y_expand: true,
             });
 
-            // Configurar o comportamento da seção de chat
-            this.chatSection.actor.x_expand = true;
-            this.chatSection.actor.y_expand = true;
-            this.chatSection.actor.style_class = 'chat-content';
+            // Adicionar a PopupMenuSection ao contentBox
+            contentBox.add_child(this.chatSection.actor);
 
-            // Adicionar a seção ao ScrollView
-            this.scrollView.add_child(this.chatSection.actor);
+            // Configurar ScrollView com políticas de rolagem
+            this.scrollView = new St.ScrollView({
+                style_class: 'chat-scroll-section',
+                hscrollbar_policy: 0, // 0 = NEVER (não mostrar barra horizontal)
+                vscrollbar_policy: 1, // 1 = AUTOMATIC (mostrar barra vertical quando necessário)
+                x_expand: true, // Expandir horizontalmente
+                y_expand: true, // Expandir verticalmente
+            });
+
+            // Adicionar contentBox ao ScrollView
+            this.scrollView.add_child(contentBox);
+
+            // Definir uma altura máxima para a ScrollView (obrigatório para que a rolagem funcione)
+            this.scrollView.style = 'max-height: 400px;'; // Limite de altura para ativar rolagem
 
             let searchEntry = new St.Entry({
                 name: 'aiEntry',
@@ -213,7 +223,7 @@ const Gemini = GObject.registerClass(
             item.add_child(micButton);
             item.add_child(settingsButton);
 
-            // Adicionar item e scrollView ao menu
+            // Adicionar item e ScrollView ao menu
             this.menu.addMenuItem(item);
             this.menu.box.add_child(this.scrollView);
         }
