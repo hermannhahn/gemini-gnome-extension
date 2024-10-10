@@ -268,7 +268,6 @@ const Gemini = GObject.registerClass(
             aiResponseItem.label.x_expand = true;
             inputCategory.style_class += ' m-w-100';
             aiResponseItem.style_class += ' m-w-100';
-            aiResponseItem.label.clutter_text.set_line_wrap(true); // Ativa a quebra de linha no texto
 
             aiResponseItem.connect('activate', (_self) => {
                 this.extension.clipboard.set_text(
