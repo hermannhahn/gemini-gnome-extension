@@ -402,7 +402,7 @@ const Gemini = GObject.registerClass(
                 tts = question.slice(0, matches.index);
                 tts += question.slice(matches.index + matches[0].length);
                 // Replace all * char from tts with space
-                tts = matches.split('*').join(' ');
+                tts = tts.split('*').join(' ');
                 return {code, tts};
             } else {
                 // Replace all * char from tts with space
