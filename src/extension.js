@@ -429,9 +429,8 @@ const Gemini = GObject.registerClass(
             };
 
             // Escolhe aleatoriamente uma frase com base na língua
-            const language = lang.toLowerCase();
-            if (language === 'pt-BR' || language === 'en-US') {
-                const selectedPhrases = phrase[language];
+            if (lang === 'pt-BR' || lang === 'en-US') {
+                const selectedPhrases = phrase[lang];
                 const randomPhrase =
                     selectedPhrases[
                         Math.floor(Math.random() * selectedPhrases.length)
