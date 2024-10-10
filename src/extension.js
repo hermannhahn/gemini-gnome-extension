@@ -411,6 +411,39 @@ const Gemini = GObject.registerClass(
             this.getAireponse(aiResponseItem, text);
         }
 
+        randomPhraseToShowOnScreen(lang) {
+            // Frases em português e inglês
+            const phrase = {
+                'pt-BR': [
+                    'Vou mostrar na tela.',
+                    'Exibindo agora.',
+                    'Aqui está na tela.',
+                    'Mostrando na tela.',
+                    'Na tela agora.',
+                ],
+                'en-US': [
+                    'I will show it on screen.',
+                    'Displaying now.',
+                    'Here it is on screen.',
+                    'Showing on screen.',
+                    'On the screen now.',
+                ],
+            };
+
+            // Escolhe aleatoriamente uma frase com base na língua
+            const language = lang.toLowerCase();
+            if (language === 'pt-BR' || language === 'en-US') {
+                const selectedPhrases = phrase[language];
+                const randomPhrase =
+                    selectedPhrases[
+                        Math.floor(Math.random() * selectedPhrases.length)
+                    ];
+                return randomPhrase;
+            } else {
+                return 'Idioma não suportado.';
+            }
+        }
+
         extractCodeAndTTS(text) {
             // Expressão regular para capturar o código entre triplo acento grave
             const regex = /`{3}([\s\S]*?)`{3}/;
@@ -425,18 +458,20 @@ const Gemini = GObject.registerClass(
                 tts = tts.split('*').join(' ');
                 // If tts is more then 100 characters, change tts text
                 if (tts.length > 100) {
-                    if (AZURE_SPEECH_LANGUAGE === 'en-US') {
-                        tts = 'I found this!';
-                    }
-                    if (AZURE_SPEECH_LANGUAGE === 'pt-BR') {
-                        tts = 'Encontrei isso!';
-                    }
+                    tts = this.randomPhraseToShowOnScreen(
+                        AZURE_SPEECH_LANGUAGE,
+                    );
                 }
                 return {code, tts};
             } else {
                 // Se não encontrar código, retorna apenas o texto original no campo tts
                 // Replace * char with space
                 tts = tts.split('*').join(' ');
+                if (tts.length > 100) {
+                    tts = this.randomPhraseToShowOnScreen(
+                        AZURE_SPEECH_LANGUAGE,
+                    );
+                }
                 return {code: null, tts};
             }
         }
