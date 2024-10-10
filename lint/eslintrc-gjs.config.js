@@ -259,13 +259,7 @@ export default [
             'prefer-promise-reject-errors': 'error',
             'prefer-rest-params': 'error',
             'prefer-spread': 'error',
-            quotes: [
-                'error',
-                'single',
-                {
-                    avoidEscape: true,
-                },
-            ],
+            'prefer-template': 'error',
             'require-await': 'error',
             'rest-spread-spacing': 'error',
             semi: ['error', 'always'],
