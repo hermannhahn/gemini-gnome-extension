@@ -20,9 +20,6 @@
 .m-w-100 {
     max-width: 800px;
     text-wrap: break-word; /* Permite que as palavras sejam quebradas */
-    word-wrap: break-word; /* Permite que as palavras sejam quebradas */
-    word-break: break-word; /* Permite que as palavras sejam quebradas */
-    white-space: normal; /* Permite que o texto quebre em várias linhas */
 }
 .chat-scroll-section {
     max-height: 600px;
