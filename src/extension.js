@@ -239,7 +239,8 @@ const Gemini = GObject.registerClass(
         }
 
         playAudio(audiofile) {
-            const process = GLib.spawn_async(
+            // Process sync, not async
+            const process = GLib.spawn_sync(
                 null, // pasta de trabalho
                 ['/bin/sh', '-c', `play ${audiofile}`], // comando e argumentos
                 null, // opções
@@ -616,7 +617,7 @@ const Gemini = GObject.registerClass(
                 } finally {
                     // Remover arquivo tmp_audio.wav
                     GLib.unlink(audioPath);
-                    // GLib.unlink(tempFilePath);
+                    GLib.unlink(tempFilePath);
                 }
             });
         }
