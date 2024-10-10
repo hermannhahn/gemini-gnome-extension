@@ -259,10 +259,14 @@ const Gemini = GObject.registerClass(
             }
         }
 
-        gnomeNotify(text) {
+        gnomeNotify(text, type = 'normal') {
             const command =
                 // eslint-disable-next-line prefer-template
-                "notify-send -a 'Gemini Voice Assist' '" + text + "'";
+                'notify-send -t ' +
+                type +
+                "-a 'Gemini Voice Assist' '" +
+                text +
+                "'";
             const process = GLib.spawn_async(
                 null, // pasta de trabalho
                 ['/bin/sh', '-c', command], // comando e argumentos
@@ -278,6 +282,30 @@ const Gemini = GObject.registerClass(
             }
         }
 
+        removeNotificationByTitle(title) {
+            // Obtenha todas as notificações ativas
+            // eslint-disable-next-line no-unused-vars
+            let [stdout, stderr, status] =
+                GLib.spawn_command_line_sync('notify-send -l');
+            let notifications = stdout.toString().split('\n');
+
+            // Pesquise a notificação com o título fornecido
+            for (let i = 0; i < notifications.length; i++) {
+                let notification = notifications[i];
+                if (notification.includes(title)) {
+                    // Obtenha o ID da notificação
+                    let notificationId = notification.split('\t')[0];
+
+                    // Remova a notificação
+                    // eslint-disable-next-line prefer-template
+                    GLib.spawn_command_line_async(
+                        'notify-send -c ' + notificationId,
+                    );
+                    break;
+                }
+            }
+        }
+
         // Função para iniciar a gravação
         startRecording() {
             if (isRecording) {
@@ -286,7 +314,7 @@ const Gemini = GObject.registerClass(
                 return;
             }
             // Notify listening...
-            this.gnomeNotify('Listening...');
+            this.gnomeNotify('Listening...', 'critical');
 
             // Definir o arquivo de saída no diretório da extensão
             const outputPath = 'temp_audio.wav';
@@ -320,6 +348,9 @@ const Gemini = GObject.registerClass(
 
             // Stop recording
             pipeline.force_exit();
+
+            // Remove notification
+            this.removeNotificationByTitle('Listening...');
 
             // Transcribe audio
             this.transcribeAudio();
