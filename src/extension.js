@@ -238,9 +238,29 @@ const Gemini = GObject.registerClass(
             }
         }
 
+        // Remove all .wav file from /tmp folder
+        removeWavFiles() {
+            log('Removing all .wav files from /tmp folder');
+            const command = 'rm /tmp/*.wav';
+            const process = GLib.spawn_async(
+                null, // pasta de trabalho
+                ['/bin/sh', '-c', command], // comando e argumentos
+                null, // opções
+                GLib.SpawnFlags.SEARCH_PATH, // flags
+                null, // PID
+            );
+
+            if (process) {
+                log('Wav files removed successfully.');
+            } else {
+                log('Error removing wav files.');
+            }
+        }
+
+        // Play audio
         playAudio(audiofile) {
             // Process sync, not async
-            const process = GLib.spawn_sync(
+            const process = GLib.spawn_async(
                 null, // pasta de trabalho
                 ['/bin/sh', '-c', `play ${audiofile}`], // comando e argumentos
                 null, // opções
@@ -249,7 +269,6 @@ const Gemini = GObject.registerClass(
             );
             if (process) {
                 log('Audio played successfully.');
-                GLib.unlink(audiofile);
             } else {
                 log('Error playing audio.');
             }
@@ -618,6 +637,7 @@ const Gemini = GObject.registerClass(
                     // Remover arquivo tmp_audio.wav
                     GLib.unlink(audioPath);
                     GLib.unlink(tempFilePath);
+                    this.removeWavFiles();
                 }
             });
         }
