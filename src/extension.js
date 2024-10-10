@@ -1,10 +1,10 @@
 import St from 'gi://St';
+import Clutter from 'gi://Clutter';
 import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
 import Pango from 'gi://Pango';
-import Clutter from 'gi://Clutter';
 
 import {
     Extension,
@@ -153,17 +153,17 @@ const Gemini = GObject.registerClass(
             });
             this.chatSection = new PopupMenu.PopupMenuSection();
 
-            // Configurar o ScrollView corretamente com políticas de rolagem
+            // Usar valores diretos para ScrollPolicy
             this.scrollView = new St.ScrollView({
                 style_class: 'chat-scroll-section',
-                hscrollbar_policy: Clutter.ScrollPolicy.NEVER, // Não queremos rolagem horizontal
-                vscrollbar_policy: Clutter.ScrollPolicy.AUTOMATIC, // Rolagem vertical automática
+                hscrollbar_policy: 0, // 0 = NEVER (nunca exibir barra horizontal)
+                vscrollbar_policy: 1, // 1 = AUTOMATIC (exibir barra vertical quando necessário)
             });
 
             // Configurar o comportamento da seção de chat
-            this.chatSection.actor.x_expand = true; // Expandir horizontalmente
-            this.chatSection.actor.y_expand = true; // Expandir verticalmente
-            this.chatSection.actor.style_class = 'chat-content'; // Classe CSS opcional para customização
+            this.chatSection.actor.x_expand = true;
+            this.chatSection.actor.y_expand = true;
+            this.chatSection.actor.style_class = 'chat-content';
 
             // Adicionar a seção ao ScrollView
             this.scrollView.add_child(this.chatSection.actor);
