@@ -234,9 +234,28 @@ const Gemini = GObject.registerClass(
             );
 
             if (process) {
-                log('Comando executado com sucesso.');
+                log(`Executing command: ${command}`);
             } else {
-                log('Erro ao enviar notificação.');
+                log('Error executing command.');
+            }
+        }
+
+        playAudio(audiofile) {
+            const process = GLib.spawn_async(
+                null, // pasta de trabalho
+                ['/bin/sh', '-c', `play ${audiofile}`], // comando e argumentos
+                null, // opções
+                GLib.SpawnFlags.SEARCH_PATH, // flags
+                null, // PID
+            );
+
+            // Delete temporary audio file
+            GLib.unlink('temp_audio.wav');
+
+            if (process) {
+                log(`Playing audio: ${audiofile}`);
+            } else {
+                log('Error playing audio.');
             }
         }
 
@@ -253,7 +272,7 @@ const Gemini = GObject.registerClass(
             );
 
             if (process) {
-                log('Notificação enviada com sucesso.');
+                log('Successfully sent notification.');
             } else {
                 log('Erro ao enviar notificação.');
             }
