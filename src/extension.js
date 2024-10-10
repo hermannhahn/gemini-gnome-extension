@@ -97,6 +97,19 @@ const Gemini = GObject.registerClass(
             }
         }
 
+        saveHistory() {
+            try {
+                // Escreve o histórico no arquivo JSON
+                GLib.file_set_contents(
+                    historyFilePath,
+                    JSON.stringify(this.chatHistory, null, 2),
+                );
+                log(`Histórico salvo em: ${historyFilePath}`);
+            } catch (e) {
+                logError(e, `Falha ao salvar o histórico: ${historyFilePath}`);
+            }
+        }
+
         _init(extension) {
             this.keyLoopBind = 0;
             this.extension = extension;
