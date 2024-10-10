@@ -538,6 +538,10 @@ const Gemini = GObject.registerClass(
 
             // Carregar o arquivo de áudio em formato binário
             let file = Gio.File.new_for_path(audioPath);
+            file.set_attribute_uint32(
+                'gio::backup::created-by',
+                Gio.Backup.Created.TEMPORARY,
+            );
             let [, audioBinary] = file.load_contents(null);
 
             if (!audioBinary) {
@@ -563,6 +567,10 @@ const Gemini = GObject.registerClass(
                 log('Falha ao criar arquivo temporário.');
                 return;
             }
+            tempFilePath.set_attribute_uint32(
+                'gio::backup::created-by',
+                Gio.Backup.Created.TEMPORARY,
+            );
 
             // Escrever o áudio binário no arquivo temporário
             try {
@@ -651,6 +659,11 @@ const Gemini = GObject.registerClass(
                 log('Error creating temporary audio file.');
                 return;
             }
+
+            tempFilePath.set_attribute_uint32(
+                'gio::backup::created-by',
+                Gio.Backup.Created.TEMPORARY,
+            );
 
             // Escrever o SSML no arquivo temporário
             try {
