@@ -297,8 +297,8 @@ const Gemini = GObject.registerClass(
                     let notificationId = notification.split('\t')[0];
 
                     // Remova a notificação
-                    // eslint-disable-next-line prefer-template
                     GLib.spawn_command_line_async(
+                        // eslint-disable-next-line prefer-template
                         'notify-send -c ' + notificationId,
                     );
                     break;
