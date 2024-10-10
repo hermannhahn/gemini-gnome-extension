@@ -65,10 +65,10 @@ const Gemini = GObject.registerClass(
             super._init(0.0, _('Gemini Voice Assist for Ubuntu'));
             this._loadSettings();
 
-            // Create history.json if not exist
             this.chatHistory = [];
             if (RECURSIVETALK) {
                 try {
+                    // Create history.json if not exist
                     const file = Gio.File.new_for_path(
                         '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/history.json',
                     );
