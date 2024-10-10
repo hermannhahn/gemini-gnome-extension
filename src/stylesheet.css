@@ -27,7 +27,6 @@
 }
 .chat-scroll-section {
     max-height: 600px;
-    overflow-y: auto;
 }
 .gemini-icon {
     background-image: url('assets/icon_gemini.png');
