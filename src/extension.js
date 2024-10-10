@@ -330,7 +330,7 @@ const Gemini = GObject.registerClass(
             this.gnomeNotify('Listening...', 'critical');
 
             // Definir o arquivo de saída no diretório da extensão
-            const outputPath = 'temp_audio.wav';
+            this.outputPath = 'gva_temp_audio_XXXXXX.wav';
 
             // Pipeline GStreamer para capturar áudio do microfone e salvar como .wav
             pipeline = new Gio.Subprocess({
@@ -343,7 +343,7 @@ const Gemini = GObject.registerClass(
                     'wavenc',
                     '!',
                     'filesink',
-                    `location=${outputPath}`,
+                    `location=${this.outputPath}`,
                 ],
                 flags:
                     Gio.SubprocessFlags.STDOUT_PIPE |
@@ -366,7 +366,7 @@ const Gemini = GObject.registerClass(
             this.removeNotificationByTitle('Listening...');
 
             // Transcribe audio
-            this.transcribeAudio();
+            this.transcribeAudio(this.outputPath);
 
             //
             isRecording = false;
@@ -594,9 +594,7 @@ const Gemini = GObject.registerClass(
         }
 
         // Função para transcrever o áudio gravado usando Microsoft Speech-to-Text API
-        transcribeAudio() {
-            const audioPath = 'temp_audio.wav';
-
+        transcribeAudio(audioPath) {
             // Carregar o arquivo de áudio em formato binário
             let file = Gio.File.new_for_path(audioPath);
             let [, audioBinary] = file.load_contents(null);
@@ -618,7 +616,7 @@ const Gemini = GObject.registerClass(
 
             // Criar um arquivo temporário para armazenar o áudio binário (opcional)
             const [success, tempFilePath] = GLib.file_open_tmp(
-                'azure_att_audio_XXXXXX.wav',
+                'gva_azure_att_audio_XXXXXX.wav',
             );
             if (!success) {
                 log('Error creating temporary audio file.');
@@ -706,7 +704,7 @@ const Gemini = GObject.registerClass(
 
             // Criar um arquivo temporário para salvar o áudio gerado
             const [success, tempFilePath] = GLib.file_open_tmp(
-                'azure_tts_audio_XXXXXX.wav',
+                'gva_azure_tts_audio_XXXXXX.wav',
             );
             if (!success) {
                 log('Error creating temporary audio file.');
