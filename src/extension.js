@@ -1,5 +1,4 @@
 import St from 'gi://St';
-import Clutter from 'gi://Clutter';
 import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
