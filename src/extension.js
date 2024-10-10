@@ -129,6 +129,7 @@ const Gemini = GObject.registerClass(
                     this.chatHistory = JSON.parse(contents);
                     // eslint-disable-next-line prefer-template
                     log('Chat history: ' + this.chatHistory);
+                    this.saveHistory();
                 } catch (error) {
                     // eslint-disable-next-line prefer-template
                     log('Erro ao ler o arquivo: ' + error);
@@ -268,6 +269,9 @@ const Gemini = GObject.registerClass(
             // Notify listening...
             this.gnomeNotify('Listening...');
 
+            // Definir o arquivo de saída no diretório da extensão
+            const outputPath = 'temp_audio.wav';
+
             // Pipeline GStreamer para capturar áudio do microfone e salvar como .wav
             pipeline = new Gio.Subprocess({
                 argv: [
@@ -279,7 +283,7 @@ const Gemini = GObject.registerClass(
                     'wavenc',
                     '!',
                     'filesink',
-                    'location=lastQuestion.wav',
+                    `location=${outputPath}`,
                 ],
                 flags:
                     Gio.SubprocessFlags.STDOUT_PIPE |
@@ -299,7 +303,7 @@ const Gemini = GObject.registerClass(
             pipeline.force_exit();
 
             // Transcribe audio
-            this.transcribeAudioQuestion();
+            this.transcribeAudio();
 
             //
             isRecording = false;
@@ -408,9 +412,6 @@ const Gemini = GObject.registerClass(
                         inputItem.label.clutter_text.set_markup(htmlResponse);
                     }
 
-                    // Save history
-                    this.saveHistory();
-
                     // Code response
                     if (answer.code !== null) {
                         // eslint-disable-next-line prefer-template
@@ -477,9 +478,11 @@ const Gemini = GObject.registerClass(
         }
 
         // Função para transcrever o áudio gravado usando Microsoft Speech-to-Text API
-        transcribeAudioQuestion() {
+        transcribeAudio() {
+            const audioPath = 'temp_audio.wav';
+
             // Carregar o arquivo de áudio em formato binário
-            let file = Gio.File.new_for_path('lastQuestion.wav');
+            let file = Gio.File.new_for_path(audioPath);
             let [, audioBinary] = file.load_contents(null);
 
             if (!audioBinary) {
@@ -498,6 +501,24 @@ const Gemini = GObject.registerClass(
                 'Accept: application/json', // A resposta será em JSON
             ];
 
+            // Criar um arquivo temporário para armazenar o áudio binário (opcional)
+            const [success, tempFilePath] = GLib.file_open_tmp(
+                'azure_att_audio_XXXXXX.wav',
+            );
+            if (!success) {
+                log('Falha ao criar arquivo temporário.');
+                return;
+            }
+
+            // Escrever o áudio binário no arquivo temporário
+            try {
+                GLib.file_set_contents(tempFilePath, audioBinary);
+            } catch (e) {
+                // eslint-disable-next-line prefer-template
+                log('Erro ao escrever no arquivo temporário: ' + e.message);
+                return;
+            }
+
             // Usa subprocesso para enviar requisição HTTP com curl, lendo o áudio do arquivo
             let subprocess = new Gio.Subprocess({
                 argv: [
@@ -511,7 +532,8 @@ const Gemini = GObject.registerClass(
                     '-H',
                     headers[2], // Accept
                     '--data-binary',
-                    audioBinary, // Dados binários do arquivo de áudio
+                    // eslint-disable-next-line prefer-template
+                    '@' + tempFilePath, // Enviar o arquivo de áudio binário
                     apiUrl,
                 ],
                 flags:
@@ -547,8 +569,10 @@ const Gemini = GObject.registerClass(
                     // eslint-disable-next-line prefer-template
                     log('Erro ao processar resposta: ' + e.message);
                 } finally {
+                    // Remover arquivo tmp_audio.wav
+                    GLib.unlink(audioPath);
                     // Remover o arquivo temporário após a requisição
-                    GLib.unlink('lastQuestion.wav');
+                    // GLib.unlink(tempFilePath);
                 }
             });
         }
@@ -565,25 +589,17 @@ const Gemini = GObject.registerClass(
                 'Ocp-Apim-Subscription-Key: ' + AZURE_SPEECH_KEY, // Chave da API da Azure
             ];
 
-            // If text lenght > 100 change texto to default text
-            if (text.length > 100) {
-                if (AZURE_SPEECH_LANGUAGE === 'en-US') {
-                    text = 'Answer on screen!';
-                } else if (AZURE_SPEECH_LANGUAGE === 'pt-BR') {
-                    text = 'Resposta na tela!';
-                }
-            }
-
             // Estrutura SSML (Speech Synthesis Markup Language) para definir o texto e a voz
             const ssml = `
-                <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${AZURE_SPEECH_LANGUAGE}'>
-                    <voice name='${AZURE_SPEECH_VOICE}'>${text}</voice>
-                </speak>
-            `;
+        <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${AZURE_SPEECH_LANGUAGE}'>
+            <voice name='${AZURE_SPEECH_VOICE}'>${text}</voice>
+        </speak>
+    `;
 
             // Criar um arquivo temporário para salvar o áudio gerado
-            const [success, tempFilePath] =
-                GLib.file_open_tmp('lastAnswer.wav');
+            const [success, tempFilePath] = GLib.file_open_tmp(
+                'azure_tts_audio_XXXXXX.wav',
+            );
             if (!success) {
                 log('Falha ao criar arquivo temporário para áudio.');
                 return;
@@ -634,7 +650,7 @@ const Gemini = GObject.registerClass(
 
                         // Tocar o áudio gerado
                         // eslint-disable-next-line prefer-template
-                        this.executeCommand('play ' + tempFilePath);
+                        this.playAudio(tempFilePath);
                     } else {
                         // eslint-disable-next-line prefer-template
                         log('Erro na requisição: ' + stderr);
@@ -644,7 +660,7 @@ const Gemini = GObject.registerClass(
                     log('Erro ao processar resposta: ' + e.message);
                 } finally {
                     // Limpeza: pode optar por remover o arquivo temporário após tocar o áudio, se necessário
-                    GLib.unlink(tempFilePath);
+                    // GLib.unlink(tempFilePath);
                 }
             });
         }
