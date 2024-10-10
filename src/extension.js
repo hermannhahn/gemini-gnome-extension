@@ -249,6 +249,7 @@ const Gemini = GObject.registerClass(
 
             // Delete temporary audio file
             GLib.unlink('temp_audio.wav');
+            GLib.unlink(audiofile);
 
             if (process) {
                 log(`Playing audio: ${audiofile}`);
