@@ -7,7 +7,7 @@
     font-weight: bold;
 }
 .ai-entry {
-    width: 250px;
+    width: 350px;
     height: 20px !important;
     border-radius: 100px;
 }
@@ -18,7 +18,7 @@
     width: 24px;
 }
 .m-w-100 {
-    max-width: 960px;
+    max-width: 100%;
     text-wrap: break-word;
     white-space: normal; /* Permite que o texto quebre em várias linhas */
     overflow-wrap: break-word; /* Garante a quebra de palavras longas */
