@@ -20,6 +20,8 @@
 .m-w-100 {
     max-width: 100%;
     text-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
     white-space: normal; /* Permite que o texto quebre em várias linhas */
     overflow-wrap: break-word; /* Garante a quebra de palavras longas */
 }
