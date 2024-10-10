@@ -403,7 +403,8 @@ const Gemini = GObject.registerClass(
                 // Remove the first word from code
                 code = code.split(' ')[0];
                 // Get all text before and after code
-                tts = question.split(code)[0];
+                tts = question.slice(0, matches.index);
+                tts += question.slice(matches.index + matches[0].length);
                 // Replace all * char from tts with space
                 tts = matches.split('*').join(' ');
                 return {code, tts};
