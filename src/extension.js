@@ -127,6 +127,8 @@ const Gemini = GObject.registerClass(
                     // eslint-disable-next-line prefer-template
                     log('Contents: ' + contents);
                     this.chatHistory = JSON.parse(contents);
+                    // eslint-disable-next-line prefer-template
+                    log('Chat history: ' + this.chatHistory);
                 } catch (error) {
                     // eslint-disable-next-line prefer-template
                     log('Erro ao ler o arquivo: ' + error);
@@ -405,6 +407,9 @@ const Gemini = GObject.registerClass(
                         let htmlResponse = convertMD(aiResponse);
                         inputItem.label.clutter_text.set_markup(htmlResponse);
                     }
+
+                    // Save history
+                    this.saveHistory();
 
                     // Code response
                     if (answer.code !== null) {
