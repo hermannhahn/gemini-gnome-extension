@@ -247,10 +247,7 @@ const Gemini = GObject.registerClass(
                 null, // PID
             );
             if (process) {
-                // Delete temporary audio file
                 log('Audio played successfully.');
-                GLib.unlink('temp_audio.wav');
-                GLib.unlink(audiofile);
             } else {
                 log('Error playing audio.');
             }
@@ -701,7 +698,7 @@ const Gemini = GObject.registerClass(
                     log('Error processing response: ' + e.message);
                 } finally {
                     // Limpeza: pode optar por remover o arquivo temporário após tocar o áudio, se necessário
-                    // GLib.unlink(tempFilePath);
+                    GLib.unlink(tempFilePath);
                 }
             });
         }
