@@ -400,6 +400,13 @@ const Gemini = GObject.registerClass(
             let tts = question.replace(regex, '');
             // Replace * char with space
             tts = tts.replace(/\*/g, ' ');
+            if (tts.length > 100) {
+                if (AZURE_SPEECH_LANGUAGE === 'en-US') {
+                    tts = 'I found this!';
+                } else if (AZURE_SPEECH_LANGUAGE === 'pt-BR') {
+                    tts = 'Encontrei isso!';
+                }
+            }
 
             if (matches) {
                 let code = matches[1];
