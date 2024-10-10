@@ -41,12 +41,19 @@ let extensionDir = GLib.build_filenamev([
     'extensions',
     'gnome-extension@gemini-assist.vercel.app',
 ]);
+let tempDir = GLib.build_filenamev([
+    '.local',
+    'share',
+    'gnome-shell',
+    'extensions',
+    'gnome-extension@gemini-assist.vercel.app',
+]);
 let historyFilePath = GLib.build_filenamev([extensionDir, 'history.json']);
 let questionAudioPath = GLib.build_filenamev([
     extensionDir,
     'lastQuestion.wav',
 ]);
-let answerAudioPath = GLib.build_filenamev([extensionDir, 'lastAnswer.wav']);
+let answerAudioPath = GLib.build_filenamev([tempDir, 'lastAnswer.wav']);
 
 const Gemini = GObject.registerClass(
     class Gemini extends PanelMenu.Button {
