@@ -265,7 +265,9 @@ const Gemini = GObject.registerClass(
             );
             aiResponseItem.label.clutter_text.set_markup(aiResponse);
             inputCategory.label.x_expand = true;
+            inputCategory.y_expand = true;
             aiResponseItem.label.x_expand = true;
+            aiResponseItem.y_expand = true;
             inputCategory.style_class += ' m-w-100';
             aiResponseItem.style_class += ' m-w-100';
 
