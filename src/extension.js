@@ -423,6 +423,15 @@ const Gemini = GObject.registerClass(
                 tts = text.replace(regex, '').trim();
                 // Replace * char with space
                 tts = tts.split('*').join(' ');
+                // If tts is more then 100 characters, change tts text
+                if (tts.length > 100) {
+                    if (AZURE_SPEECH_LANGUAGE === 'en-US') {
+                        tts = 'I found this!';
+                    }
+                    if (AZURE_SPEECH_LANGUAGE === 'pt-BR') {
+                        tts = 'Encontrei isso!';
+                    }
+                }
                 return {code, tts};
             } else {
                 // Se não encontrar código, retorna apenas o texto original no campo tts
