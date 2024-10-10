@@ -30,7 +30,6 @@ let AZURE_SPEECH_VOICE = ''; // Ex: "en-US-JennyNeural"
 let LOCATION = '';
 let USERNAME = GLib.get_real_name();
 let RECURSIVETALK = true;
-let LASTQUESTIONFILE = 'lastQuestion.wav';
 let pipeline;
 let isRecording = false;
 // Caminho do diretório e arquivo
@@ -43,6 +42,11 @@ let extensionDir = GLib.build_filenamev([
     'gnome-extension@gemini-assist.vercel.app',
 ]);
 let historyFilePath = GLib.build_filenamev([extensionDir, 'history.json']);
+let questionAudioPath = GLib.build_filenamev([
+    extensionDir,
+    'lastQuestion.wav',
+]);
+let answerAudioPath = GLib.build_filenamev([extensionDir, 'lastAnswer.wav']);
 
 const Gemini = GObject.registerClass(
     class Gemini extends PanelMenu.Button {
@@ -186,7 +190,7 @@ const Gemini = GObject.registerClass(
                 searchEntry.clutter_text.set_text('');
             });
             micButton.connect('clicked', (_self) => {
-                this.startRecording(LASTQUESTIONFILE);
+                this.startRecording();
             });
             settingsButton.connect('clicked', (_self) => {
                 this.openSettings();
@@ -258,7 +262,7 @@ const Gemini = GObject.registerClass(
         }
 
         // Função para iniciar a gravação
-        startRecording(outputFile) {
+        startRecording() {
             if (isRecording) {
                 // Stop recording
                 this.stopRecording();
@@ -266,12 +270,6 @@ const Gemini = GObject.registerClass(
             }
             // Notify listening...
             this.gnomeNotify('Listening...');
-
-            // Definir o arquivo de saída no diretório da extensão
-            const outputPath =
-                // eslint-disable-next-line prefer-template
-                '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/' +
-                outputFile;
 
             // Pipeline GStreamer para capturar áudio do microfone e salvar como .wav
             pipeline = new Gio.Subprocess({
@@ -284,7 +282,7 @@ const Gemini = GObject.registerClass(
                     'wavenc',
                     '!',
                     'filesink',
-                    `location=${outputPath}`,
+                    `location=${questionAudioPath}`,
                 ],
                 flags:
                     Gio.SubprocessFlags.STDOUT_PIPE |
@@ -304,7 +302,7 @@ const Gemini = GObject.registerClass(
             pipeline.force_exit();
 
             // Transcribe audio
-            this.transcribeAudio(LASTQUESTIONFILE);
+            this.transcribeAudioQuestion();
 
             //
             isRecording = false;
@@ -479,14 +477,9 @@ const Gemini = GObject.registerClass(
         }
 
         // Função para transcrever o áudio gravado usando Microsoft Speech-to-Text API
-        transcribeAudio(audioFile) {
-            const audioPath =
-                // eslint-disable-next-line prefer-template
-                '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/' +
-                audioFile;
-
+        transcribeAudioQuestion() {
             // Carregar o arquivo de áudio em formato binário
-            let file = Gio.File.new_for_path(audioPath);
+            let file = Gio.File.new_for_path(questionAudioPath);
             let [, audioBinary] = file.load_contents(null);
 
             if (!audioBinary) {
@@ -599,9 +592,7 @@ const Gemini = GObject.registerClass(
     `;
 
             // Criar um arquivo temporário para salvar o áudio gerado
-            const [success, tempFilePath] = GLib.file_open_tmp(
-                'azure_tts_audio_XXXXXX.wav',
-            );
+            const [success, tempFilePath] = GLib.file_open_tmp(answerAudioPath);
             if (!success) {
                 log('Falha ao criar arquivo temporário para áudio.');
                 return;
