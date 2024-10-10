@@ -24,10 +24,9 @@
     word-break: break-word; /* Permite que as palavras sejam quebradas */
     white-space: normal; /* Permite que o texto quebre em várias linhas */
     overflow-wrap: break-word; /* Garante a quebra de palavras longas */
-    max-height: fit-content;
 }
 .chat-scroll-section {
-    max-height: fit-content;
+    max-height: 600px;
     overflow-y: auto;
 }
 .gemini-icon {
