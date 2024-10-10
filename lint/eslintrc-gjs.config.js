@@ -260,17 +260,15 @@ export default [
             'prefer-rest-params': 'error',
             'prefer-spread': 'error',
             'prefer-template': 'error',
-            'require-await': 'error',
-            'rest-spread-spacing': 'error',
-            semi: ['error', 'always'],
-            'semi-spacing': [
+            quotes: [
                 'error',
+                'single',
                 {
-                    before: false,
-                    after: true,
+                    avoidEscape: true,
                 },
             ],
-            'semi-style': 'error',
+            'require-await': 'error',
+            'rest-spread-spacing': 'error',
             'space-before-blocks': 'error',
             'space-before-function-paren': [
                 'error',
