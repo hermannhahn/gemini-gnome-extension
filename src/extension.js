@@ -148,9 +148,6 @@ const Gemini = GObject.registerClass(
             let item = new PopupMenu.PopupBaseMenuItem({
                 reactive: false,
                 can_focus: false,
-                style_class: 'm-w-100',
-                x_expand: true,
-                y_expand: true,
             });
             this.chatSection = new PopupMenu.PopupMenuSection();
             this.scrollView = new St.ScrollView({
@@ -211,6 +208,7 @@ const Gemini = GObject.registerClass(
             const aiResponseItem = new PopupMenu.PopupMenuItem('');
             aiResponseItem.label.clutter_text.set_markup(aiResponse);
             aiResponseItem.label.x_expand = true;
+            aiResponseItem.label.y_expand = true;
             aiResponseItem.style_class += ' m-w-100';
 
             aiResponseItem.connect('activate', (_self) => {
@@ -395,9 +393,11 @@ const Gemini = GObject.registerClass(
 
             inputCategory.label.x_expand = true;
             aiResponseItem.label.x_expand = true;
+            inputCategory.label.y_expand = true;
+            aiResponseItem.label.y_expand = true;
 
-            inputCategory.style_class += ' m-w-100';
-            aiResponseItem.style_class += ' m-w-100';
+            inputCategory.style_class += 'm-w-100';
+            aiResponseItem.style_class += 'm-w-100';
 
             aiResponseItem.connect('activate', (_self) => {
                 this.extension.clipboard.set_text(
