@@ -37,5 +37,33 @@ fi
 echo "Version: $VERSION"
 echo "New version: $NEW_VERSION"
 
+# Git checkout to new version
+git checkout -b $NEW_VERSION
+
+# Update version in package.json
+jq ".version = \"$NEW_VERSION\"" package.json > package.json.new
+mv package.json.new package.json
+echo "Updated version in package.json"
+
+SHORT_VERSION=$major_version.$minor_version
+
+# Update
+jq ".version = $SHORT_VERSION" metadata.json > metadata.json.new
+mv metadata.json.new metadata.json
+echo "Updated version in metadata.json"
+
+# Add, commit and push files
+cd -- "$( dirname "$0" )/../"
+git add .
+git commit -S -m "$NEW_VERSION"
+git push
+
+# Build
+npm run build:install
+echo "Extension built."
+echo "All done."
+
+# Exit script
+exit 0
 
 
