@@ -177,7 +177,6 @@ const Gemini = GObject.registerClass(
                 }),
             });
             this.scrollView.add_child(this.chatSection.actor);
-            item.add_child(this.scrollView);
 
             // Connect signals
             searchEntry.clutter_text.connect('activate', (actor) => {
@@ -526,7 +525,7 @@ const Gemini = GObject.registerClass(
                     let htmlResponse = convertMD(aiResponse);
                     inputItem.label.clutter_text.set_markup(htmlResponse);
                     inputItem.label.clutter_text.set_line_wrap(true); // Ativar quebra de linha
-
+                    inputItem.style_class += 'm-w-100';
                     // Code response
                     if (answer.code !== null) {
                         log('Code response: ' + answer.code);
