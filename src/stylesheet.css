@@ -24,6 +24,54 @@
 .chat-scroll-section {
     overflow-y: auto;
 }
+.item-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.item-section-left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.item-section-right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+.item-section-left > * {
+    margin-right: 10px;
+}
+.item-section-right > * {
+    margin-left: 10px;
+}
+.chat-entry {
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+}
+.chat-entry-user {
+    background-color: #e0e0e0;
+}
+.chat-entry-ai {
+    background-color: #f0f0f0;
+}
+.chat-entry-ai > .chatLog {
+    color: black;
+}
+.chat-entry-user > .chatLog {
+    color: black;
+}
+.chat-entry-ai > .chatType {
+    color: #007bff;
+}
+.chat-entry-user > .chatType {
+    color: #007bff;
+}
 .gemini-icon {
     background-image: url('assets/icon_gemini.png');
     background-size: 24px;
