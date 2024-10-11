@@ -475,7 +475,6 @@ const Gemini = GObject.registerClass(
             var body = this.buildBody(question);
             let message = Soup.Message.new('POST', url);
             let bytes = GLib.Bytes.new(body);
-            this.saveHistory();
             message.set_request_body_from_bytes('application/json', bytes);
             _httpSession.send_and_read_async(
                 message,
@@ -505,16 +504,15 @@ const Gemini = GObject.registerClass(
                     }
 
                     // Add to chat
-                    if (RECURSIVETALK) {
-                        this.chatHistory.push({
-                            role: 'user',
-                            parts: [{text: question}],
-                        });
-                        this.chatHistory.push({
-                            role: 'model',
-                            parts: [{text: aiResponse}],
-                        });
-                    }
+                    this.chatHistory.push({
+                        role: 'user',
+                        parts: [{text: question}],
+                    });
+                    this.chatHistory.push({
+                        role: 'model',
+                        parts: [{text: aiResponse}],
+                    });
+                    this.saveHistory();
 
                     let htmlResponse = convertMD(aiResponse);
                     inputItem.label.clutter_text.set_markup(htmlResponse);
