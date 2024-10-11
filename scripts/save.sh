@@ -8,12 +8,13 @@
 # Main script starts here #
 ###########################
 
+VERSIONCHANGED=false
+
 # Get version from package.json
 VERSION=$(jq -r .version package.json) # E.g. 1.0.0
 
 # Get branch name
 BRANCH=$(git rev-parse --abbrev-ref HEAD) # E.g. main or 1.0.0
-
 
 # Check if version is empty
 if [ -z "$VERSION" ]; then
@@ -31,6 +32,7 @@ if [ "$BRANCH" != "$VERSION" ]; then
   # Update version in package.json with branch name
   jq ".version = \"$BRANCH\"" package.json > package.json.new
   mv package.json.new package.json
+  VERSIONCHANGED=true
   echo "Updated version in package.json"
 fi
 
@@ -60,6 +62,13 @@ npm run build:install
 cd -- "$( dirname "$0" )/../"
 git add .
 git commit -S -m "$VERSION"
+# If version has changed
+if [ "$VERSIONCHANGED" = true ]; then
+  git push origin $BRANCH
+else
+  git push
+fi
+
 git push
 
 echo "All done."
