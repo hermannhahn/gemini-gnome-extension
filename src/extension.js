@@ -378,7 +378,8 @@ const Gemini = GObject.registerClass(
                 `<b>${USERNAME}: </b>${text}`,
             );
             inputCategory.label.clutter_text.set_line_wrap(true); // Permite quebras de linha
-            aiResponseItem.label.clutter_text.set_markup(aiResponse);
+            let htmlResponse = convertMD(aiResponse);
+            aiResponseItem.label.clutter_text.set_markup(htmlResponse);
             aiResponseItem.label.clutter_text.set_line_wrap(true); // Ativar quebra de linha
             inputCategory.label.x_expand = true;
             aiResponseItem.label.x_expand = true;
