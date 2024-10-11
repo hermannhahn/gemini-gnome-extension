@@ -378,17 +378,23 @@ const Gemini = GObject.registerClass(
 
         aiResponse(text) {
             let aiResponse = _('<b>Gemini:</b> Thinking...');
+
             const inputCategory = new PopupMenu.PopupMenuItem('');
             const aiResponseItem = new PopupMenu.PopupMenuItem('');
+
             let htmlText = convertMD(text);
+
             inputCategory.label.clutter_text.set_markup(
                 `<b>${USERNAME}: </b>${htmlText}`,
             );
             inputCategory.label.clutter_text.set_line_wrap(true); // Permite quebras de linha
+
             aiResponseItem.label.clutter_text.set_markup(aiResponse);
             aiResponseItem.label.clutter_text.set_line_wrap(true); // Ativar quebra de linha
+
             inputCategory.label.x_expand = true;
             aiResponseItem.label.x_expand = true;
+
             inputCategory.style_class += ' m-w-100';
             aiResponseItem.style_class += ' m-w-100';
 
