@@ -3,7 +3,6 @@ import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
-import Pango from 'gi://Pango';
 
 import {
     Extension,
@@ -379,14 +378,8 @@ const Gemini = GObject.registerClass(
                 `<b>${USERNAME}: </b>${text}`,
             );
             inputCategory.label.clutter_text.set_line_wrap(true); // Permite quebras de linha
-            inputCategory.label.clutter_text.set_line_wrap_mode(
-                Pango.WrapMode.WORD_CHAR,
-            ); // Quebra em palavras ou caracteres
             aiResponseItem.label.clutter_text.set_markup(aiResponse);
             aiResponseItem.label.clutter_text.set_line_wrap(true); // Ativar quebra de linha
-            aiResponseItem.label.clutter_text.set_line_wrap_mode(
-                Pango.WrapMode.WORD_CHAR,
-            ); // Quebra entre palavras
             inputCategory.label.x_expand = true;
             aiResponseItem.label.x_expand = true;
             inputCategory.style_class += ' m-w-100';
