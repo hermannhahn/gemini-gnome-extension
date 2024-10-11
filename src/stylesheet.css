@@ -7,7 +7,7 @@
     font-weight: bold;
 }
 .ai-entry {
-    width: 350px;
+    width: 250px;
     height: 20px !important;
     border-radius: 100px;
 }
@@ -18,63 +18,11 @@
     width: 24px;
 }
 .m-w-100 {
-    max-width: 800px;
-    text-wrap: break-word; /* Permite que as palavras sejam quebradas */
+    max-width: 960px;
+    text-wrap: wrap;
 }
 .chat-scroll-section {
-    max-height: 600px;
-    overflow-y: auto;
-}
-.item-section {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 10px;
-}
-.item-section-left {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-.item-section-right {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-}
-.item-section-left > * {
-    margin-right: 10px;
-}
-.item-section-right > * {
-    margin-left: 10px;
-}
-.chat-entry {
-    background-color: #f0f0f0;
-    border-radius: 10px;
-    padding: 10px;
-    margin-bottom: 10px;
-    word-wrap: break-word;
-    overflow-y: auto;
-}
-.chat-entry-user {
-    background-color: #e0e0e0;
-    overflow-y: auto;
-}
-.chat-entry-ai {
-    background-color: #f0f0f0;
-    overflow-y: auto;
-}
-.chat-entry-ai > .chatLog {
-    color: black;
-}
-.chat-entry-user > .chatLog {
-    color: black;
-}
-.chat-entry-ai > .chatType {
-    color: #007bff;
-}
-.chat-entry-user > .chatType {
-    color: #007bff;
+    max-height: 800px;
 }
 .gemini-icon {
     background-image: url('assets/icon_gemini.png');
