@@ -149,9 +149,7 @@ const Gemini = GObject.registerClass(
                 reactive: false,
                 can_focus: false,
             });
-            this.chatSection = new PopupMenu.PopupMenuSection({
-                style_class: 'chat-section',
-            });
+            this.chatSection = new PopupMenu.PopupMenuSection();
             this.scrollView = new St.ScrollView({
                 style_class: 'chat-scroll-section',
             });
