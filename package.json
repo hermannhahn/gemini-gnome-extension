@@ -3,8 +3,8 @@
   "version": "1.2.0",
   "private": true,
   "scripts": {
-    "save": "./scripts/save.sh && exit",
-    "build": "./scripts/build.sh && exit",
+    "save": "./scripts/save.sh",
+    "build": "./scripts/build.sh",
     "build:dev": "./scripts/build.sh --unsafe-reload",
     "build:install": "./scripts/build.sh --install",
     "check:lint": "eslint src/**/*.js",
