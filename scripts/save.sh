@@ -36,15 +36,7 @@ fi
 # Update version-name in metadata.json
 minor_version=$(echo "$BRANCH" | cut -d'.' -f2)
 major_version=($(echo "$BRANCH" | cut -d'.' -f1))
-if [ "$minor_version" -eq 9 ]; then
-  minor_version=0
-  major_version=$((major_version + 1))
-else
-  minor_version=$((minor_version + 1))
-fi
-
 SHORT_VERSION=$major_version.$minor_version
-echo "New version: $SHORT_VERSION"
 
 # Update
 jq ".version = $SHORT_VERSION" metadata.json > metadata.json.new
