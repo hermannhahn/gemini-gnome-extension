@@ -525,8 +525,6 @@ const Gemini = GObject.registerClass(
                     let htmlResponse = convertMD(aiResponse);
                     inputItem.label.clutter_text.set_markup(htmlResponse);
                     inputItem.label.clutter_text.set_line_wrap(true); // Ativar quebra de linha
-                    inputItem.style_class += 'm-w-100';
-                    this.scrollView.add_child(inputItem.actor);
 
                     // Code response
                     if (answer.code !== null) {
