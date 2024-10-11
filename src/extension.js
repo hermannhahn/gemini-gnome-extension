@@ -177,6 +177,8 @@ const Gemini = GObject.registerClass(
                 }),
             });
             this.scrollView.add_child(this.chatSection.actor);
+            this.scrollView.set_vertical_scroll_bar_visible(true);
+            this.scrollView.set_horizontal_scroll_bar_visible(true);
 
             // Connect signals
             searchEntry.clutter_text.connect('activate', (actor) => {
