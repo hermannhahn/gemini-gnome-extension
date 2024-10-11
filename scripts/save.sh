@@ -8,8 +8,6 @@
 # Main script starts here #
 ###########################
 
-VERSIONCHANGED=false
-
 # Get version from package.json
 VERSION=$(jq -r .version package.json) # E.g. 1.0.0
 
@@ -32,7 +30,6 @@ if [ "$BRANCH" != "$VERSION" ]; then
   # Update version in package.json with branch name
   jq ".version = \"$BRANCH\"" package.json > package.json.new
   mv package.json.new package.json
-  VERSIONCHANGED=true
   echo "Updated version in package.json"
 fi
 
@@ -46,12 +43,10 @@ else
   minor_version=$((minor_version + 1))
 fi
 
-VERSION=$major_version.$minor_version
-
-echo "Current Version: $VERSION"
+SHORT_VERSION=$major_version.$minor_version
 
 # Update
-jq ".version = $VERSION" metadata.json > metadata.json.new
+jq ".version = $SHORT_VERSION" metadata.json > metadata.json.new
 mv metadata.json.new metadata.json
 echo "Updated version in metadata.json"
 
@@ -61,14 +56,7 @@ npm run build:install
 # Add, commit and push files
 cd -- "$( dirname "$0" )/../"
 git add .
-git commit -S -m "$VERSION"
-# If version has changed
-if [ "$VERSIONCHANGED" = true ]; then
-  git push origin $BRANCH
-else
-  git push
-fi
-
+git commit -S -m "$BRANCH"
 git push
 
 echo "All done."
