@@ -374,8 +374,9 @@ const Gemini = GObject.registerClass(
             let aiResponse = _('<b>Gemini: </b> Thinking...');
             const inputCategory = new PopupMenu.PopupMenuItem('');
             const aiResponseItem = new PopupMenu.PopupMenuItem('');
+            let htmlText = convertMD(text);
             inputCategory.label.clutter_text.set_markup(
-                `<b>${USERNAME}: </b>${text}`,
+                `<b>${USERNAME}: </b>${htmlText}`,
             );
             inputCategory.label.clutter_text.set_line_wrap(true); // Permite quebras de linha
             let htmlResponse = convertMD(aiResponse);
