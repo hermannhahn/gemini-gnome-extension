@@ -126,8 +126,8 @@ const Gemini = GObject.registerClass(
                     const [, contents] = file.load_contents(null);
                     log('Contents: ' + contents);
                     this.chatHistory = JSON.parse(contents);
-                    log('Chat history: ' + this.chatHistory);
                     this.saveHistory();
+                    log('Chat history: ' + this.chatHistory);
                 } catch (error) {
                     log('Erro ao ler o arquivo: ' + error);
                 }
@@ -371,7 +371,7 @@ const Gemini = GObject.registerClass(
         }
 
         aiResponse(text) {
-            let aiResponse = _('<b>Gemini: </b> Thinking...');
+            let aiResponse = _('<b>Gemini:</b> Thinking...');
             const inputCategory = new PopupMenu.PopupMenuItem('');
             const aiResponseItem = new PopupMenu.PopupMenuItem('');
             let htmlText = convertMD(text);
@@ -379,8 +379,7 @@ const Gemini = GObject.registerClass(
                 `<b>${USERNAME}: </b>${htmlText}`,
             );
             inputCategory.label.clutter_text.set_line_wrap(true); // Permite quebras de linha
-            let htmlResponse = convertMD(aiResponse);
-            aiResponseItem.label.clutter_text.set_markup(htmlResponse);
+            aiResponseItem.label.clutter_text.set_markup(aiResponse);
             aiResponseItem.label.clutter_text.set_line_wrap(true); // Ativar quebra de linha
             inputCategory.label.x_expand = true;
             aiResponseItem.label.x_expand = true;
@@ -516,10 +515,9 @@ const Gemini = GObject.registerClass(
                         });
                     }
 
-                    if (inputItem !== undefined) {
-                        let htmlResponse = convertMD(aiResponse);
-                        inputItem.label.clutter_text.set_markup(htmlResponse);
-                    }
+                    let htmlResponse = convertMD(aiResponse);
+                    inputItem.label.clutter_text.set_markup(htmlResponse);
+                    inputItem.label.clutter_text.set_line_wrap(true); // Ativar quebra de linha
 
                     // Code response
                     if (answer.code !== null) {
