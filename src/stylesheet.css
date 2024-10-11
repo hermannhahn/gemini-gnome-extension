@@ -23,8 +23,8 @@
     max-height: max-content;
 }
 .chat-scroll-section {
+    max-height: 600px;
     overflow-y: auto;
-    max-height: max-content;
 }
 .item-section {
     display: flex;
