@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "save": "./scripts/save.sh && exit",
-    "build": "./scripts/build.sh",
+    "build": "./scripts/build.sh && exit",
     "build:dev": "./scripts/build.sh --unsafe-reload",
     "build:install": "./scripts/build.sh --install",
     "check:lint": "eslint src/**/*.js",
