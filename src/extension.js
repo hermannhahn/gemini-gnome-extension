@@ -154,8 +154,6 @@ const Gemini = GObject.registerClass(
                 style_class: 'chat-scroll-section',
                 x_expand: true,
                 y_expand: true,
-                vertical: true,
-                horizontal: false,
             });
 
             let searchEntry = new St.Entry({
