@@ -149,10 +149,11 @@ const Gemini = GObject.registerClass(
                 reactive: false,
                 can_focus: false,
             });
-            this.chatSection = new PopupMenu.PopupMenuSection();
+            this.chatSection = new PopupMenu.PopupMenuSection({
+                style_class: 'chat-section',
+            });
             this.scrollView = new St.ScrollView({
                 style_class: 'chat-scroll-section',
-                y_expand: true,
             });
 
             let searchEntry = new St.Entry({
@@ -393,8 +394,6 @@ const Gemini = GObject.registerClass(
 
             inputCategory.label.x_expand = true;
             aiResponseItem.label.x_expand = true;
-            inputCategory.label.y_expand = true;
-            aiResponseItem.label.y_expand = true;
 
             inputCategory.style_class += 'm-w-100';
             aiResponseItem.style_class += 'm-w-100';
@@ -411,7 +410,6 @@ const Gemini = GObject.registerClass(
             );
             this.chatSection.addMenuItem(inputCategory);
             this.chatSection.addMenuItem(aiResponseItem);
-
             this.getAireponse(aiResponseItem, text);
         }
 
