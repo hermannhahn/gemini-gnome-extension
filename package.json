@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "save": "./scripts/save.sh",
+    "new": "./scripts/new.sh",
     "build": "./scripts/build.sh",
     "build:dev": "./scripts/build.sh --unsafe-reload",
     "build:install": "./scripts/build.sh --install",
