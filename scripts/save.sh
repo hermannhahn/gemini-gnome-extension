@@ -51,15 +51,15 @@ jq ".version = $SHORT_VERSION" metadata.json > metadata.json.new
 mv metadata.json.new metadata.json
 echo "Updated version in metadata.json"
 
-# Build
-npm run build:install
-
 # Add, commit and push files
 cd -- "$( dirname "$0" )/../"
 git add .
 git commit -S -m "$BRANCH"
 git push
 
+# Build
+npm run build:install
+echo "Extension built."
 echo "All done."
 
 # Exit script
