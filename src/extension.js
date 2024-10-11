@@ -475,6 +475,7 @@ const Gemini = GObject.registerClass(
             var body = this.buildBody(question);
             let message = Soup.Message.new('POST', url);
             let bytes = GLib.Bytes.new(body);
+            this.saveHistory();
             message.set_request_body_from_bytes('application/json', bytes);
             _httpSession.send_and_read_async(
                 message,
