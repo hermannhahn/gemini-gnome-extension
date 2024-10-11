@@ -20,7 +20,6 @@
 .m-w-100 {
     max-width: 800px;
     text-wrap: break-word; /* Permite que as palavras sejam quebradas */
-    max-height: max-content;
 }
 .chat-scroll-section {
     max-height: 600px;
@@ -55,12 +54,15 @@
     padding: 10px;
     margin-bottom: 10px;
     word-wrap: break-word;
+    overflow-y: auto;
 }
 .chat-entry-user {
     background-color: #e0e0e0;
+    overflow-y: auto;
 }
 .chat-entry-ai {
     background-color: #f0f0f0;
+    overflow-y: auto;
 }
 .chat-entry-ai > .chatLog {
     color: black;
