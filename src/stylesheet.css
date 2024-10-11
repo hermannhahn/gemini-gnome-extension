@@ -20,9 +20,11 @@
 .m-w-100 {
     max-width: 800px;
     text-wrap: break-word; /* Permite que as palavras sejam quebradas */
+    max-height: max-content;
 }
 .chat-scroll-section {
     overflow-y: auto;
+    max-height: max-content;
 }
 .item-section {
     display: flex;
