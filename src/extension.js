@@ -152,6 +152,10 @@ const Gemini = GObject.registerClass(
             this.chatSection = new PopupMenu.PopupMenuSection();
             this.scrollView = new St.ScrollView({
                 style_class: 'chat-scroll-section',
+                x_expand: true,
+                y_expand: true,
+                vertical: true,
+                horizontal: false,
             });
 
             let searchEntry = new St.Entry({
@@ -177,8 +181,7 @@ const Gemini = GObject.registerClass(
                 }),
             });
             this.scrollView.add_child(this.chatSection.actor);
-            this.scrollView.set_vertical_scroll_bar_visible(true);
-            this.scrollView.set_horizontal_scroll_bar_visible(true);
+            item.add_child(this.scrollView);
 
             // Connect signals
             searchEntry.clutter_text.connect('activate', (actor) => {
