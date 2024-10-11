@@ -44,6 +44,7 @@ else
 fi
 
 SHORT_VERSION=$major_version.$minor_version
+echo "New version: $SHORT_VERSION"
 
 # Update
 jq ".version = $SHORT_VERSION" metadata.json > metadata.json.new
