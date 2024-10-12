@@ -115,6 +115,8 @@ const Gemini = GObject.registerClass(
             this.chatSection = new PopupMenu.PopupMenuSection();
             this.scrollView = new St.ScrollView({
                 style_class: 'chat-scroll-section',
+                x_expand: true,
+                y_expand: true,
             });
 
             let searchEntry = new St.Entry({
@@ -197,15 +199,11 @@ const Gemini = GObject.registerClass(
                 `<b>${USERNAME}: </b>${htmlUserQuestion}`,
             );
 
-            // Criar um contêiner de rolagem usando St.ScrollView
-            let scrollView = new St.ScrollView({
-                style_class: 'scrollview', // Opcional, adicione estilo se necessário
-                x_expand: true, // Permitir expansão horizontal
-                y_expand: true, // Permitir expansão vertical
-            });
-
             // Ativar a barra de rolagem vertical e desativar a horizontal
-            scrollView.set_policy(St.PolicyType.NEVER, St.PolicyType.AUTOMATIC);
+            this.scrollView.set_policy(
+                St.PolicyType.NEVER,
+                St.PolicyType.AUTOMATIC,
+            );
 
             // Configurar o label (Clutter.Text) para usar a quebra de linha
             aiResponseItem.label.clutter_text.set_line_wrap(true);
@@ -215,12 +213,6 @@ const Gemini = GObject.registerClass(
 
             // Definir uma largura máxima para o label para forçar a quebra de linha
             aiResponseItem.label.set_width(400); // Ajuste a largura de acordo com seu layout
-
-            // Adicionar o Clutter.Text ao ScrollView
-            this.menu.box.add_child(aiResponseItem.label);
-
-            // Adicionar o ScrollView ao contêiner principal da interface
-            this.searchEntry.add_child(scrollView);
 
             // Definir o texto com markup, como antes
             aiResponseItem.label.clutter_text.set_markup(aiResponse);
