@@ -198,31 +198,32 @@ const Gemini = GObject.registerClass(
                 `<b>${USERNAME}: </b>${htmlUserQuestion}`,
             );
 
-            // Criar um contêiner de rolagem
-            let scrollActor = new Clutter.ScrollActor({
-                vscroll: Clutter.ScrollMode.ALWAYS, // Sempre mostrar a barra de rolagem vertical
-                hscroll: Clutter.ScrollMode.NEVER, // Nunca mostrar a barra de rolagem horizontal
+            // Criar um contêiner de rolagem usando St.ScrollView
+            let scrollView = new St.ScrollView({
+                style_class: 'scrollview', // Opcional, adicione estilo se necessário
+                x_expand: true, // Permitir expansão horizontal
+                y_expand: true, // Permitir expansão vertical
             });
 
-            // Configurar o label (ou Clutter.Text) para usar no scroll
+            // Ativar a barra de rolagem vertical e desativar a horizontal
+            scrollView.set_policy(St.PolicyType.NEVER, St.PolicyType.AUTOMATIC);
+
+            // Configurar o label (Clutter.Text) para usar a quebra de linha
             aiResponseItem.label.clutter_text.set_line_wrap(true);
             aiResponseItem.label.clutter_text.set_line_wrap_mode(
                 Pango.WrapMode.WORD,
-            ); // Ou Pango.WrapMode.CHAR para quebras por caractere
+            ); // Ou Pango.WrapMode.CHAR
 
-            // Definir uma largura máxima para o label, importante para a quebra de linha
-            aiResponseItem.label.set_width(400); // Defina a largura de acordo com o seu layout
+            // Definir uma largura máxima para o label para forçar a quebra de linha
+            aiResponseItem.label.set_width(400); // Ajuste a largura de acordo com seu layout
 
-            // Adicionar o Clutter.Text no ScrollActor
-            scrollActor.add_child(aiResponseItem.label);
+            // Adicionar o Clutter.Text ao ScrollView
+            this.chatSection.add_child(aiResponseItem.label);
 
-            // Definir o markup como antes
-            aiResponseItem.label.clutter_text.set_markup(aiResponse);
+            // Adicionar o ScrollView ao contêiner principal da interface
+            this.searchEntry.add_child(scrollView);
 
-            // Adicionar o ScrollActor ao layout da interface, conforme necessário
-            this.searchEntry.add_child(scrollActor); // Adicione ao seu layout
-
-            // Add temporary response while whait for ai response
+            // Definir o texto com markup, como antes
             aiResponseItem.label.clutter_text.set_markup(aiResponse);
 
             // Chat settings
