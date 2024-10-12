@@ -85,8 +85,10 @@ Other files may be included but they aren't directly related to extension develo
 
 ## Bug Fixes
 
--   [ ] Chat Scrolling
--   [ ] Formatting chat messages
+-   [x] Chat Scrolling
+-   [x] Formatting chat messages
+-   [ ] Increase chat width size
+-   [ ] Fix chat form, after create scroll, only click if scroll to begin
 
 ## License
 
