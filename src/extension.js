@@ -58,7 +58,6 @@ const Gemini = GObject.registerClass(
             if (ISVERTEX) {
                 this.chatTune = this.getTuneString();
                 this.getAireponse(undefined, this.chatTune);
-                //Sometimes Vertex keep talking Turkish because of fine tunning for internet, so we need to send Hi! message to understand it, it can talk with any language
                 this.afterTune = setTimeout(() => {
                     this.getAireponse(undefined, 'Hi!', undefined, true);
                 }, 1500);
@@ -131,6 +130,7 @@ const Gemini = GObject.registerClass(
                 this.aiResponse(actor.text);
                 searchEntry.clutter_text.set_text('');
             });
+            // eslint-disable-next-line no-unused-vars
             clearButton.connect('clicked', (self) => {
                 searchEntry.clutter_text.set_text('');
                 this.chatHistory = [];
@@ -140,10 +140,11 @@ const Gemini = GObject.registerClass(
                 this.menu.box.add_child(this.scrollView);
                 this._initFirstResponse();
             });
+            // eslint-disable-next-line no-unused-vars
             settingsButton.connect('clicked', (self) => {
                 this.openSettings();
             });
-            if (GEMINIAPIKEY == '') {
+            if (GEMINIAPIKEY === '') {
                 this.openSettings();
             }
             item.add_child(searchEntry);
@@ -167,6 +168,7 @@ const Gemini = GObject.registerClass(
             inputCategory.style_class += ' m-w-100';
             aiResponseItem.style_class += ' m-w-100';
 
+            // eslint-disable-next-line no-unused-vars
             aiResponseItem.connect('activate', (self) => {
                 this.extension.clipboard.set_text(
                     St.ClipboardType.CLIPBOARD,
@@ -194,17 +196,17 @@ const Gemini = GObject.registerClass(
             }
             let _httpSession = new Soup.Session();
             let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${GEMINIAPIKEY}`;
-            if (VERTEXPROJECTID != '' && ISVERTEX) {
+            if (VERTEXPROJECTID !== '' && ISVERTEX) {
                 url = `https://us-east4-aiplatform.googleapis.com/v1/projects/${VERTEXPROJECTID}/locations/us-east4/publishers/google/models/gemini-1.0-pro:generateContent`;
             }
-            if (newKey != undefined) {
+            if (newKey !== undefined) {
                 this.extension.settings.set_string('gemini-api-key', newKey);
                 GEMINIAPIKEY = newKey;
             }
             var body = this.buildBody(question);
             let message = Soup.Message.new('POST', url);
             let bytes = GLib.Bytes.new(body);
-            if (VERTEXPROJECTID != '' && ISVERTEX) {
+            if (VERTEXPROJECTID !== '' && ISVERTEX) {
                 message.request_headers.append(
                     'Authorization',
                     `Bearer ${GEMINIAPIKEY}`,
@@ -215,7 +217,9 @@ const Gemini = GObject.registerClass(
                 message,
                 GLib.PRIORITY_DEFAULT,
                 null,
+                // eslint-disable-next-line no-shadow
                 (_httpSession, result) => {
+                    // eslint-disable-next-line no-shadow
                     let bytes = _httpSession.send_and_read_finish(result);
                     let decoder = new TextDecoder('utf-8');
                     let response = decoder.decode(bytes.get_data());
@@ -223,13 +227,13 @@ const Gemini = GObject.registerClass(
                     // Inspecting the response for dev purpose
                     log(url);
                     log(response);
-                    if (res.error?.code != 401 && res.error !== undefined) {
+                    if (res.error?.code !== 401 && res.error !== undefined) {
                         inputItem?.label.clutter_text.set_markup(response);
                         return;
                     }
                     if (
-                        res.error?.code == 401 &&
-                        newKey == undefined &&
+                        res.error?.code === 401 &&
+                        newKey === undefined &&
                         ISVERTEX
                     ) {
                         this.keyLoopBind++;
@@ -250,7 +254,7 @@ const Gemini = GObject.registerClass(
                                 parts: [{text: aiResponse}],
                             });
                         }
-                        if (inputItem != undefined) {
+                        if (inputItem !== undefined) {
                             let htmlResponse = convertMD(aiResponse);
                             inputItem.label.clutter_text.set_markup(
                                 htmlResponse,
@@ -260,13 +264,14 @@ const Gemini = GObject.registerClass(
                 },
             );
         }
+
         getTuneString() {
             const date = new Date();
             // PLEASE DO NOT TRANSLATE FINE TUNE BECAUSE
             // VERTEX SOMETIMES DOESNT SUPPORT INTERNET CONNECTION
             //  IF YOU TRANSLATE TO ENGLISH
             let driveTune = '';
-            if (DRIVEFOLDER != '') {
+            if (DRIVEFOLDER !== '') {
                 driveTune = `bundan sonraki konuşmalarımızda şu drive klasörünündeki tüm pdf, excel, word, txt dosyalarından yararlan ama önceliğin internet ve kendi modelin olsun: ${DRIVEFOLDER}\n`;
             }
             return `bana ${USERNAME} olarak hitap edebilirsin, \n
@@ -276,6 +281,7 @@ const Gemini = GObject.registerClass(
         bir sonraki konuşmamızda sana hangi dilde yazyorsam KESİNLİKLE o dilde cevap ver ben sana bundan sonra türkçe konuşmadıkça bana türkçe cevap verme,
        `;
         }
+
         buildBody(input) {
             const stringfiedHistory = JSON.stringify([
                 ...this.chatHistory,
@@ -286,6 +292,7 @@ const Gemini = GObject.registerClass(
             ]);
             return `{"contents":${stringfiedHistory}}`;
         }
+
         openSettings() {
             this.extension.openSettings();
         }
@@ -296,6 +303,7 @@ const Gemini = GObject.registerClass(
                 this.afterTune = null;
             }
         }
+
         destroy() {
             this.destroyLoop();
             super.destroy();
@@ -319,6 +327,7 @@ export default class GeminiExtension extends Extension {
             message,
             GLib.PRIORITY_DEFAULT,
             null,
+            // eslint-disable-next-line no-shadow
             (_httpSession, result) => {
                 let bytes = _httpSession.send_and_read_finish(result);
                 let decoder = new TextDecoder('utf-8');
