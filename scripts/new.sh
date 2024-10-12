@@ -8,6 +8,13 @@
 # Main script starts here #
 ###########################
 
+# Get command line arguments
+UPDATE_TYPE=$1
+
+# Get version from package.json
+VERSION=$(jq -r .version package.json) # E.g. 1.0.0
+
+
 # Get branch name
 BRANCH=$(git rev-parse --abbrev-ref HEAD) # E.g. main or 1.0.0
 
@@ -21,19 +28,30 @@ fi
 minor_version=$(echo "$BRANCH" | cut -d'.' -f2)
 major_version=($(echo "$BRANCH" | cut -d'.' -f1))
 patch_version=($(echo "$BRANCH" | cut -d'.' -f3))
-
 VERSION=$major_version.$minor_version.$patch_version
+
 NEW_VERSION=$major_version.$minor_version.$patch_version
-if [ "$patch" = "9" ]; then
-  major_version=$((major_version+1))
-  minor_version=0
-  patch_version=0
-  NEW_VERSION=$major_version.$minor_version.$patch_version
+if [ "$UPDATE_TYPE" = "upgrade" ]; then
+    major_version=$(($major_version + 1))
+    minor_version=0
+    patch_version=0
+else
+  if [ "$UPDATE_TYPE" = "update" ]; then
+    minor_version=$(($minor_version + 1))
+    patch_version=0
   else
-  patch_version=$((patch_version+1))
-  NEW_VERSION=$major_version.$minor_version.$patch_version
+    if [ "$UPDATE_TYPE" = "patch" ]; then
+      patch_version=$(($patch_version + 1))
+    else
+      echo "Whrong update type. Try: npm run [upgrade, update or patch]."
+      exit 1
+    fi
+  fi
 fi
 
+NEW_VERSION=$major_version.$minor_version.$patch_version
+
+# Update
 echo "Version: $VERSION"
 echo "New version: $NEW_VERSION"
 
