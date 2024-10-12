@@ -266,7 +266,11 @@ const Gemini = GObject.registerClass(
                         inputItem?.label.clutter_text.set_markup(response);
                         return;
                     }
+                    // Get ai response
                     let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
+
+                    // Convert user question to HTML
+                    aiResponse = convertMD(aiResponse);
 
                     // Extract code and tts from response
                     let answer = this.extractCodeAndTTS(aiResponse);
