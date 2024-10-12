@@ -130,7 +130,7 @@ const Gemini = GObject.registerClass(
 
             // Create app tray icon
             this.icon = new St.Icon({
-                style_class: 'gemini-icon',
+                style_class: 'google-gemini-icon',
             });
             hbox.add_child(this.icon);
             this.add_child(hbox);
@@ -375,10 +375,10 @@ const Gemini = GObject.registerClass(
             inputCategory.label.clutter_text.set_markup(
                 `<b>${USERNAME}: </b>${text}`,
             );
-            inputCategory.label.clutter_text.set_line_wrap(true); // Permite quebras de linha
+            // inputCategory.label.clutter_text.set_line_wrap(true); // Permite quebras de linha
 
             aiResponseItem.label.clutter_text.set_markup(aiResponse);
-            aiResponseItem.label.clutter_text.set_line_wrap(true); // Ativar quebra de linha
+            // aiResponseItem.label.clutter_text.set_line_wrap(true); // Ativar quebra de linha
 
             inputCategory.label.x_expand = true;
             aiResponseItem.label.x_expand = true;
@@ -498,7 +498,7 @@ const Gemini = GObject.registerClass(
                     if (inputItem !== undefined) {
                         let htmlResponse = convertMD(aiResponse);
                         inputItem.label.clutter_text.set_markup(htmlResponse);
-                        inputItem.label.clutter_text.set_line_wrap(true); // Ativar quebra de linha
+                        // inputItem.label.clutter_text.set_line_wrap(true); // Ativar quebra de linha
                     }
 
                     // Code response
