@@ -63,13 +63,13 @@ Other files may be included but they aren't directly related to extension develo
 -   [x] Implement Settings UI
 -   [x] Implement Gemini API
 -   [x] Implement Recorder
+-   [x] Implement Azure Speech to Text API
 -   [x] Implement Azure Text To Speech API
--   [x] Implement Gemini Speech to Text API
--   [x] Implement Voice Recognition
+-   [x] Implement generic voice response for long responses
 -   [x] Implement Chat UI
+-   [x] Implement development scripts
 -   [x] Implement Release Process
 -   [x] Implement README
--   [ ] Fix Chat Scrolling
 -   [ ] Implement Stop Button
 -   [ ] Implement Clear History Button
 -   [ ] Implement Documentation
@@ -77,6 +77,11 @@ Other files may be included but they aren't directly related to extension develo
 -   [ ] Implement Translations
 -   [ ] Implement User Experience
 -   [ ] Implement User Feedback
+
+## Bug Fixes
+
+-   [ ] Chat Scrolling
+-   [ ] Formatting chat messages
 
 ## License
 
