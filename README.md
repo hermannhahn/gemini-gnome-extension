@@ -1,30 +1,20 @@
-# create-gnome-extension
+# Gemini Voice Assistant for Ubuntu
 
-`create-gnome-extension` is a community maintained scaffolding tool to build GNOME Shell extensions.
+Gemini AI Voice and Chat
 
-## Developing a GNOME Shell extension
+## Install
 
-To get started with developing GNOME Shell extensions, visit [gjs.guide](https://gjs.guide/extensions/). It has tutorials and guides written by the GNOME community.
+git clone https://github.com/hermann-s/gemini-gnome-extension.git
+cd gemini-gnome-extension
+npm run install
 
-If you need more help, you can use the following channels
+## Dev
 
--   [Discourse](https://discourse.gnome.org/tag/extensions)
--   [Matrix](https://matrix.to/#/#extensions:gnome.org)
--   [StackOverflow](https://stackoverflow.com/questions/tagged/gnome-shell-extensions+gjs)
-
-## Usage
-
-To use `create-gnome-extension` run the following command in a terminal.
-
-```sh
-npm create gnome-extension@latest
-```
-
-You will be asked some questions to determine which files to include in your project.
+npm run save
+npm run new:[upgrade|update|patch]
+npm run publish
 
 ## Project Structure
-
-The following file structure will be created when running `npm create gnome-extension`. Depending on the options passed to create-gnome-extension, some files may not be included in your project.
 
 ```
 project-directory/
