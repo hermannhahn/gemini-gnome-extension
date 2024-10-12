@@ -22,6 +22,7 @@ import St from 'gi://St';
 import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
+
 import {
     Extension,
     gettext as _,
