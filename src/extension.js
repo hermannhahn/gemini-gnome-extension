@@ -114,8 +114,6 @@ const Gemini = GObject.registerClass(
             this.chatSection = new PopupMenu.PopupMenuSection();
             this.scrollView = new St.ScrollView({
                 style_class: 'chat-scroll-section',
-                x_expand: true,
-                y_expand: true,
             });
 
             let searchEntry = new St.Entry({
@@ -198,7 +196,7 @@ const Gemini = GObject.registerClass(
                 `<b>${USERNAME}: </b>${htmlUserQuestion}`,
             );
 
-            // Definir o texto com markup, como antes
+            // Add temporary response while whait for ai response
             aiResponseItem.label.clutter_text.set_markup(aiResponse);
 
             // Chat settings
