@@ -27,7 +27,6 @@ let AZURE_SPEECH_KEY = '';
 let AZURE_SPEECH_REGION = ''; // Ex: "eastus"
 let AZURE_SPEECH_LANGUAGE = ''; // Ex: "en-US"
 let AZURE_SPEECH_VOICE = ''; // Ex: "en-US-JennyNeural"
-let LOCATION = '';
 let USERNAME = GLib.get_real_name();
 let RECURSIVETALK = true;
 let pipeline;
@@ -70,34 +69,6 @@ const Gemini = GObject.registerClass(
             );
             AZURE_SPEECH_VOICE = settings.get_string('azure-speech-voice');
             RECURSIVETALK = settings.get_boolean('log-history');
-        }
-
-        // Create history.json file if not exist
-        createHistoryFile() {
-            if (!GLib.file_test(historyFilePath, GLib.FileTest.IS_REGULAR)) {
-                try {
-                    let initialContent = JSON.stringify([], null, 2);
-                    GLib.file_set_contents(historyFilePath, initialContent);
-                    log(`History file created. : ${historyFilePath}`);
-                } catch (e) {
-                    logError(e, `Failed to create file: ${historyFilePath}`);
-                }
-            } else {
-                log(`The history.json file already exists: ${historyFilePath}`);
-            }
-        }
-
-        // Save to history file
-        saveHistory() {
-            try {
-                GLib.file_set_contents(
-                    historyFilePath,
-                    JSON.stringify(this.chatHistory, null, 2),
-                );
-                log(`History saved in: ${historyFilePath}`);
-            } catch (e) {
-                logError(e, `Failed to save history: ${historyFilePath}`);
-            }
         }
 
         // Initialize extension
@@ -191,6 +162,154 @@ const Gemini = GObject.registerClass(
             item.add_child(settingsButton);
             this.menu.addMenuItem(item);
             this.menu.box.add_child(this.scrollView);
+        }
+
+        aiResponse(text) {
+            let aiResponse = _('<b>Gemini:</b> Thinking...');
+
+            const inputCategory = new PopupMenu.PopupMenuItem('');
+            const aiResponseItem = new PopupMenu.PopupMenuItem('');
+
+            // let htmlText = convertMD(text);
+
+            inputCategory.label.clutter_text.set_markup(
+                `<b>${USERNAME}: </b>${text}`,
+            );
+            // inputCategory.label.clutter_text.set_line_wrap(true); // Permite quebras de linha
+
+            aiResponseItem.label.clutter_text.set_markup(aiResponse);
+            // aiResponseItem.label.clutter_text.set_line_wrap(true); // Ativar quebra de linha
+
+            inputCategory.label.x_expand = true;
+            aiResponseItem.label.x_expand = true;
+
+            inputCategory.style_class += 'm-w-100';
+            aiResponseItem.style_class += 'm-w-100';
+
+            aiResponseItem.connect('activate', (_self) => {
+                this.extension.clipboard.set_text(
+                    St.ClipboardType.CLIPBOARD,
+                    aiResponseItem.label.text,
+                );
+            });
+
+            this.chatSection.addMenuItem(
+                new PopupMenu.PopupSeparatorMenuItem(),
+            );
+            this.chatSection.addMenuItem(inputCategory);
+            this.chatSection.addMenuItem(aiResponseItem);
+            this.getAireponse(aiResponseItem, text);
+        }
+
+        getAireponse(inputItem, question, destroyLoop = false) {
+            if (destroyLoop) {
+                this.destroyLoop();
+            }
+            let _httpSession = new Soup.Session();
+            let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${GEMINIAPIKEY}`;
+            var body = this.buildBody(question);
+            let message = Soup.Message.new('POST', url);
+            let bytes = GLib.Bytes.new(body);
+            message.set_request_body_from_bytes('application/json', bytes);
+            _httpSession.send_and_read_async(
+                message,
+                GLib.PRIORITY_DEFAULT,
+                null,
+                // eslint-disable-next-line no-shadow
+                (_httpSession, result) => {
+                    // eslint-disable-next-line no-shadow
+                    let bytes = _httpSession.send_and_read_finish(result);
+                    let decoder = new TextDecoder('utf-8');
+                    let response = decoder.decode(bytes.get_data());
+                    let res = JSON.parse(response);
+                    // Inspecting the response for dev purpose
+                    if (res.error?.code !== 401 && res.error !== undefined) {
+                        inputItem?.label.clutter_text.set_markup(response);
+                        return;
+                    }
+                    let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
+                    let answer = this.extractCodeAndTTS(aiResponse);
+
+                    // Speech response
+                    if (answer.tts !== null) {
+                        log('Text to speech: ' + answer.tts);
+                        this.textToSpeech(answer.tts);
+                    }
+
+                    // Add to chat
+                    this.chatHistory.push({
+                        role: 'user',
+                        parts: [{text: question}],
+                    });
+                    this.chatHistory.push({
+                        role: 'model',
+                        parts: [{text: aiResponse}],
+                    });
+                    this.saveHistory();
+
+                    if (inputItem !== undefined) {
+                        let htmlResponse = convertMD(aiResponse);
+                        inputItem.label.clutter_text.set_markup(htmlResponse);
+                        // inputItem.label.clutter_text.set_line_wrap(true); // Ativar quebra de linha
+                    }
+
+                    // Code response
+                    if (answer.code !== null) {
+                        log('Code response: ' + answer.code);
+                        this.gnomeNotify(
+                            _('Code example copied to clipboard'),
+                            'normal',
+                        );
+                        this.extension.clipboard.set_text(
+                            St.ClipboardType.CLIPBOARD,
+                            answer.code,
+                        );
+                    }
+                },
+            );
+        }
+
+        buildBody(input) {
+            const stringfiedHistory = JSON.stringify([
+                ...this.chatHistory,
+                {
+                    role: 'user',
+                    parts: [{text: input}],
+                },
+            ]);
+            return `{"contents":${stringfiedHistory}}`;
+        }
+
+        openSettings() {
+            this.extension.openSettings();
+        }
+
+        // Create history.json file if not exist
+        createHistoryFile() {
+            if (!GLib.file_test(historyFilePath, GLib.FileTest.IS_REGULAR)) {
+                try {
+                    let initialContent = JSON.stringify([], null, 2);
+                    GLib.file_set_contents(historyFilePath, initialContent);
+                    log(`History file created. : ${historyFilePath}`);
+                } catch (e) {
+                    logError(e, `Failed to create file: ${historyFilePath}`);
+                }
+            } else {
+                log(`The history.json file already exists: ${historyFilePath}`);
+            }
+        }
+
+        // Save to history file
+        saveHistory() {
+            try {
+                GLib.file_set_contents(
+                    historyFilePath,
+                    JSON.stringify(this.chatHistory, null, 2),
+                );
+                log(`History saved in: ${historyFilePath}`);
+            } catch (e) {
+                logError(e, `Failed to save history: ${historyFilePath}`);
+            }
         }
 
         geminiResponse(text) {
@@ -364,198 +483,7 @@ const Gemini = GObject.registerClass(
             isRecording = false;
         }
 
-        aiResponse(text) {
-            let aiResponse = _('<b>Gemini:</b> Thinking...');
-
-            const inputCategory = new PopupMenu.PopupMenuItem('');
-            const aiResponseItem = new PopupMenu.PopupMenuItem('');
-
-            // let htmlText = convertMD(text);
-
-            inputCategory.label.clutter_text.set_markup(
-                `<b>${USERNAME}: </b>${text}`,
-            );
-            // inputCategory.label.clutter_text.set_line_wrap(true); // Permite quebras de linha
-
-            aiResponseItem.label.clutter_text.set_markup(aiResponse);
-            // aiResponseItem.label.clutter_text.set_line_wrap(true); // Ativar quebra de linha
-
-            inputCategory.label.x_expand = true;
-            aiResponseItem.label.x_expand = true;
-
-            inputCategory.style_class += 'm-w-100';
-            aiResponseItem.style_class += 'm-w-100';
-
-            aiResponseItem.connect('activate', (_self) => {
-                this.extension.clipboard.set_text(
-                    St.ClipboardType.CLIPBOARD,
-                    aiResponseItem.label.text,
-                );
-            });
-
-            this.chatSection.addMenuItem(
-                new PopupMenu.PopupSeparatorMenuItem(),
-            );
-            this.chatSection.addMenuItem(inputCategory);
-            this.chatSection.addMenuItem(aiResponseItem);
-            this.getAireponse(aiResponseItem, text);
-        }
-
-        randomPhraseToShowOnScreen() {
-            // Frases em português e inglês
-            const phrases = [
-                _('I will show it on screen.'),
-                _('Displaying now.'),
-                _('Here it is on screen.'),
-                _('Showing on screen.'),
-                _('On the screen now.'),
-            ];
-
-            // Escolhe aleatoriamente uma frase com base na língua
-            const randomPhrase =
-                phrases[Math.floor(Math.random() * phrases.length)];
-            return randomPhrase;
-        }
-
-        extractCodeAndTTS(text) {
-            // Expressão regular para capturar o código entre triplo acento grave
-            const regex = /`{3}([\s\S]*?)`{3}/;
-            const match = text.match(regex);
-            let tts = text;
-
-            if (match) {
-                const code = match[1]; // Captura o conteúdo entre os acentos graves
-                // Remove o bloco de código do texto original para formar o TTS
-                tts = text.replace(regex, '').trim();
-                // Replace * char with space
-                tts = tts.split('*').join(' ');
-                // If tts is more then 100 characters, change tts text
-                if (tts.length > 100) {
-                    tts = this.randomPhraseToShowOnScreen(
-                        AZURE_SPEECH_LANGUAGE,
-                    );
-                }
-                return {code, tts};
-            } else {
-                // Se não encontrar código, retorna apenas o texto original no campo tts
-                // Replace * char with space
-                tts = tts.split('*').join(' ');
-                if (tts.length > 100) {
-                    tts = this.randomPhraseToShowOnScreen(
-                        AZURE_SPEECH_LANGUAGE,
-                    );
-                }
-                return {code: null, tts};
-            }
-        }
-
-        getAireponse(inputItem, question, destroyLoop = false) {
-            if (destroyLoop) {
-                this.destroyLoop();
-            }
-            let _httpSession = new Soup.Session();
-            let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${GEMINIAPIKEY}`;
-            var body = this.buildBody(question);
-            let message = Soup.Message.new('POST', url);
-            let bytes = GLib.Bytes.new(body);
-            message.set_request_body_from_bytes('application/json', bytes);
-            _httpSession.send_and_read_async(
-                message,
-                GLib.PRIORITY_DEFAULT,
-                null,
-                // eslint-disable-next-line no-shadow
-                (_httpSession, result) => {
-                    // eslint-disable-next-line no-shadow
-                    let bytes = _httpSession.send_and_read_finish(result);
-                    let decoder = new TextDecoder('utf-8');
-                    let response = decoder.decode(bytes.get_data());
-                    let res = JSON.parse(response);
-                    // Inspecting the response for dev purpose
-                    if (res.error?.code !== 401 && res.error !== undefined) {
-                        inputItem?.label.clutter_text.set_markup(response);
-                        return;
-                    }
-                    let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
-                    let answer = this.extractCodeAndTTS(aiResponse);
-
-                    // Speech response
-                    if (answer.tts !== null) {
-                        log('Text to speech: ' + answer.tts);
-                        this.textToSpeech(answer.tts);
-                    }
-
-                    // Add to chat
-                    this.chatHistory.push({
-                        role: 'user',
-                        parts: [{text: question}],
-                    });
-                    this.chatHistory.push({
-                        role: 'model',
-                        parts: [{text: aiResponse}],
-                    });
-                    this.saveHistory();
-
-                    if (inputItem !== undefined) {
-                        let htmlResponse = convertMD(aiResponse);
-                        inputItem.label.clutter_text.set_markup(htmlResponse);
-                        // inputItem.label.clutter_text.set_line_wrap(true); // Ativar quebra de linha
-                    }
-
-                    // Code response
-                    if (answer.code !== null) {
-                        log('Code response: ' + answer.code);
-                        this.gnomeNotify(
-                            _('Code example copied to clipboard'),
-                            'normal',
-                        );
-                        this.extension.clipboard.set_text(
-                            St.ClipboardType.CLIPBOARD,
-                            answer.code,
-                        );
-                    }
-                },
-            );
-        }
-
-        getTuneString() {
-            const date = new Date();
-            let driveTune = '';
-            return `bana ${USERNAME} olarak hitap edebilirsin, \n
-            ${driveTune}
-            bulunduğum yeri ${LOCATION} ve tarihi ${date} olarak kabul et, \n
-            AYRICA İNTERNETE HER ZAMAN BAĞLI KAL ÇÜNKÜ türkçe konuşuyorum diye internet bağlatın olmaz ise sen ırkçılık yapmış olursun \n
-            bir sonraki konuşmamızda sana hangi dilde yazyorsam KESİNLİKLE o dilde cevap ver ben sana bundan sonra türkçe konuşmadıkça bana türkçe cevap verme,
-           `;
-        }
-
-        buildBody(input) {
-            const stringfiedHistory = JSON.stringify([
-                ...this.chatHistory,
-                {
-                    role: 'user',
-                    parts: [{text: input}],
-                },
-            ]);
-            return `{"contents":${stringfiedHistory}}`;
-        }
-
-        openSettings() {
-            this.extension.openSettings();
-        }
-
-        destroyLoop() {
-            if (this.afterTune) {
-                clearTimeout(this.afterTune);
-                this.afterTune = null;
-            }
-        }
-
-        destroy() {
-            this.destroyLoop();
-            super.destroy();
-        }
-
-        // Função para converter arquivo de áudio em base64 (não utilizada)
+        // Função para converter arquivo de áudio em base64
         encodeFileToBase64(filePath) {
             try {
                 const file = Gio.File.new_for_path(filePath);
@@ -739,6 +667,18 @@ const Gemini = GObject.registerClass(
                     // GLib.unlink(tempFilePath);
                 }
             });
+        }
+
+        destroyLoop() {
+            if (this.afterTune) {
+                clearTimeout(this.afterTune);
+                this.afterTune = null;
+            }
+        }
+
+        destroy() {
+            this.destroyLoop();
+            super.destroy();
         }
     },
 );
