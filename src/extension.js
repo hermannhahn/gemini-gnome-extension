@@ -24,7 +24,6 @@ import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
 import Pango from 'gi://Pango';
-import Clutter from 'gi://Clutter';
 
 import {
     Extension,
