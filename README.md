@@ -66,6 +66,8 @@ Other files may be included but they aren't directly related to extension develo
 -   [x] Implement Azure Speech to Text API
 -   [x] Implement Azure Text To Speech API
 -   [x] Implement generic voice response for long responses
+-   [x] Implement auto copy to clipboard code examples
+-   [x] Implement don't speech code examples
 -   [x] Implement Chat UI
 -   [x] Implement development scripts
 -   [x] Implement Release Process
