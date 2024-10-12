@@ -23,7 +23,6 @@ import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
-import Pango from 'gi://Pango';
 
 import {
     Extension,
@@ -198,21 +197,6 @@ const Gemini = GObject.registerClass(
             inputCategory.label.clutter_text.set_markup(
                 `<b>${USERNAME}: </b>${htmlUserQuestion}`,
             );
-
-            // Ativar a barra de rolagem vertical e desativar a horizontal
-            this.scrollView.set_policy(
-                St.PolicyType.NEVER,
-                St.PolicyType.AUTOMATIC,
-            );
-
-            // Configurar o label (Clutter.Text) para usar a quebra de linha
-            aiResponseItem.label.clutter_text.set_line_wrap(true);
-            aiResponseItem.label.clutter_text.set_line_wrap_mode(
-                Pango.WrapMode.WORD,
-            ); // Ou Pango.WrapMode.CHAR
-
-            // Definir uma largura máxima para o label para forçar a quebra de linha
-            aiResponseItem.label.set_width(400); // Ajuste a largura de acordo com seu layout
 
             // Definir o texto com markup, como antes
             aiResponseItem.label.clutter_text.set_markup(aiResponse);
