@@ -1,19 +1,18 @@
-# Gemini Voice Assistant for Ubuntu\n
+# Gemini Voice Assistant for Ubuntu
 
-\n
 Gemini AI Voice and Chat
 
 ## Install
 
-git clone https://github.com/hermann-s/gemini-gnome-extension.git
-cd gemini-gnome-extension
-npm run install
+git clone https://github.com/hermann-s/gemini-gnome-extension.git<br>
+cd gemini-gnome-extension<br>
+npm run install<br>
 
 ## Dev
 
-npm run save
-npm run new:[upgrade|update|patch]
-npm run publish
+npm run save<br>
+npm run new:[upgrade|update|patch]<br>
+npm run publish<br>
 
 ## Project Structure
 
