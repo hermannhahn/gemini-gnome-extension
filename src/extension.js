@@ -126,7 +126,6 @@ const Gemini = GObject.registerClass(
                     const [, contents] = file.load_contents(null);
                     log('Contents: ' + contents);
                     this.chatHistory = JSON.parse(contents);
-                    this.saveHistory();
                     log('Chat history: ' + this.chatHistory);
                 } catch (error) {
                     log('Erro ao ler o arquivo: ' + error);
@@ -410,35 +409,74 @@ const Gemini = GObject.registerClass(
             this.getAireponse(aiResponseItem, text);
         }
 
-        randomPhraseToShowOnScreen(lang) {
+        randomPhraseToShowOnScreen() {
             // Frases em português e inglês
-            const phrase = {
-                'pt-BR': [
-                    'Vou mostrar na tela.',
-                    'Exibindo agora.',
-                    'Aqui está na tela.',
-                    'Mostrando na tela.',
-                    'Na tela agora.',
-                ],
-                'en-US': [
-                    'I will show it on screen.',
-                    'Displaying now.',
-                    'Here it is on screen.',
-                    'Showing on screen.',
-                    'On the screen now.',
-                ],
-            };
+            const phrases = [
+                    (_('I will show it on screen.')),
+                    (_('Displaying now.')),
+                    (_('Here it is on screen.')),
+                    (_('Showing on screen.')),
+                    (_('On the screen now.')),
+                ]
 
             // Escolhe aleatoriamente uma frase com base na língua
-            if (lang === 'pt-BR' || lang === 'en-US') {
-                const selectedPhrases = phrase[lang];
-                const randomPhrase =
-                    selectedPhrases[
-                        Math.floor(Math.random() * selectedPhrases.length)
-                    ];
-                return randomPhrase;
-            } else {
-                return 'Not supported language.';
+            const randomPhrase =
+            phrases[
+                    Math.floor(Math.random() * phrases.length)
+                ];
+            return randomPhrase;
+        }
+
+        // Função para converter texto em fala usando a API do Azure Speech-to-Text
+        textToSpeech(text) {
+            if (AZURE_SPEECH_KEY === '') {
+                this.gnomeNotify(
+                    _('Please configure your Azure Speech API key in the settings.'),
+                    'critical',
+                );
+                return;
+            }
+            try {
+                // Criar um arquivo temporário para salvar o áudio gerado
+                const [success, tempFilePath] = GLib.file_open_tmp(
+                    'gva_azure_tts_audio_XXXXXX.wav',
+                );
+                if (!success) {
+                    log('Error creating temporary audio file.');
+                    return;
+                }
+
+                // Criar um subprocesso para executar o comando curl
+                let subprocess = new Gio.Subprocess({
+                    argv: [
+                        'curl',
+                        '-X',
+                        'POST',
+                        '-H',
+                        'Content-Type: application/ssml+xml',
+                        '-H',
+                        'X-Microsoft-OutputFormat: riff-24khz-16bit-mono-pcm',
+                        '-H',
+                        'Ocp-Apim-Subscription-Key: ' + AZURE_SPEECH_KEY,
+                        '--data',
+                        `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${AZURE_SPEECH_LANGUAGE}'>
+                            <voice name='${AZURE_SPEECH_VOICE}'>${text}</voice>
+                        </speak>`,
+                        '--output',
+                        tempFilePath,
+                        `https://${AZURE_SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/v1`,
+                    ],
+                    flags:
+                        Gio.SubprocessFlags.STDOUT_PIPE |
+                        Gio.SubprocessFlags.STDERR_PIPE,
+                });
+
+                subprocess.init(null);
+
+                // Captura o status da requisição
+                subprocess.communicate_utf8_async(null, null, (proc, res) => {
+                    try {
+                        // eslint-disable-next)
             }
         }
 
@@ -496,8 +534,6 @@ const Gemini = GObject.registerClass(
                     let response = decoder.decode(bytes.get_data());
                     let res = JSON.parse(response);
                     // Inspecting the response for dev purpose
-                    log(url);
-                    log(response);
                     if (res.error?.code !== 401 && res.error !== undefined) {
                         inputItem?.label.clutter_text.set_markup(response);
                         return;
