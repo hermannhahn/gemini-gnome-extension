@@ -17,7 +17,7 @@ import {convertMD} from './md2pango.js';
 // Log function
 function log(message) {
     if (message) {
-        console.log(message);
+        console.log(`[ DEBUG ] ${message}`);
     }
 }
 
@@ -32,7 +32,8 @@ let USERNAME = GLib.get_real_name();
 let RECURSIVETALK = true;
 let pipeline;
 let isRecording = false;
-// Caminho do diretório e arquivo
+
+// Extension folder
 let extensionDir = GLib.build_filenamev([
     GLib.get_home_dir(),
     '.local',
@@ -41,10 +42,13 @@ let extensionDir = GLib.build_filenamev([
     'extensions',
     'gnome-extension@gemini-assist.vercel.app',
 ]);
+
+// History file path
 let historyFilePath = GLib.build_filenamev([extensionDir, 'history.json']);
 
 const Gemini = GObject.registerClass(
     class Gemini extends PanelMenu.Button {
+        // Load settings
         _loadSettings() {
             this._settingsChangedId = this.extension.settings.connect(
                 'changed',
@@ -55,6 +59,7 @@ const Gemini = GObject.registerClass(
             this._fetchSettings();
         }
 
+        // Get user-defined values from settings
         _fetchSettings() {
             const {settings} = this.extension;
             GEMINIAPIKEY = settings.get_string('gemini-api-key');
@@ -67,83 +72,80 @@ const Gemini = GObject.registerClass(
             RECURSIVETALK = settings.get_boolean('log-history');
         }
 
+        // Create history.json file if not exist
         createHistoryFile() {
-            // Verifica se o diretório existe, caso contrário, cria o diretório
-            if (!GLib.file_test(extensionDir, GLib.FileTest.IS_DIR)) {
-                try {
-                    GLib.mkdir_with_parents(extensionDir, 0o755); // Cria o diretório com permissão padrão
-                    log(`Diretório criado: ${extensionDir}`);
-                } catch (e) {
-                    logError(e, `Falha ao criar diretório: ${extensionDir}`);
-                    return;
-                }
-            }
-
-            // Verifica se o arquivo history.json existe, caso contrário, cria o arquivo
             if (!GLib.file_test(historyFilePath, GLib.FileTest.IS_REGULAR)) {
                 try {
-                    // Conteúdo inicial do arquivo JSON
-                    let initialContent = JSON.stringify([], null, 2); // Formata o JSON com um array de histórico vazio
-
-                    // Escreve o arquivo no diretório
+                    let initialContent = JSON.stringify([], null, 2);
                     GLib.file_set_contents(historyFilePath, initialContent);
-                    log(`Arquivo criado: ${historyFilePath}`);
+                    log(`History file created. : ${historyFilePath}`);
                 } catch (e) {
-                    logError(e, `Falha ao criar o arquivo: ${historyFilePath}`);
+                    logError(e, `Failed to create file: ${historyFilePath}`);
                 }
             } else {
-                log(`O arquivo history.json já existe: ${historyFilePath}`);
+                log(`The history.json file already exists: ${historyFilePath}`);
             }
         }
 
+        // Save to history file
         saveHistory() {
             try {
-                // Escreve o histórico no arquivo JSON
                 GLib.file_set_contents(
                     historyFilePath,
                     JSON.stringify(this.chatHistory, null, 2),
                 );
-                log(`Histórico salvo em: ${historyFilePath}`);
+                log(`History saved in: ${historyFilePath}`);
             } catch (e) {
-                logError(e, `Falha ao salvar o histórico: ${historyFilePath}`);
+                logError(e, `Failed to save history: ${historyFilePath}`);
             }
         }
 
+        // Initialize extension
         _init(extension) {
             this.keyLoopBind = 0;
             this.extension = extension;
-            super._init(0.0, _('Gemini Voice Assist for Ubuntu'));
+            super._init(0.0, _('Gemini Voice Assistant for Ubuntu'));
             this._loadSettings();
-
             this.chatHistory = [];
+
+            // Create history.json if not exist
             if (RECURSIVETALK) {
                 try {
-                    // Create history.json if not exist
                     this.createHistoryFile();
                     const file = Gio.File.new_for_path(
                         '.local/share/gnome-shell/extensions/gnome-extension@gemini-assist.vercel.app/history.json',
                     );
                     const [, contents] = file.load_contents(null);
-                    log('Contents: ' + contents);
                     this.chatHistory = JSON.parse(contents);
-                    log('Chat history: ' + this.chatHistory);
                 } catch (error) {
-                    log('Erro ao ler o arquivo: ' + error);
+                    log('Error loading history file: ' + error);
                 }
             }
 
+            // Create box
             let hbox = new St.BoxLayout({
                 style_class: 'panel-status-menu-box',
             });
             this.hbox = hbox;
 
+            // Create app tray icon
             this.icon = new St.Icon({
                 style_class: 'gemini-icon',
             });
             hbox.add_child(this.icon);
             this.add_child(hbox);
-            this.menu.actor.style_class = 'm-w-100';
 
+            // this.menu.actor.style_class = 'm-w-100';
+
+            this.menu = new PopupMenu.PopupMenu();
+            this.menu.actor.style_class = 'gemini-menu';
+            this.menu.actor.style_class += ' m-w-100';
+            this.menu.actor.style_class += ' m-h-100';
+            this.menu.actor.style_class += ' m-p-10';
+            this.menu.actor.style_class += ' m-bg-color';
+            this.menu.actor.style_class += ' m-border-radius-10';
+
+            // Create chat section
             let item = new PopupMenu.PopupBaseMenuItem({
                 reactive: false,
                 can_focus: false,
@@ -412,71 +414,17 @@ const Gemini = GObject.registerClass(
         randomPhraseToShowOnScreen() {
             // Frases em português e inglês
             const phrases = [
-                (_('I will show it on screen.')),
-                (_('Displaying now.')),
-                (_('Here it is on screen.')),
-                (_('Showing on screen.')),
-                (_('On the screen now.')),
-            ]
+                _('I will show it on screen.'),
+                _('Displaying now.'),
+                _('Here it is on screen.'),
+                _('Showing on screen.'),
+                _('On the screen now.'),
+            ];
 
             // Escolhe aleatoriamente uma frase com base na língua
-            const randomPhrase = phrases[
-                Math.floor(Math.random() * phrases.length)
-            ];
+            const randomPhrase =
+                phrases[Math.floor(Math.random() * phrases.length)];
             return randomPhrase;
-        }
-
-        // Função para converter texto em fala usando a API do Azure Speech-to-Text
-        textToSpeech(text) {
-            if (AZURE_SPEECH_KEY === '') {
-                this.gnomeNotify(
-                    _('Please configure your Azure Speech API key in the settings.'),
-                    'critical',
-                );
-                return;
-            }
-            try {
-                // Criar um arquivo temporário para salvar o áudio gerado
-                const [success, tempFilePath] = GLib.file_open_tmp(
-                    'gva_azure_tts_audio_XXXXXX.wav',
-                );
-                if (!success) {
-                    log('Error creating temporary audio file.');
-                    return;
-                }
-
-                // Criar um subprocesso para executar o comando curl
-                let subprocess = new Gio.Subprocess({
-                    argv: [
-                        'curl',
-                        '-X',
-                        'POST',
-                        '-H',
-                        'Content-Type: application/ssml+xml',
-                        '-H',
-                        'X-Microsoft-OutputFormat: riff-24khz-16bit-mono-pcm',
-                        '-H',
-                        'Ocp-Apim-Subscription-Key: ' + AZURE_SPEECH_KEY,
-                        '--data',
-                        `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${AZURE_SPEECH_LANGUAGE}'>
-                            <voice name='${AZURE_SPEECH_VOICE}'>${text}</voice>
-                        </speak>`,
-                        '--output',
-                        tempFilePath,
-                        `https://${AZURE_SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/v1`,
-                    ],
-                    flags:
-                        Gio.SubprocessFlags.STDOUT_PIPE |
-                        Gio.SubprocessFlags.STDERR_PIPE,
-                });
-
-                subprocess.init(null);
-
-                // Captura o status da requisição
-                subprocess.communicate_utf8_async(null, null, (proc, res) => {
-                    try {
-                        // eslint-disable-next)
-            }
         }
 
         extractCodeAndTTS(text) {
