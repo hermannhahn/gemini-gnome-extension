@@ -11,6 +11,9 @@
     height: 20px !important;
     border-radius: 100px;
 }
+.mic-button {
+    width: 24px;
+}
 .clear-button {
     width: 24px;
 }
