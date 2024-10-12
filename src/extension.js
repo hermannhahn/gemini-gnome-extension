@@ -181,18 +181,13 @@ const Gemini = GObject.registerClass(
         }
 
         aiResponse(userQuestion) {
-            let aiResponse = _(
-                '<b>Gemini: </b> ' + this.randomPhraseToWaitResponse(),
-            );
+            let aiResponse = _('<b>Gemini: </b> ...');
             const inputCategory = new PopupMenu.PopupMenuItem('');
             const aiResponseItem = new PopupMenu.PopupMenuItem('');
 
-            // Convert user question to HTML
-            let htmlUserQuestion = convertMD(userQuestion);
-
             // Add user question to chat
             inputCategory.label.clutter_text.set_markup(
-                `<b>${USERNAME}: </b>${htmlUserQuestion}`,
+                `<b>${USERNAME}: </b>${userQuestion}`,
             );
 
             // Add temporary response while whait for ai response
@@ -262,7 +257,7 @@ const Gemini = GObject.registerClass(
                     // Get response
                     let response = decoder.decode(bytes.get_data());
                     let res = JSON.parse(response);
-                    log(res);
+                    log('[ RES ] ' + res);
 
                     if (res.error?.code !== 401 && res.error !== undefined) {
                         inputItem?.label.clutter_text.set_markup(response);
@@ -270,13 +265,16 @@ const Gemini = GObject.registerClass(
                     }
                     // Get ai response
                     let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
+                    log('[ AI-RES ] ' + aiResponse);
 
                     // Extract code and tts from response
-                    let answer = this.extractCodeAndTTS(aiResponse);
+                    if (aiResponse !== null) {
+                        let answer = this.extractCodeAndTTS(aiResponse);
 
-                    // Speech response
-                    if (answer.tts !== null) {
-                        this.textToSpeech(answer.tts);
+                        // Speech response
+                        if (answer.tts !== null) {
+                            this.textToSpeech(answer.tts);
+                        }
                     }
 
                     // Add to history
