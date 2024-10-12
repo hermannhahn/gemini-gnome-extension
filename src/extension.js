@@ -173,6 +173,7 @@ const Gemini = GObject.registerClass(
                 this.openSettings();
             }
             item.add_child(searchEntry);
+            item.add_child(micButton);
             item.add_child(clearButton);
             item.add_child(settingsButton);
             this.menu.addMenuItem(item);
