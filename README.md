@@ -62,14 +62,18 @@ Other files may be included but they aren't directly related to extension develo
 -   [x] Implement GNOME Shell Integration
 -   [x] Implement Settings UI
 -   [x] Implement Gemini API
+-   [x] Implement Recorder
+-   [x] Implement Azure Text To Speech API
+-   [x] Implement Gemini Speech to Text API
 -   [x] Implement Voice Recognition
 -   [x] Implement Chat UI
+-   [x] Implement Release Process
+-   [x] Implement README
 -   [ ] Fix Chat Scrolling
 -   [ ] Implement Stop Button
 -   [ ] Implement Clear History Button
 -   [ ] Implement Documentation
 -   [ ] Implement Testing
--   [ ] Implement Release Process
 -   [ ] Implement Translations
 -   [ ] Implement User Experience
 -   [ ] Implement User Feedback
