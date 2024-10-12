@@ -298,15 +298,15 @@ const Gemini = GObject.registerClass(
 
                         // Save history in history.json
                         this.saveHistory();
-                    }
 
-                    if (inputItem !== undefined) {
-                        // Convert response to HTML
-                        // let htmlResponse = convertMD(aiResponse);
-                        // Set response
-                        inputItem.label.clutter_text.set_markup(
-                            '<b>Gemini: </b> ' + aiResponse,
-                        );
+                        if (inputItem !== undefined) {
+                            // Convert response to HTML
+                            // let htmlResponse = convertMD(aiResponse);
+                            // Set response
+                            inputItem.label.clutter_text.set_markup(
+                                '<b>Gemini: </b> ' + aiResponse,
+                            );
+                        }
                     }
                 },
             );
