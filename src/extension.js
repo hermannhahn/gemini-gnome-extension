@@ -23,6 +23,7 @@ import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
+import Pango from 'gi://Pango';
 
 import {
     Extension,
@@ -190,6 +191,23 @@ const Gemini = GObject.registerClass(
 
             // Convert user question to HTML
             let htmlUserQuestion = convertMD(userQuestion);
+
+            // Use pango to break lines
+            let pangoLayout = new Pango.Layout(
+                Main.layoutManager.get_default_context(),
+            );
+            pangoLayout.set_text(htmlUserQuestion);
+            pangoLayout.set_width(
+                this.scrollView.width -
+                    this.scrollView.get_style_class().length * 2,
+            );
+            pangoLayout.set_wrap(Pango.WrapMode.WORD_CHAR);
+            // let [width, height] = pangoLayout.get_pixel_size();
+            htmlUserQuestion = pangoLayout.get_text();
+            htmlUserQuestion = htmlUserQuestion.replace(
+                /(\s*)\n(\s*)/g,
+                '<br>$1$2',
+            );
 
             // Add user question to chat
             inputCategory.label.clutter_text.set_markup(
