@@ -178,7 +178,6 @@ const Gemini = GObject.registerClass(
             item.add_child(settingsButton);
             this.menu.addMenuItem(item);
             this.menu.box.add_child(this.scrollView);
-            this._initFirstResponse();
         }
 
         aiResponse(userQuestion) {
@@ -268,6 +267,7 @@ const Gemini = GObject.registerClass(
                         return;
                     }
                     let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
+
                     // Extract code and tts from response
                     let answer = this.extractCodeAndTTS(aiResponse);
 
