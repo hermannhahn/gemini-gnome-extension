@@ -217,7 +217,7 @@ const Gemini = GObject.registerClass(
             aiResponseItem.label.set_width(400); // Ajuste a largura de acordo com seu layout
 
             // Adicionar o Clutter.Text ao ScrollView
-            this.chatSection.add_child(aiResponseItem.label);
+            this.menu.box.add_child(aiResponseItem.label);
 
             // Adicionar o ScrollView ao contêiner principal da interface
             this.searchEntry.add_child(scrollView);
