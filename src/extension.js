@@ -34,12 +34,9 @@ import {convertMD} from './md2pango.js';
 import {generateAPIKey} from './auth.js';
 
 let GEMINIAPIKEY = '';
-let DRIVEFOLDER = '';
-let VERTEXPROJECTID = '';
 let LOCATION = '';
 let USERNAME = GLib.get_real_name();
 let RECURSIVETALK = false;
-let ISVERTEX = false;
 
 const Gemini = GObject.registerClass(
     class Gemini extends PanelMenu.Button {
@@ -54,23 +51,12 @@ const Gemini = GObject.registerClass(
             this._fetchSettings();
         }
 
-        _initFirstResponse() {
-            if (ISVERTEX) {
-                this.chatTune = this.getTuneString();
-                this.getAireponse(undefined, this.chatTune);
-                this.afterTune = setTimeout(() => {
-                    this.getAireponse(undefined, 'Hi!', undefined, true);
-                }, 1500);
-            }
-        }
+        _initFirstResponse() {}
 
         _fetchSettings() {
             const {settings} = this.extension;
             GEMINIAPIKEY = settings.get_string('gemini-api-key');
-            DRIVEFOLDER = settings.get_string('drive-folder');
-            VERTEXPROJECTID = settings.get_string('vertex-project-id');
             RECURSIVETALK = settings.get_boolean('log-history');
-            ISVERTEX = settings.get_boolean('vertex-enabled');
         }
 
         _init(extension) {
@@ -196,9 +182,6 @@ const Gemini = GObject.registerClass(
             }
             let _httpSession = new Soup.Session();
             let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${GEMINIAPIKEY}`;
-            if (VERTEXPROJECTID !== '' && ISVERTEX) {
-                url = `https://us-east4-aiplatform.googleapis.com/v1/projects/${VERTEXPROJECTID}/locations/us-east4/publishers/google/models/gemini-1.0-pro:generateContent`;
-            }
             if (newKey !== undefined) {
                 this.extension.settings.set_string('gemini-api-key', newKey);
                 GEMINIAPIKEY = newKey;
@@ -206,12 +189,6 @@ const Gemini = GObject.registerClass(
             var body = this.buildBody(question);
             let message = Soup.Message.new('POST', url);
             let bytes = GLib.Bytes.new(body);
-            if (VERTEXPROJECTID !== '' && ISVERTEX) {
-                message.request_headers.append(
-                    'Authorization',
-                    `Bearer ${GEMINIAPIKEY}`,
-                );
-            }
             message.set_request_body_from_bytes('application/json', bytes);
             _httpSession.send_and_read_async(
                 message,
@@ -231,35 +208,20 @@ const Gemini = GObject.registerClass(
                         inputItem?.label.clutter_text.set_markup(response);
                         return;
                     }
-                    if (
-                        res.error?.code === 401 &&
-                        newKey === undefined &&
-                        ISVERTEX
-                    ) {
-                        this.keyLoopBind++;
-                        if (this.keyLoopBind < 3) {
-                            let key = generateAPIKey();
-                            this.getAireponse(inputItem, question, key);
-                        }
-                    } else {
-                        let aiResponse =
-                            res.candidates[0]?.content?.parts[0]?.text;
-                        if (RECURSIVETALK) {
-                            this.chatHistory.push({
-                                role: 'user',
-                                parts: [{text: question}],
-                            });
-                            this.chatHistory.push({
-                                role: 'model',
-                                parts: [{text: aiResponse}],
-                            });
-                        }
-                        if (inputItem !== undefined) {
-                            let htmlResponse = convertMD(aiResponse);
-                            inputItem.label.clutter_text.set_markup(
-                                htmlResponse,
-                            );
-                        }
+                    let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
+                    if (RECURSIVETALK) {
+                        this.chatHistory.push({
+                            role: 'user',
+                            parts: [{text: question}],
+                        });
+                        this.chatHistory.push({
+                            role: 'model',
+                            parts: [{text: aiResponse}],
+                        });
+                    }
+                    if (inputItem !== undefined) {
+                        let htmlResponse = convertMD(aiResponse);
+                        inputItem.label.clutter_text.set_markup(htmlResponse);
                     }
                 },
             );
@@ -271,9 +233,6 @@ const Gemini = GObject.registerClass(
             // VERTEX SOMETIMES DOESNT SUPPORT INTERNET CONNECTION
             //  IF YOU TRANSLATE TO ENGLISH
             let driveTune = '';
-            if (DRIVEFOLDER !== '') {
-                driveTune = `bundan sonraki konuşmalarımızda şu drive klasörünündeki tüm pdf, excel, word, txt dosyalarından yararlan ama önceliğin internet ve kendi modelin olsun: ${DRIVEFOLDER}\n`;
-            }
             return `bana ${USERNAME} olarak hitap edebilirsin, \n
         ${driveTune}
         bulunduğum yeri ${LOCATION} ve tarihi ${date} olarak kabul et, \n
