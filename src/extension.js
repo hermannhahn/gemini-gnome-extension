@@ -32,7 +32,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
-import {convertMD} from './md2pango.js';
+// import {convertMD} from './md2pango.js';
 
 // Global variables
 let GEMINIAPIKEY = '';
@@ -299,6 +299,8 @@ const Gemini = GObject.registerClass(
                         // Save history in history.json
                         this.saveHistory();
 
+                        // Convert response to HTML
+                        // let htmlResponse = convertMD(aiResponse);
                         // Set response
                         inputItem.label.clutter_text.set_markup(aiResponse);
                     }
