@@ -653,6 +653,22 @@ const Gemini = GObject.registerClass(
             });
         }
 
+        randomPhraseToShowOnScreen() {
+            // Frases em português e inglês
+            const phrases = [
+                _('I will show it on screen.'),
+                _('Displaying now.'),
+                _('Here it is on screen.'),
+                _('Showing on screen.'),
+                _('On the screen now.'),
+            ];
+
+            // Escolhe aleatoriamente uma frase com base na língua
+            const randomPhrase =
+                phrases[Math.floor(Math.random() * phrases.length)];
+            return randomPhrase;
+        }
+
         extractCodeAndTTS(text) {
             // Expressão regular para capturar o código entre triplo acento grave
             const regex = /`{3}([\s\S]*?)`{3}/;
