@@ -279,7 +279,6 @@ const Gemini = GObject.registerClass(
                         if (answer.code !== null) {
                             this.gnomeNotify(
                                 _('Code example copied to clipboard'),
-                                'normal',
                             );
                             this.extension.clipboard.set_text(
                                 St.ClipboardType.CLIPBOARD,
