@@ -34,6 +34,7 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import {convertMD} from './md2pango.js';
 
+// Global variables
 let GEMINIAPIKEY = '';
 let AZURE_SPEECH_KEY = '';
 let AZURE_SPEECH_REGION = ''; // Ex: "eastus"
@@ -52,7 +53,6 @@ let extensionDir = GLib.build_filenamev([
     'extensions',
     'gnome-extension@gemini-assist.vercel.app',
 ]);
-// History file path
 let historyFilePath = GLib.build_filenamev([extensionDir, 'history.json']);
 
 // Log function
@@ -181,7 +181,9 @@ const Gemini = GObject.registerClass(
         }
 
         aiResponse(userQuestion) {
-            let aiResponse = _('<b>Gemini: </b> Thinking...');
+            let aiResponse = _(
+                '<b>Gemini: </b> ' + this.randomPhraseToWaitResponse(),
+            );
             const inputCategory = new PopupMenu.PopupMenuItem('');
             const aiResponseItem = new PopupMenu.PopupMenuItem('');
 
@@ -654,7 +656,6 @@ const Gemini = GObject.registerClass(
         }
 
         randomPhraseToShowOnScreen() {
-            // Frases em português e inglês
             const phrases = [
                 _('I will show it on screen.'),
                 _('Displaying now.'),
@@ -663,7 +664,35 @@ const Gemini = GObject.registerClass(
                 _('On the screen now.'),
             ];
 
-            // Escolhe aleatoriamente uma frase com base na língua
+            const randomPhrase =
+                phrases[Math.floor(Math.random() * phrases.length)];
+            return randomPhrase;
+        }
+
+        randomPhraseToWaitResponse() {
+            const phrases = [
+                _('Thinking...'),
+                _('Let me see...'),
+                _('Just a moment...'),
+                _('Hmm, let me think about that...'),
+                _('Give me a second...'),
+                _('Let me check...'),
+                _('Working on it...'),
+                _('Hold on a sec...'),
+                _('One moment, please...'),
+                _('Let me figure this out...'),
+                _("I'll get back to you in a sec..."),
+                _('Just thinking this through...'),
+                _("Let's see what I can find..."),
+                _('Give me a moment to process this...'),
+                _('Let me look into that...'),
+                _("I'm on it..."),
+                _("I'll need a moment for that..."),
+                _('Let me dig deeper...'),
+                _("I'm thinking it over..."),
+                _('Give me a moment to sort this out...'),
+            ];
+
             const randomPhrase =
                 phrases[Math.floor(Math.random() * phrases.length)];
             return randomPhrase;
