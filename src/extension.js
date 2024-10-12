@@ -304,7 +304,9 @@ const Gemini = GObject.registerClass(
                         // Convert response to HTML
                         // let htmlResponse = convertMD(aiResponse);
                         // Set response
-                        inputItem.label.clutter_text.set_markup(aiResponse);
+                        inputItem.label.clutter_text.set_markup(
+                            '<b>Gemini: </b> ' + aiResponse,
+                        );
                     }
                 },
             );
