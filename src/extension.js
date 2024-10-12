@@ -266,7 +266,7 @@ const Gemini = GObject.registerClass(
                     let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
                     // log('[ AI-RES ] ' + aiResponse);
 
-                    if (inputItem !== undefined) {
+                    if (aiResponse !== null && aiResponse !== undefined) {
                         // Extract code and tts from response
                         let answer = this.extractCodeAndTTS(aiResponse);
 
@@ -298,7 +298,9 @@ const Gemini = GObject.registerClass(
 
                         // Save history in history.json
                         this.saveHistory();
+                    }
 
+                    if (inputItem !== undefined) {
                         // Convert response to HTML
                         // let htmlResponse = convertMD(aiResponse);
                         // Set response
