@@ -80,8 +80,8 @@ const pad = (lines, start = 1, end = 1) => {
 };
 
 function convert(text) {
-    let lines = text.split('\n');
-    lines = lines.replace(/\n/g, '<br />');
+    text = text.replace(/\n/g, '<br />');
+    let lines = text.split('<br />');
 
     // Indicates if the current line is within a code block
     let is_code = false;
