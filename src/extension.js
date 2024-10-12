@@ -257,7 +257,6 @@ const Gemini = GObject.registerClass(
                     // Get response
                     let response = decoder.decode(bytes.get_data());
                     let res = JSON.parse(response);
-                    log('[ RES ] ' + response);
 
                     if (res.error?.code !== 401 && res.error !== undefined) {
                         inputItem?.label.clutter_text.set_markup(response);
@@ -265,7 +264,7 @@ const Gemini = GObject.registerClass(
                     }
                     // Get ai response
                     let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
-                    log('[ AI-RES ] ' + aiResponse);
+                    // log('[ AI-RES ] ' + aiResponse);
 
                     // Extract code and tts from response
                     if (aiResponse !== null && aiResponse !== undefined) {
