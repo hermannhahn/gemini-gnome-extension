@@ -197,7 +197,6 @@ const Gemini = GObject.registerClass(
             const aiResponseItem = new PopupMenu.PopupMenuItem('');
             aiResponseItem.label.clutter_text.set_markup(aiResponse);
             aiResponseItem.label.x_expand = true;
-            aiResponseItem.label.y_expand = true;
             aiResponseItem.style_class += ' m-w-100';
 
             aiResponseItem.connect('activate', (_self) => {
@@ -370,10 +369,10 @@ const Gemini = GObject.registerClass(
             const inputCategory = new PopupMenu.PopupMenuItem('');
             const aiResponseItem = new PopupMenu.PopupMenuItem('');
 
-            let htmlText = convertMD(text);
+            // let htmlText = convertMD(text);
 
             inputCategory.label.clutter_text.set_markup(
-                `<b>${USERNAME}: </b>${htmlText}`,
+                `<b>${USERNAME}: </b>${text}`,
             );
             inputCategory.label.clutter_text.set_line_wrap(true); // Permite quebras de linha
 
@@ -495,9 +494,11 @@ const Gemini = GObject.registerClass(
                     });
                     this.saveHistory();
 
-                    let htmlResponse = convertMD(aiResponse);
-                    inputItem.label.clutter_text.set_markup(htmlResponse);
-                    inputItem.label.clutter_text.set_line_wrap(true); // Ativar quebra de linha
+                    if (inputItem !== undefined) {
+                        let htmlResponse = convertMD(aiResponse);
+                        inputItem.label.clutter_text.set_markup(htmlResponse);
+                        inputItem.label.clutter_text.set_line_wrap(true); // Ativar quebra de linha
+                    }
 
                     // Code response
                     if (answer.code !== null) {
