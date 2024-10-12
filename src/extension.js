@@ -70,7 +70,7 @@ const Gemini = GObject.registerClass(
             this.hbox = hbox;
 
             this.icon = new St.Icon({
-                style_class: 'gemini-icon',
+                style_class: 'google-gemini-icon',
             });
             hbox.add_child(this.icon);
             this.add_child(hbox);
