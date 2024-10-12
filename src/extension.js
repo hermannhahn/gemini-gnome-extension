@@ -28,6 +28,7 @@ let AZURE_SPEECH_REGION = ''; // Ex: "eastus"
 let AZURE_SPEECH_LANGUAGE = ''; // Ex: "en-US"
 let AZURE_SPEECH_VOICE = ''; // Ex: "en-US-JennyNeural"
 let USERNAME = GLib.get_real_name();
+let LOCATION = '';
 let RECURSIVETALK = true;
 let pipeline;
 let isRecording = false;
@@ -708,6 +709,7 @@ export default class GeminiExtension extends Extension {
                 LOCATION = `${res.countryName}/${res.cityName}`;
             },
         );
+        log(`Location: ${LOCATION}`);
     }
 
     disable() {
