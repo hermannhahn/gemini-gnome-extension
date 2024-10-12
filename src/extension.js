@@ -192,41 +192,18 @@ const Gemini = GObject.registerClass(
             // Convert user question to HTML
             let htmlUserQuestion = convertMD(userQuestion);
 
-            // Use pango to break lines
-            let pangoLayout = new Pango.Layout(
-                Main.layoutManager.get_default_context(),
-            );
-            pangoLayout.set_text(htmlUserQuestion);
-            pangoLayout.set_width(
-                this.scrollView.width -
-                    this.scrollView.get_style_class().length * 2,
-            );
-            pangoLayout.set_wrap(Pango.WrapMode.WORD_CHAR);
-            // let [width, height] = pangoLayout.get_pixel_size();
-            htmlUserQuestion = pangoLayout.get_text();
-            htmlUserQuestion = htmlUserQuestion.replace(
-                /(\s*)\n(\s*)/g,
-                '<br>$1$2',
-            );
-
             // Add user question to chat
             inputCategory.label.clutter_text.set_markup(
                 `<b>${USERNAME}: </b>${htmlUserQuestion}`,
             );
 
-            // Use pango to break lines
-            pangoLayout = new Pango.Layout(
-                Main.layoutManager.get_default_context(),
-            );
-            pangoLayout.set_text(aiResponse);
-            pangoLayout.set_width(
-                this.scrollView.width -
-                    this.scrollView.get_style_class().length * 2,
-            );
-            pangoLayout.set_wrap(Pango.WrapMode.WORD_CHAR);
-            // let [width, height] = pangoLayout.get_pixel_size();
-            aiResponse = pangoLayout.get_text();
-            aiResponse = aiResponse.replace(/(\s*)\n(\s*)/g, '<br>$1$2');
+            // Ativar a quebra de linha no Clutter.Text
+            aiResponseItem.label.clutter_text.set_line_wrap(true);
+
+            // Definir o modo de quebra de linha (Pango.WrapMode.WORD ou Pango.WrapMode.CHAR)
+            aiResponseItem.label.clutter_text.set_line_wrap_mode(
+                Pango.WrapMode.WORD,
+            ); // ou CHAR, se preferir quebra por caractere
 
             // Add temporary response while whait for ai response
             aiResponseItem.label.clutter_text.set_markup(aiResponse);
