@@ -135,8 +135,6 @@ const Gemini = GObject.registerClass(
             hbox.add_child(this.icon);
             this.add_child(hbox);
 
-            // this.menu.actor.style_class = 'm-w-100';
-
             // Create chat section
             let item = new PopupMenu.PopupBaseMenuItem({
                 reactive: false,
