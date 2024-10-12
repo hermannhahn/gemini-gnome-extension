@@ -137,14 +137,6 @@ const Gemini = GObject.registerClass(
 
             // this.menu.actor.style_class = 'm-w-100';
 
-            this.menu = new PopupMenu.PopupMenu();
-            this.menu.actor.style_class = 'gemini-menu';
-            this.menu.actor.style_class += ' m-w-100';
-            this.menu.actor.style_class += ' m-h-100';
-            this.menu.actor.style_class += ' m-p-10';
-            this.menu.actor.style_class += ' m-bg-color';
-            this.menu.actor.style_class += ' m-border-radius-10';
-
             // Create chat section
             let item = new PopupMenu.PopupBaseMenuItem({
                 reactive: false,
