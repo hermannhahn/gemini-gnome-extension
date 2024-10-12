@@ -266,8 +266,8 @@ const Gemini = GObject.registerClass(
                     let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
                     // log('[ AI-RES ] ' + aiResponse);
 
-                    // Extract code and tts from response
-                    if (aiResponse !== null && aiResponse !== undefined) {
+                    if (inputItem !== undefined) {
+                        // Extract code and tts from response
                         let answer = this.extractCodeAndTTS(aiResponse);
 
                         // Speech response
@@ -284,28 +284,23 @@ const Gemini = GObject.registerClass(
                                 answer.code,
                             );
                         }
-                    }
+                        // Add to history
+                        if (RECURSIVETALK) {
+                            this.chatHistory.push({
+                                role: 'user',
+                                parts: [{text: question}],
+                            });
+                            this.chatHistory.push({
+                                role: 'model',
+                                parts: [{text: aiResponse}],
+                            });
+                        }
 
-                    // Add to history
-                    if (RECURSIVETALK) {
-                        this.chatHistory.push({
-                            role: 'user',
-                            parts: [{text: question}],
-                        });
-                        this.chatHistory.push({
-                            role: 'model',
-                            parts: [{text: aiResponse}],
-                        });
-                    }
+                        // Save history in history.json
+                        this.saveHistory();
 
-                    // Save history in history.json
-                    this.saveHistory();
-
-                    if (inputItem !== undefined) {
-                        // Convert response to HTML
-                        let htmlResponse = convertMD(aiResponse);
                         // Set response
-                        inputItem.label.clutter_text.set_markup(htmlResponse);
+                        inputItem.label.clutter_text.set_markup(aiResponse);
                     }
                 },
             );
