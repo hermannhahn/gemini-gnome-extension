@@ -73,8 +73,10 @@ Other files may be included but they aren't directly related to extension develo
 -   [x] Implement Release Process
 -   [x] Implement README
 -   [x] Implement Clear History Button
+-   [x] Implement Random response to wait AI response
 -   [ ] Implement Voice activation with hotkeys
 -   [ ] Implement Stop Button to stop speech.
+-   [ ] Implement Imports and Code Separators
 -   [ ] Implement Documentation
 -   [ ] Implement Testing
 -   [ ] Implement Translations
