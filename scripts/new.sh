@@ -74,9 +74,9 @@ echo "Updated version in metadata.json"
 cd -- "$( dirname "$0" )/../"
 git add .
 git commit -S -m "$NEW_VERSION"
-git push
+git push --set-upstream origin $NEW_VERSION
 
-# Build
+# Install extension
 npm run build:install
 echo "Extension built."
 echo "All done."
