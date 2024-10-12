@@ -1,6 +1,6 @@
 # Gemini Voice Assistant for Ubuntu
 
-Gemini AI Voice and Chat
+Gemini AI Voice and Chat, this project is under construction and is not ready.
 
 ## Install
 
@@ -56,6 +56,23 @@ project-directory/
 -   `README.md` is a file that describes this project.
 
 Other files may be included but they aren't directly related to extension development.
+
+## TODO
+
+-   [x] Implement GNOME Shell Integration
+-   [x] Implement Settings UI
+-   [x] Implement Gemini API
+-   [x] Implement Voice Recognition
+-   [x] Implement Chat UI
+-   [ ] Fix Chat Scrolling
+-   [ ] Implement Stop Button
+-   [ ] Implement Clear History Button
+-   [ ] Implement Documentation
+-   [ ] Implement Testing
+-   [ ] Implement Release Process
+-   [ ] Implement Translations
+-   [ ] Implement User Experience
+-   [ ] Implement User Feedback
 
 ## License
 
