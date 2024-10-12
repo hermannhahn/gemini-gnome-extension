@@ -24,6 +24,7 @@ import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
 import Pango from 'gi://Pango';
+import Clutter from 'gi://Clutter';
 
 import {
     Extension,
@@ -197,13 +198,29 @@ const Gemini = GObject.registerClass(
                 `<b>${USERNAME}: </b>${htmlUserQuestion}`,
             );
 
-            // Ativar a quebra de linha no Clutter.Text
-            aiResponseItem.label.clutter_text.set_line_wrap(true);
+            // Criar um contêiner de rolagem
+            let scrollActor = new Clutter.ScrollActor({
+                vscroll: Clutter.ScrollMode.ALWAYS, // Sempre mostrar a barra de rolagem vertical
+                hscroll: Clutter.ScrollMode.NEVER, // Nunca mostrar a barra de rolagem horizontal
+            });
 
-            // Definir o modo de quebra de linha (Pango.WrapMode.WORD ou Pango.WrapMode.CHAR)
+            // Configurar o label (ou Clutter.Text) para usar no scroll
+            aiResponseItem.label.clutter_text.set_line_wrap(true);
             aiResponseItem.label.clutter_text.set_line_wrap_mode(
                 Pango.WrapMode.WORD,
-            ); // ou CHAR, se preferir quebra por caractere
+            ); // Ou Pango.WrapMode.CHAR para quebras por caractere
+
+            // Definir uma largura máxima para o label, importante para a quebra de linha
+            aiResponseItem.label.set_width(400); // Defina a largura de acordo com o seu layout
+
+            // Adicionar o Clutter.Text no ScrollActor
+            scrollActor.add_child(aiResponseItem.label);
+
+            // Definir o markup como antes
+            aiResponseItem.label.clutter_text.set_markup(aiResponse);
+
+            // Adicionar o ScrollActor ao layout da interface, conforme necessário
+            this.searchEntry.add_child(scrollActor); // Adicione ao seu layout
 
             // Add temporary response while whait for ai response
             aiResponseItem.label.clutter_text.set_markup(aiResponse);
