@@ -31,7 +31,6 @@ import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import {convertMD} from './md2pango.js';
-import {generateAPIKey} from './auth.js';
 
 let GEMINIAPIKEY = '';
 let LOCATION = '';
