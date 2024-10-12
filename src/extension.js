@@ -653,6 +653,38 @@ const Gemini = GObject.registerClass(
             });
         }
 
+        extractCodeAndTTS(text) {
+            // Expressão regular para capturar o código entre triplo acento grave
+            const regex = /`{3}([\s\S]*?)`{3}/;
+            const match = text.match(regex);
+            let tts = text;
+
+            if (match) {
+                const code = match[1]; // Captura o conteúdo entre os acentos graves
+                // Remove o bloco de código do texto original para formar o TTS
+                tts = text.replace(regex, '').trim();
+                // Replace * char with space
+                tts = tts.split('*').join(' ');
+                // If tts is more then 100 characters, change tts text
+                if (tts.length > 100) {
+                    tts = this.randomPhraseToShowOnScreen(
+                        AZURE_SPEECH_LANGUAGE,
+                    );
+                }
+                return {code, tts};
+            } else {
+                // Se não encontrar código, retorna apenas o texto original no campo tts
+                // Replace * char with space
+                tts = tts.split('*').join(' ');
+                if (tts.length > 100) {
+                    tts = this.randomPhraseToShowOnScreen(
+                        AZURE_SPEECH_LANGUAGE,
+                    );
+                }
+                return {code: null, tts};
+            }
+        }
+
         // Função para converter texto em áudio usando Microsoft Text-to-Speech API
         textToSpeech(text) {
             const apiUrl = `https://${AZURE_SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/v1`;
