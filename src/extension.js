@@ -275,6 +275,17 @@ const Gemini = GObject.registerClass(
                         if (answer.tts !== null) {
                             this.textToSpeech(answer.tts);
                         }
+                        // If answer.code is not null, copy to clipboard
+                        if (answer.code !== null) {
+                            this.gnomeNotify(
+                                _('Code example copied to clipboard'),
+                                'normal',
+                            );
+                            this.extension.clipboard.set_text(
+                                St.ClipboardType.CLIPBOARD,
+                                answer.code,
+                            );
+                        }
                     }
 
                     // Add to history
@@ -291,18 +302,6 @@ const Gemini = GObject.registerClass(
 
                     // Save history in history.json
                     this.saveHistory();
-
-                    // If answer.code is not null, copy to clipboard
-                    if (answer.code !== null) {
-                        this.gnomeNotify(
-                            _('Code example copied to clipboard'),
-                            'normal',
-                        );
-                        this.extension.clipboard.set_text(
-                            St.ClipboardType.CLIPBOARD,
-                            answer.code,
-                        );
-                    }
 
                     if (inputItem !== undefined) {
                         // Convert response to HTML
