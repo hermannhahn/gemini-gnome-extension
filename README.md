@@ -1,5 +1,6 @@
-# Gemini Voice Assistant for Ubuntu
+# Gemini Voice Assistant for Ubuntu\n
 
+\n
 Gemini AI Voice and Chat
 
 ## Install
