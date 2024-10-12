@@ -72,8 +72,9 @@ Other files may be included but they aren't directly related to extension develo
 -   [x] Implement development scripts
 -   [x] Implement Release Process
 -   [x] Implement README
--   [ ] Implement Stop Button
--   [ ] Implement Clear History Button
+-   [x] Implement Clear History Button
+-   [ ] Implement Voice activation with hotkeys
+-   [ ] Implement Stop Button to stop speech.
 -   [ ] Implement Documentation
 -   [ ] Implement Testing
 -   [ ] Implement Translations
