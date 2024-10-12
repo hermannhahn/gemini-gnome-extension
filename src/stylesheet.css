@@ -31,6 +31,7 @@
 }
 .chat-scroll-section {
     max-height: 800px;
+    padding-top: 10px;
 }
 .google-gemini-icon {
     background-image: url('assets/icon_gemini.png');
