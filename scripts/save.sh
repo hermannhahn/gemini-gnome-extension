@@ -38,10 +38,13 @@ minor_version=$(echo "$BRANCH" | cut -d'.' -f2)
 major_version=($(echo "$BRANCH" | cut -d'.' -f1))
 SHORT_VERSION=$major_version.$minor_version
 
-# Update
-jq ".version = $SHORT_VERSION" metadata.json > metadata.json.new
-mv metadata.json.new metadata.json
-echo "Updated version in metadata.json"
+# Check if Metadata version is equal SHORT_VERSION
+if [ "$(jq -r .version metadata.json)" != "$SHORT_VERSION" ]; then
+  # Update version in metadata.json
+  jq ".version = $SHORT_VERSION" metadata.json > metadata.json.new
+  mv metadata.json.new metadata.json
+  echo "Updated version in metadata.json"
+fi
 
 # Add, commit and push files
 cd -- "$( dirname "$0" )/../"
@@ -51,8 +54,3 @@ git push
 
 # Build
 npm run build:install
-echo "Extension built."
-echo "All done."
-
-# Exit script
-exit 0
