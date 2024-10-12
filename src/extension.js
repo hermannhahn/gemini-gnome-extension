@@ -214,6 +214,20 @@ const Gemini = GObject.registerClass(
                 `<b>${USERNAME}: </b>${htmlUserQuestion}`,
             );
 
+            // Use pango to break lines
+            pangoLayout = new Pango.Layout(
+                Main.layoutManager.get_default_context(),
+            );
+            pangoLayout.set_text(aiResponse);
+            pangoLayout.set_width(
+                this.scrollView.width -
+                    this.scrollView.get_style_class().length * 2,
+            );
+            pangoLayout.set_wrap(Pango.WrapMode.WORD_CHAR);
+            // let [width, height] = pangoLayout.get_pixel_size();
+            aiResponse = pangoLayout.get_text();
+            aiResponse = aiResponse.replace(/(\s*)\n(\s*)/g, '<br>$1$2');
+
             // Add temporary response while whait for ai response
             aiResponseItem.label.clutter_text.set_markup(aiResponse);
 
