@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "save": "./scripts/save.sh",
-    "new": "./scripts/new.sh",
+    "new:patch": "./scripts/new.sh patch",
+    "new:update": "./scripts/new.sh update",
+    "new:upgrade": "./scripts/new.sh upgrade",
+    "publish": "./scripts/publish.sh",
     "build": "./scripts/build.sh",
     "build:dev": "./scripts/build.sh --unsafe-reload",
     "build:install": "./scripts/build.sh --install",
