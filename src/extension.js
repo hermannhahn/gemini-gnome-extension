@@ -263,7 +263,7 @@ const Gemini = GObject.registerClass(
                 GEMINIAPIKEY = newKey;
             }
 
-            // Send request
+            // Send async request
             var body = this.buildBody(question);
             let message = Soup.Message.new('POST', url);
             let bytes = GLib.Bytes.new(body);
@@ -272,11 +272,10 @@ const Gemini = GObject.registerClass(
                 message,
                 GLib.PRIORITY_DEFAULT,
                 null,
-                // eslint-disable-next-line no-shadow
                 (_httpSession, result) => {
-                    // eslint-disable-next-line no-shadow
                     let bytes = _httpSession.send_and_read_finish(result);
                     let decoder = new TextDecoder('utf-8');
+
                     // Get response
                     let response = decoder.decode(bytes.get_data());
                     let res = JSON.parse(response);
@@ -321,15 +320,14 @@ const Gemini = GObject.registerClass(
 
                         // Save history in history.json
                         this.saveHistory();
-
-                        if (inputItem !== undefined) {
-                            // Convert response to HTML
-                            let htmlResponse = format(aiResponse);
-                            // Set response
-                            inputItem.label.clutter_text.set_markup(
-                                '<b>Gemini: </b> ' + htmlResponse,
-                            );
-                        }
+                    }
+                    if (inputItem !== undefined) {
+                        // Convert response to HTML
+                        let htmlResponse = format(aiResponse);
+                        // Set response
+                        inputItem.label.clutter_text.set_markup(
+                            '<b>Gemini: </b> ' + htmlResponse,
+                        );
                     }
                 },
             );
