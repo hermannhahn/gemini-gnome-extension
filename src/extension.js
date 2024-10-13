@@ -95,27 +95,33 @@ const Gemini = GObject.registerClass(
             super._init(0.0, _('Gemini Voice Assistant for Ubuntu'));
             this._loadSettings();
             this.chatHistory = [];
-            let hbox = new St.BoxLayout({
+
+            // Create Tray
+            let tray = new St.BoxLayout({
                 style_class: 'panel-status-menu-box',
             });
-            this.hbox = hbox;
-
+            this.tray = tray;
             this.icon = new St.Icon({
                 style_class: 'google-gemini-icon',
             });
-            hbox.add_child(this.icon);
-            this.add_child(hbox);
-            this.menu.actor.style_class = 'm-w-100';
+            tray.add_child(this.icon);
+            this.add_child(tray);
 
+            // Create app item section
             let item = new PopupMenu.PopupBaseMenuItem({
                 reactive: false,
                 can_focus: false,
             });
+
+            // Create chat section
             this.chatSection = new PopupMenu.PopupMenuSection();
+
+            // Create scrollbar
             this.scrollView = new St.ScrollView({
                 style_class: 'chat-scroll-section',
             });
 
+            // Create search entry
             let searchEntry = new St.Entry({
                 name: 'aiEntry',
                 style_class: 'ai-entry',
@@ -125,11 +131,15 @@ const Gemini = GObject.registerClass(
                 x_expand: true,
                 y_expand: true,
             });
+
+            // Create voice activation button
             let micButton = new St.Button({
                 can_focus: true,
                 toggle_mode: true,
                 style_class: 'mic-icon',
             });
+
+            // Create clear history button
             let clearButton = new St.Button({
                 can_focus: true,
                 toggle_mode: true,
@@ -138,6 +148,8 @@ const Gemini = GObject.registerClass(
                     style_class: 'trash-icon',
                 }),
             });
+
+            // Create settings button
             let settingsButton = new St.Button({
                 can_focus: true,
                 toggle_mode: true,
@@ -146,65 +158,75 @@ const Gemini = GObject.registerClass(
                     style_class: 'settings-icon',
                 }),
             });
+
+            // Add scroll to chat section
             this.scrollView.add_child(this.chatSection.actor);
+
+            // Add search entry, mic button, clear button and settings button to menu
             searchEntry.clutter_text.connect('activate', (actor) => {
                 this.aiResponse(actor.text);
                 searchEntry.clutter_text.set_text('');
             });
-            // eslint-disable-next-line no-unused-vars
-            micButton.connect('clicked', (self) => {
+            micButton.connect('clicked', (_self) => {
                 this.startRecording();
             });
-            // eslint-disable-next-line no-unused-vars
-            clearButton.connect('clicked', (self) => {
+            clearButton.connect('clicked', (_self) => {
                 searchEntry.clutter_text.set_text('');
                 this.chatHistory = [];
-                this.menu.box.remove_child(this.scrollView);
+                this.app.box.remove_child(this.scrollView);
                 this.chatSection = new PopupMenu.PopupMenuSection();
                 this.scrollView.add_child(this.chatSection.actor);
-                this.menu.box.add_child(this.scrollView);
-                this._initFirstResponse();
+                this.app.box.add_child(this.scrollView);
             });
-            // eslint-disable-next-line no-unused-vars
-            settingsButton.connect('clicked', (self) => {
+            settingsButton.connect('clicked', (_self) => {
                 this.openSettings();
             });
-            if (GEMINIAPIKEY === '') {
-                this.openSettings();
-            }
+
+            // Add search entry, mic button, clear button and settings button to menu
             item.add_child(searchEntry);
             item.add_child(micButton);
             item.add_child(clearButton);
             item.add_child(settingsButton);
-            this.menu.addMenuItem(item);
-            this.menu.box.add_child(this.scrollView);
+
+            // Add items to app
+            this.app.addMenuItem(item);
+
+            // Add chat section to app
+            this.app.box.add_child(this.scrollView);
+
+            // Open settings if gemini api key is not configured
+            if (GEMINIAPIKEY === '') {
+                this.openSettings();
+            }
         }
 
         aiResponse(userQuestion) {
+            // Set temporary message
             let aiResponse = _('<b>Gemini: </b> ...');
-            const inputCategory = new PopupMenu.PopupMenuItem('');
-            const aiResponseItem = new PopupMenu.PopupMenuItem('');
+
+            // Create input and response chat items
+            const inputChat = new PopupMenu.PopupMenuItem('');
+            const responseChat = new PopupMenu.PopupMenuItem('');
 
             // Add user question to chat
-            inputCategory.label.clutter_text.set_markup(
+            inputChat.label.clutter_text.set_markup(
                 `<b>${USERNAME}: </b>${userQuestion}`,
             );
 
-            // Add temporary response while whait for ai response
-            aiResponseItem.label.clutter_text.set_markup(aiResponse);
+            // Add temporary message to chat while whait for ai response
+            responseChat.label.clutter_text.set_markup(aiResponse);
 
             // Chat settings
-            inputCategory.label.x_expand = true;
-            aiResponseItem.label.x_expand = true;
-            inputCategory.style_class += ' m-w-100';
-            aiResponseItem.style_class += ' m-w-100';
+            inputChat.label.x_expand = true;
+            responseChat.label.x_expand = true;
+            inputChat.style_class += ' m-w-100';
+            responseChat.style_class += ' m-w-100';
 
             // Set mouse click to copy response to clipboard
-            // eslint-disable-next-line no-unused-vars
-            aiResponseItem.connect('activate', (self) => {
+            responseChat.connect('activate', (_self) => {
                 this.extension.clipboard.set_text(
                     St.ClipboardType.CLIPBOARD,
-                    aiResponseItem.label.text,
+                    responseChat.label.text,
                 );
             });
 
@@ -214,10 +236,11 @@ const Gemini = GObject.registerClass(
             );
 
             // Add user question and ai response to chat
-            this.chatSection.addMenuItem(inputCategory);
-            this.chatSection.addMenuItem(aiResponseItem);
+            this.chatSection.addMenuItem(inputChat);
+            this.chatSection.addMenuItem(responseChat);
+
             // Get ai response for user question
-            this.getAireponse(aiResponseItem, userQuestion);
+            this.getAireponse(responseChat, userQuestion);
         }
 
         getAireponse(
@@ -383,22 +406,22 @@ const Gemini = GObject.registerClass(
 
         geminiResponse(text) {
             let aiResponse = _(`<b>Gemini: </b> ${text}`);
-            const aiResponseItem = new PopupMenu.PopupMenuItem('');
-            aiResponseItem.label.clutter_text.set_markup(aiResponse);
-            aiResponseItem.label.x_expand = true;
-            aiResponseItem.style_class += ' m-w-100';
+            const responseChat = new PopupMenu.PopupMenuItem('');
+            responseChat.label.clutter_text.set_markup(aiResponse);
+            responseChat.label.x_expand = true;
+            responseChat.style_class += ' m-w-100';
 
-            aiResponseItem.connect('activate', (_self) => {
+            responseChat.connect('activate', (_self) => {
                 this.extension.clipboard.set_text(
                     St.ClipboardType.CLIPBOARD,
-                    aiResponseItem.label.text,
+                    responseChat.label.text,
                 );
             });
 
             this.chatSection.addMenuItem(
                 new PopupMenu.PopupSeparatorMenuItem(),
             );
-            this.chatSection.addMenuItem(aiResponseItem);
+            this.chatSection.addMenuItem(responseChat);
         }
 
         executeCommand(cmd) {
