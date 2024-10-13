@@ -309,10 +309,9 @@ const Gemini = GObject.registerClass(
                                 role: 'model',
                                 parts: [{text: aiResponse}],
                             });
+                            // Save history.json
+                            this.saveHistory();
                         }
-
-                        // Save history.json
-                        this.saveHistory();
                     }
 
                     if (responseChat !== undefined) {
