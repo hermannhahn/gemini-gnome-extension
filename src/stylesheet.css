@@ -50,10 +50,11 @@
 }
 .mic-icon:hover {
     background-color: rgb(42, 42, 42);
-    border-radius: 100px;
+    border-radius: 50%;
 }
 .mic-icon:checked {
     background-image: url('assets/icon_mic_on.png');
+    background-color: transparent;
 }
 .trash-icon {
     background-image: url('assets/icon_trash.png');
@@ -64,7 +65,7 @@
 }
 .trash-icon:hover {
     background-color: rgb(42, 42, 42);
-    border-radius: 100px;
+    border-radius: 50%;
 }
 .settings-icon {
     background-image: url('assets/icon_settings.png');
@@ -75,5 +76,5 @@
 }
 .settings-icon:hover {
     background-color: rgb(42, 42, 42);
-    border-radius: 100px;
+    border-radius: 50%;
 }
