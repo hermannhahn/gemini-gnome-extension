@@ -217,7 +217,7 @@ export default [
             'no-return-assign': 'error',
             'no-return-await': 'error',
             'no-self-compare': 'error',
-            'no-shadow': 'error',
+            // 'no-shadow': 'error',
             'no-shadow-restricted-names': 'error',
             'no-spaced-func': 'error',
             'no-tabs': 'error',
