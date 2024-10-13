@@ -379,6 +379,30 @@ const Gemini = GObject.registerClass(
                     GLib.file_set_contents(historyFilePath, initialContent);
                     this.chatHistory = [];
                     log(`History file created. : ${historyFilePath}`);
+                    if (RECURSIVETALK) {
+                        this.chatHistory.push({
+                            role: 'user',
+                            parts: [
+                                {
+                                    text: _(
+                                        'Who are you? At the end of next question response, ask me my name. I like to be called by name.',
+                                    ),
+                                },
+                            ],
+                        });
+                        this.chatHistory.push({
+                            role: 'model',
+                            parts: [
+                                {
+                                    text: _(
+                                        'I am Gemini, your helpfull assistant.',
+                                    ),
+                                },
+                            ],
+                        });
+                        // Save history.json
+                        this.saveHistory();
+                    }
                 } catch (e) {
                     logError(e, `Failed to create file: ${historyFilePath}`);
                 }
