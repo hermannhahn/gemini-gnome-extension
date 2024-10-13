@@ -445,6 +445,7 @@ const Gemini = GObject.registerClass(
             const responseChat = new PopupMenu.PopupMenuItem('');
             responseChat.label.clutter_text.set_markup(aiResponse);
             responseChat.label.x_expand = true;
+            responseChat.label.style_class += ' m-w-100';
             responseChat.style_class += ' m-w-100';
 
             responseChat.connect('activate', (_self) => {
