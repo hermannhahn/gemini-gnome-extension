@@ -143,20 +143,14 @@ const Gemini = GObject.registerClass(
             let clearButton = new St.Button({
                 can_focus: true,
                 toggle_mode: true,
-                child: new St.Icon({
-                    icon_name: 'user-trash-symbolic',
-                    style_class: 'trash-icon',
-                }),
+                style_class: 'trash-icon',
             });
 
             // Create settings button
             let settingsButton = new St.Button({
                 can_focus: true,
                 toggle_mode: true,
-                child: new St.Icon({
-                    icon_name: 'preferences-system-symbolic',
-                    style_class: 'settings-icon',
-                }),
+                style_class: 'settings-icon',
             });
 
             // Add scroll to chat section
