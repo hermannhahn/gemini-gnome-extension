@@ -1,10 +1,12 @@
 /* Add your custom extension styling here */
 .chatLog {
     color: black;
+    text-wrap: wrap;
 }
 .chatType {
     color: black;
     font-weight: bold;
+    text-wrap: wrap;
 }
 .ai-entry {
     width: 250px;
@@ -29,6 +31,7 @@
 }
 .chat-scroll-section {
     max-height: 800px;
+    text-wrap: wrap;
     padding-top: 10px;
 }
 .google-gemini-icon {
