@@ -1,6 +1,6 @@
 {
   "name": "gemini-gnome-extension",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "private": true,
   "scripts": {
     "save": "./scripts/save.sh",
