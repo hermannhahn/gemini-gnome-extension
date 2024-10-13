@@ -173,10 +173,10 @@ const Gemini = GObject.registerClass(
             clearButton.connect('clicked', (_self) => {
                 searchEntry.clutter_text.set_text('');
                 this.chatHistory = [];
-                this.app.box.remove_child(this.scrollView);
+                this.menu.box.remove_child(this.scrollView);
                 this.chatSection = new PopupMenu.PopupMenuSection();
                 this.scrollView.add_child(this.chatSection.actor);
-                this.app.box.add_child(this.scrollView);
+                this.menu.box.add_child(this.scrollView);
             });
             settingsButton.connect('clicked', (_self) => {
                 this.openSettings();
@@ -189,10 +189,10 @@ const Gemini = GObject.registerClass(
             item.add_child(settingsButton);
 
             // Add items to app
-            this.app.addMenuItem(item);
+            this.menu.addMenuItem(item);
 
             // Add chat section to app
-            this.app.box.add_child(this.scrollView);
+            this.menu.box.add_child(this.scrollView);
 
             // Open settings if gemini api key is not configured
             if (GEMINIAPIKEY === '') {
