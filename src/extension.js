@@ -211,14 +211,22 @@ const Gemini = GObject.registerClass(
                 `<b>${USERNAME}: </b>${userQuestion}`,
             );
 
-            // Add temporary message to chat while whait for ai response
-            responseChat.label.clutter_text.set_markup(aiResponse);
-
             // Chat settings
             inputChat.label.x_expand = true;
-            responseChat.label.x_expand = true;
+            inputChat.label.style_class += ' m-w-100';
             inputChat.style_class += ' m-w-100';
+            responseChat.label.x_expand = true;
+            responseChat.label.style_class += ' m-w-100';
             responseChat.style_class += ' m-w-100';
+            // Break lines
+            responseChat.clutter_text.set_line_wrap(true);
+            // Enable scroll
+            responseChat.label.clutter_text.set_ellipsize(
+                Pango.EllipsizeMode.END,
+            );
+
+            // Add temporary message to chat while whait for ai response
+            responseChat.label.clutter_text.set_markup(aiResponse);
 
             // Set mouse click to copy response to clipboard
             responseChat.connect('activate', (_self) => {
@@ -439,33 +447,6 @@ const Gemini = GObject.registerClass(
             } catch (e) {
                 logError(e, `Failed to load history: ${historyFilePath}`);
             }
-        }
-
-        geminiResponse(text) {
-            let aiResponse = _(`<b>Gemini: </b> ${text}`);
-            const responseChat = new PopupMenu.PopupMenuItem('');
-            responseChat.label.clutter_text.set_markup(aiResponse);
-            responseChat.label.x_expand = true;
-            responseChat.label.style_class += ' m-w-100';
-            responseChat.style_class += ' m-w-100';
-            // Break lines
-            responseChat.clutter_text.set_line_wrap(true);
-            // Enable scroll
-            responseChat.label.clutter_text.set_ellipsize(
-                Pango.EllipsizeMode.END,
-            );
-            // Set mouse click to copy response to clipboard
-            responseChat.connect('activate', (_self) => {
-                this.extension.clipboard.set_text(
-                    St.ClipboardType.CLIPBOARD,
-                    responseChat.label.text,
-                );
-            });
-
-            this.chatSection.addMenuItem(
-                new PopupMenu.PopupSeparatorMenuItem(),
-            );
-            this.chatSection.addMenuItem(responseChat);
         }
 
         executeCommand(cmd) {
