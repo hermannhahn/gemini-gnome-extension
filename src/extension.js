@@ -442,7 +442,7 @@ const Gemini = GObject.registerClass(
         // Remove all .wav file from /tmp folder
         removeWavFiles() {
             log('Removing all .wav files from /tmp folder');
-            const command = 'rm /tmp/*.wav';
+            const command = 'rm /tmp/gva*.wav';
             const process = GLib.spawn_async(
                 null, // pasta de trabalho
                 ['/bin/sh', '-c', command], // comando e argumentos
