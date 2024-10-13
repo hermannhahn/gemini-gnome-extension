@@ -95,7 +95,7 @@ const Gemini = GObject.registerClass(
             super._init(0.0, _('Gemini Voice Assistant for Ubuntu'));
             this._loadSettings();
             if (RECURSIVETALK) {
-                this._loadHistoryFile();
+                this.loadHistoryFile();
             } else {
                 this.chatHistory = [];
             }
@@ -377,6 +377,7 @@ const Gemini = GObject.registerClass(
                 try {
                     let initialContent = JSON.stringify([], null, 2);
                     GLib.file_set_contents(historyFilePath, initialContent);
+                    this.chatHistory = [];
                     log(`History file created. : ${historyFilePath}`);
                 } catch (e) {
                     logError(e, `Failed to create file: ${historyFilePath}`);
@@ -400,7 +401,7 @@ const Gemini = GObject.registerClass(
         }
 
         // Load history file
-        _loadHistoryFile() {
+        loadHistoryFile() {
             try {
                 let file = Gio.File.new_for_path(historyFilePath);
                 if (!file.query_exists(null)) {
