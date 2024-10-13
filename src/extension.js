@@ -23,6 +23,7 @@ import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
+import Pango from 'gi://Pango';
 
 import {
     Extension,
@@ -447,7 +448,13 @@ const Gemini = GObject.registerClass(
             responseChat.label.x_expand = true;
             responseChat.label.style_class += ' m-w-100';
             responseChat.style_class += ' m-w-100';
-
+            // Break lines
+            responseChat.clutter_text.set_line_wrap(true);
+            // Enable scroll
+            responseChat.label.clutter_text.set_ellipsize(
+                Pango.EllipsizeMode.END,
+            );
+            // Set mouse click to copy response to clipboard
             responseChat.connect('activate', (_self) => {
                 this.extension.clipboard.set_text(
                     St.ClipboardType.CLIPBOARD,
