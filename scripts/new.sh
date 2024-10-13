@@ -75,6 +75,7 @@ cd -- "$( dirname "$0" )/../"
 git add .
 git commit -S -m "$NEW_VERSION"
 git push --set-upstream origin $NEW_VERSION
+git push
 
 # Install extension
 npm run build:install
