@@ -50,20 +50,17 @@
 }
 .mic-icon:checked {
     background-image: url('assets/icon_mic_on.png');
+}
+.trash-icon {
+    background-image: url('assets/icon_trash.png');
+    background-size: 24px;
     width: 24px;
     height: 24px;
     padding: 1px;
 }
 .settings-icon {
-    /*background-image: url("assets/settings.png");
-    background-size: 20px;*/
-    width: 24px;
-    height: 24px;
-    padding: 1px;
-}
-.trash-icon {
-    /*background-image: url("assets/trashcan.png");
-    background-size: 30px;*/
+    background-image: url('assets/icon_settings.png');
+    background-size: 20px;
     width: 24px;
     height: 24px;
     padding: 1px;
