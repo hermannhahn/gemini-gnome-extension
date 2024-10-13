@@ -243,7 +243,7 @@ const Gemini = GObject.registerClass(
         }
 
         getAireponse(
-            inputItem,
+            responseChat,
             question,
             newKey = undefined,
             destroyLoop = false,
@@ -279,7 +279,7 @@ const Gemini = GObject.registerClass(
                     let response = decoder.decode(bytes.get_data());
                     let res = JSON.parse(response);
                     if (res.error?.code !== 401 && res.error !== undefined) {
-                        inputItem?.label.clutter_text.set_markup(response);
+                        responseChat?.label.clutter_text.set_markup(response);
                         return;
                     }
                     let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
@@ -321,14 +321,13 @@ const Gemini = GObject.registerClass(
                         this.saveHistory();
                     }
 
-                    if (inputItem !== undefined) {
+                    if (responseChat !== undefined) {
                         // Convert response to HTML
                         let htmlResponse = format(aiResponse);
                         // Set response
-                        inputItem.label.clutter_text.set_markup(
+                        responseChat.label.clutter_text.set_markup(
                             '<b>Gemini: </b> ' + htmlResponse,
                         );
-                        inputItem.label.clutter_text.set_line_wrap(true);
                     }
                 },
             );
