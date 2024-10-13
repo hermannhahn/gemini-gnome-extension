@@ -48,6 +48,9 @@
     height: 24px;
     padding: 0px;
 }
+.mic-icon:hover {
+    background-color: chartreuse;
+}
 .mic-icon:checked {
     background-image: url('assets/icon_mic_on.png');
 }
@@ -58,10 +61,16 @@
     height: 24px;
     padding: 1px;
 }
+.trash-icon:hover {
+    background-color: rgb(161, 12, 32);
+}
 .settings-icon {
     background-image: url('assets/icon_settings.png');
     background-size: 20px;
     width: 24px;
     height: 24px;
     padding: 1px;
+}
+.settings-icon:hover {
+    background-color: rgb(48, 36, 209);
 }
