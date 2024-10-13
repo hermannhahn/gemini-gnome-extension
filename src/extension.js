@@ -162,7 +162,6 @@ const Gemini = GObject.registerClass(
             // Add scroll to chat section
             this.scrollView.add_child(this.chatSection.actor);
 
-            // Add search entry, mic button, clear button and settings button to menu
             searchEntry.clutter_text.connect('activate', (actor) => {
                 this.aiResponse(actor.text);
                 searchEntry.clutter_text.set_text('');
@@ -279,12 +278,10 @@ const Gemini = GObject.registerClass(
                     // Get response
                     let response = decoder.decode(bytes.get_data());
                     let res = JSON.parse(response);
-
                     if (res.error?.code !== 401 && res.error !== undefined) {
                         inputItem?.label.clutter_text.set_markup(response);
                         return;
                     }
-                    // Get ai response
                     let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
                     // log('[ AI-RES ] ' + aiResponse);
 
@@ -296,6 +293,7 @@ const Gemini = GObject.registerClass(
                         if (answer.tts !== null) {
                             this.textToSpeech(answer.tts);
                         }
+
                         // If answer.code is not null, copy to clipboard
                         if (answer.code !== null) {
                             this.gnomeNotify(
@@ -306,6 +304,7 @@ const Gemini = GObject.registerClass(
                                 answer.code,
                             );
                         }
+
                         // Add to history
                         if (RECURSIVETALK) {
                             this.chatHistory.push({
@@ -318,9 +317,10 @@ const Gemini = GObject.registerClass(
                             });
                         }
 
-                        // Save history in history.json
+                        // Save history.json
                         this.saveHistory();
                     }
+
                     if (inputItem !== undefined) {
                         // Convert response to HTML
                         let htmlResponse = format(aiResponse);
@@ -328,6 +328,7 @@ const Gemini = GObject.registerClass(
                         inputItem.label.clutter_text.set_markup(
                             '<b>Gemini: </b> ' + htmlResponse,
                         );
+                        inputItem.label.clutter_text.set_line_wrap(true);
                     }
                 },
             );
