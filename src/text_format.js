@@ -1,7 +1,9 @@
 // Text Format
 
 /**
- * @param {string} text
+ * @param {string} text - Text to be formatted
+ * @param {boolean} breakLines - Break lines if text is too long
+ * @returns {string} Formatted text
  */
 export function format(text, breakLines = false) {
     let formatedText = text
