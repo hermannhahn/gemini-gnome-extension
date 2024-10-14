@@ -379,7 +379,7 @@ const Gemini = GObject.registerClass(
             let textArray = text.split('\n');
             let newText = '';
             for (let i = 0; i < textArray.length; i++) {
-                if (textArray[i].length > 900) {
+                if (textArray[i].length > 100) {
                     newText += this.lineBreaker(textArray[i]);
                 } else {
                     newText += textArray[i] + '\n';
