@@ -222,6 +222,10 @@ const Gemini = GObject.registerClass(
             responseChat.label.x_expand = true;
             responseChat.label.style_class += ' m-w-100';
             responseChat.style_class += ' m-w-100';
+            this.chatSection.style_class += ' m-w-100';
+            this.scrollView.style_class += ' m-w-100';
+            inputChat.label.clutter_text.style_class += ' m-w-100';
+            responseChat.label.clutter_text.style_class += ' m-w-100';
 
             // Add temporary message to chat while whait for ai response
             responseChat.label.clutter_text.set_markup(aiResponse);
@@ -233,8 +237,6 @@ const Gemini = GObject.registerClass(
             // Pango
             inputChat.label.clutter_text.set_use_markup(true);
             responseChat.label.clutter_text.set_use_markup(true);
-            inputChat.label.set_style_class('m-w-100');
-            responseChat.label.set_style_class('m-w-100');
 
             // Set text wrap
             inputChat.label.clutter_text.set_wrap_mode(Pango.WrapMode.WORD);
