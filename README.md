@@ -31,9 +31,9 @@ project-directory/
 │   ├── schemas/
 │   │   └── org.gnome.shell.extensions.gva.gschema.xml
 │   ├── extension.js
-│   ├── md2pango.js
 │   ├── prefs.js
-|   └── stylesheet.css
+│   ├── stylesheet.css
+|   └── text_format.js
 ├── .editorconfig
 ├── .gitignore
 ├── eslint.config.js
@@ -47,7 +47,7 @@ project-directory/
 -   `data/` contains files that will be bundled into a [GResource](https://docs.gtk.org/gio/struct.Resource.html) file when building your extension.
 -   `po/` contains files for the [translation of your project](https://gjs.guide/extensions/development/translations.html). The template file (`*.pot`) lists all translatable strings. Translators will use this template to create translation files (`*.po`).
 -   `scripts/` consists of scripts to build and install your extension. The scripts have `--help` flags. They can also be called via the npm scripts in `package.json`.
--   `src/` is where the actual source code of your extension will reside. `extension.js` is the main entry point, `prefs.js` is the entry point for your preference window, `md2pango.js` is a helper script to render Markdown in Pango, and `stylesheet.css` is a CSS file for styling your extension.
+-   `src/` is where the actual source code of your extension will reside. `extension.js` is the main entry point, `prefs.js` is the entry point for your preference window, `text_format.js` is a helper script to make response adjustments, and `stylesheet.css` is a CSS file for styling your extension.
 -   `.editorconfig` provides configuration for editors.
 -   `eslint.config.js` provides configuration for the ESLint code linter.
 -   `metadata.json` provides information about your extension for GNOME Shell's extension system.
@@ -75,7 +75,7 @@ Other files may be included but they aren't directly related to extension develo
 -   [x] Implement Clear History Button
 -   [x] Implement Random response to wait AI response
 -   [ ] Implement Voice activation with hotkeys
--   [ ] Implement Stop Button to stop speech.
+-   [ ] Implement Stop Button to stop speech
 -   [ ] Implement Imports and Code Separators
 -   [ ] Implement Documentation
 -   [ ] Implement Testing
@@ -87,6 +87,8 @@ Other files may be included but they aren't directly related to extension develo
 
 -   [x] Chat Scrolling
 -   [x] Form focus
+-   [ ] Fix gnome notify function
+-   [ ] Go to end of chat after send new question and after receive response
 -   [ ] Formatting chat messages
 -   [ ] Increase chat width size
 -   [ ] Fix chat form, after create scroll, only click if scroll to begin
