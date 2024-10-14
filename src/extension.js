@@ -32,7 +32,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
-import {format} from './text_format.js';
+import {convertMD} from './md2pango.js';
 
 // Global variables
 let GEMINIAPIKEY = '';
@@ -345,7 +345,7 @@ const Gemini = GObject.registerClass(
                     if (responseChat !== undefined) {
                         log('[ AI ]' + aiResponse);
                         // Replace html tags to pango markup
-                        aiResponse = format(aiResponse);
+                        aiResponse = convertMD(aiResponse);
                         // Set ai response to chat
                         responseChat.label.clutter_text.set_markup(
                             '<b>Gemini: </b> ' + aiResponse,
