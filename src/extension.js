@@ -33,7 +33,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
-import {format} from './text_format.js';
+// import {format} from './text_format.js';
 
 // Global variables
 let GEMINIAPIKEY = '';
@@ -225,6 +225,16 @@ const Gemini = GObject.registerClass(
             // Accept Pango Markup Language
             inputChat.label.use_markup = true;
             responseChat.label.use_markup = true;
+
+            // Pango
+            inputChat.label.clutter_text.set_use_markup(true);
+            responseChat.label.clutter_text.set_use_markup(true);
+            inputChat.label.set_style_class('m-w-100');
+            responseChat.label.set_style_class('m-w-100');
+
+            // Set text wrap
+            inputChat.label.clutter_text.set_wrap_mode(Pango.WrapMode.WORD);
+            responseChat.label.clutter_text.set_wrap_mode(Pango.WrapMode.WORD);
 
             // Set mouse click to copy response to clipboard
             responseChat.connect('activate', (_self) => {
