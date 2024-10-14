@@ -326,7 +326,7 @@ const Gemini = GObject.registerClass(
                         let formatedResponse = format(aiResponse);
                         log('[ HTML ]' + formatedResponse);
                         // Set response
-                        responseChat.label.text = formatedResponse;
+                        responseChat.label.text = aiResponse;
                         // responseChat.label.clutter_text.set_markup(
                         //     '<b>Gemini: </b> ' + formatedResponse,
                         // );
@@ -408,7 +408,7 @@ const Gemini = GObject.registerClass(
                             parts: [
                                 {
                                     text: _(
-                                        'For next responses, please use ansi colors codes for better readability: yellow for titles, green for quotes, red for errors or warnings, and cyan for code examples. Format code blocks clearly for improved visibility.',
+                                        'For next responses, please respond in HTML format for better readability. Format code blocks clearly for improved visibility.',
                                     ),
                                 },
                             ],
