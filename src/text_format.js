@@ -8,9 +8,6 @@
 export function format(text, breakLines = false) {
     let formatedText = text
         .replace(/<\/?p>/g, '\n') // <p> -> quebra de linha
-        .replace(/<\/?b>/g, '<b>') // <b> já é suportado
-        .replace(/<\/?i>/g, '<i>') // <i> já é suportado
-        .replace(/<\/?u>/g, '<u>') // <u> já é suportado
         .replace(/<li>/g, '• ') // <li> -> bullet point
         .replace(/<\/li>/g, '\n') // Fecha <li> -> nova linha
         .replace(/<br\s*\/?>/g, '\n') // <br> -> nova linha
