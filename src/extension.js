@@ -386,7 +386,7 @@ const Gemini = GObject.registerClass(
                             role: 'user',
                             parts: [
                                 {
-                                    text: _('Who are you?'),
+                                    text: _('Hi, ho are you?'),
                                 },
                             ],
                         });
@@ -405,8 +405,16 @@ const Gemini = GObject.registerClass(
                             parts: [
                                 {
                                     text: _(
-                                        'For next responses, please use ansi colors for better readability: yellow for titles, green for quotes, red for errors or warnings, and cyan for code examples. Format code blocks clearly for improved visibility.',
+                                        'For next responses, please use ansi colors codes for better readability: yellow for titles, green for quotes, red for errors or warnings, and cyan for code examples. Format code blocks clearly for improved visibility.',
                                     ),
+                                },
+                            ],
+                        });
+                        this.chatHistory.push({
+                            role: 'model',
+                            parts: [
+                                {
+                                    text: _('\x1b[38;5;220mOk!\x1b[0m'),
                                 },
                             ],
                         });
