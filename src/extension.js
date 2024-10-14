@@ -23,7 +23,6 @@ import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
-import Pango from 'gi://Pango';
 
 import {
     Extension,
@@ -237,10 +236,6 @@ const Gemini = GObject.registerClass(
             // Pango
             inputChat.label.clutter_text.set_use_markup(true);
             responseChat.label.clutter_text.set_use_markup(true);
-
-            // Set text wrap
-            inputChat.label.clutter_text.set_wrap_mode(Pango.WrapMode.WORD);
-            responseChat.label.clutter_text.set_wrap_mode(Pango.WrapMode.WORD);
 
             // Set mouse click to copy response to clipboard
             responseChat.connect('activate', (_self) => {
