@@ -5,19 +5,16 @@
  */
 export function format(text) {
     let html = text
+        .replace(/\*/g, ' ') // Remove all * char from text
+        .replace(/`{3}\s*\w+\s*/g, '`{3}') // Remove first word after triple ` char
+        .replace(/`{3}/g, '') // Replace triple ` char
         .replace(/<\/?p>/g, '\n') // <p> -> quebra de linha
-        .replace(/<\/?b>/g, '<b>') // <b> já é suportado
-        .replace(/<\/?i>/g, '<i>') // <i> já é suportado
-        .replace(/<\/?u>/g, '<u>') // <u> já é suportado
         .replace(/<li>/g, '• ') // <li> -> bullet point
         .replace(/<\/li>/g, '\n') // Fecha <li> -> nova linha
         .replace(/<ul>|<\/ul>/g, '') // Remove <ul> tags
         .replace(/<ol>/g, '') // Remove <ol> tag
         .replace(/<\/ol>/g, '') // Remove </ol> tag
-        .replace(/<br\s*\/?>/g, '\n') // <br> -> nova linha
-        .replace(/\*/g, ' ') // Remove all * char from text
-        .replace(/`{3}\s*\w+\s*/g, '`{3}') // Remove first word after triple ` char
-        .replace(/`{3}/g, ''); // Replace triple ` char
+        .replace(/<br\s*\/?>/g, '\n'); // <br> -> nova linha
 
     // Line breaker
     let lines = html.split('\n');
