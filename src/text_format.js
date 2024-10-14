@@ -22,7 +22,9 @@ export function format(text) {
         .replace(/<strike>/g, '\x1b[38;5;202m~~') // Replace with orange color and similar ansi code
         .replace(/<\/strike>/g, '\x1b[0m~~') // Remove color
         .replace(/<code>/g, '\x1b[38;5;6m') // Replace with green color and similar ansi code
-        .replace(/<\/code>/g, '\x1b[0m'); // Remove color
+        .replace(/<\/code>/g, '\x1b[0m') // Remove color
+        .replace(/<span>/g, '') // Remove <span>
+        .replace(/<\/span>/g, ''); // Remove </span>
 
     // Line breaker
     let lines = html.split('\n');
