@@ -219,11 +219,6 @@ const Gemini = GObject.registerClass(
             responseChat.label.style_class += ' m-w-100';
             responseChat.style_class += ' m-w-100';
 
-            // Enable scroll
-            responseChat.label.clutter_text.set_ellipsize(
-                Pango.EllipsizeMode.END,
-            );
-
             // Add temporary message to chat while whait for ai response
             responseChat.label.clutter_text.set_markup(aiResponse);
 
