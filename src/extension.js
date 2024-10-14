@@ -222,6 +222,12 @@ const Gemini = GObject.registerClass(
             responseChat.label.clutter_text.set_ellipsize(
                 Pango.EllipsizeMode.END,
             );
+            // Break lines with ten words
+            responseChat.label.clutter_text.set_wrap_mode(
+                Pango.WrapMode.WORD_CHAR,
+            );
+            // Set text alignment
+            responseChat.label.clutter_text.set_alignment(Pango.Alignment.LEFT);
 
             // Add temporary message to chat while whait for ai response
             responseChat.label.clutter_text.set_markup(aiResponse);
