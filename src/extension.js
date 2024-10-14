@@ -431,17 +431,17 @@ const Gemini = GObject.registerClass(
 
         // Load history file
         loadHistoryFile() {
-            try {
-                let file = Gio.File.new_for_path(historyFilePath);
-                if (!file.query_exists(null)) {
-                    this.createHistoryFile();
-                    return;
+            if (GLib.file_test(historyFilePath, GLib.FileTest.IS_REGULAR)) {
+                try {
+                    let file = Gio.File.new_for_path(historyFilePath);
+                    let [, contents] = file.load_contents(null);
+                    this.chatHistory = JSON.parse(contents);
+                    log(`History loaded from: ${historyFilePath}`);
+                } catch (e) {
+                    logError(e, `Failed to load history: ${historyFilePath}`);
                 }
-                let [, contents] = file.load_contents(null);
-                this.chatHistory = JSON.parse(contents);
-                log(`History loaded from: ${historyFilePath}`);
-            } catch (e) {
-                logError(e, `Failed to load history: ${historyFilePath}`);
+            } else {
+                this.createHistoryFile();
             }
         }
 
