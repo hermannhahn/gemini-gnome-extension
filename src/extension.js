@@ -32,7 +32,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
-// import {format} from './text_format.js';
+import {format} from './text_format.js';
 
 // Global variables
 let GEMINIAPIKEY = '';
@@ -56,6 +56,11 @@ let extensionDir = GLib.build_filenamev([
 let historyFilePath = GLib.build_filenamev([extensionDir, 'history.json']);
 
 // Log function
+
+/**
+ *
+ * @param {*} message
+ */
 function log(message) {
     if (message) {
         console.log(`[ DEBUG ] ${message}`);
@@ -69,13 +74,10 @@ const Gemini = GObject.registerClass(
                 'changed',
                 () => {
                     this._fetchSettings();
-                    this._initFirstResponse();
                 },
             );
             this._fetchSettings();
         }
-
-        _initFirstResponse() {}
 
         _fetchSettings() {
             const {settings} = this.extension;
@@ -150,7 +152,11 @@ const Gemini = GObject.registerClass(
             });
 
             // Create chat section
-            this.chatSection = new PopupMenu.PopupMenuSection();
+            this.chatSection = new PopupMenu.PopupMenuSection({
+                style_class: 'chat-section',
+                x_expand: true,
+                y_expand: true,
+            });
 
             // Create scrollbar
             this.scrollView = new St.ScrollView({
@@ -338,6 +344,9 @@ const Gemini = GObject.registerClass(
 
                     if (responseChat !== undefined) {
                         log('[ AI ]' + aiResponse);
+                        // Replace html tags to pango markup
+                        aiResponse = format(aiResponse);
+                        // Set ai response to chat
                         responseChat.label.clutter_text.set_markup(
                             '<b>Gemini: </b> ' + aiResponse,
                         );
@@ -908,7 +917,6 @@ export default class GeminiExtension extends Extension {
                 let response = decoder.decode(bytes.get_data());
                 const res = JSON.parse(response);
                 LOCATION = `${res.countryName}/${res.cityName}`;
-                this._gemini._initFirstResponse();
             },
         );
     }
