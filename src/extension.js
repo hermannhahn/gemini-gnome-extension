@@ -324,12 +324,10 @@ const Gemini = GObject.registerClass(
                         log('[ AI ]' + aiResponse);
                         // Format response
                         let formatedResponse = format(aiResponse);
-                        log('[ HTML ]' + formatedResponse);
                         // Set response
-                        responseChat.label.text = aiResponse;
-                        // responseChat.label.clutter_text.set_markup(
-                        //     '<b>Gemini: </b> ' + formatedResponse,
-                        // );
+                        responseChat.label.clutter_text.set_markup(
+                            '<b>Gemini: </b> ' + formatedResponse,
+                        );
                     }
                 },
             );
