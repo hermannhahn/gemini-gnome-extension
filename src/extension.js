@@ -218,8 +218,6 @@ const Gemini = GObject.registerClass(
             responseChat.label.x_expand = true;
             responseChat.label.style_class += ' m-w-100';
             responseChat.style_class += ' m-w-100';
-            // Break lines
-            responseChat.label.clutter_text.set_line_wrap(true);
             // Enable scroll
             responseChat.label.clutter_text.set_ellipsize(
                 Pango.EllipsizeMode.END,
@@ -393,9 +391,7 @@ const Gemini = GObject.registerClass(
                             role: 'user',
                             parts: [
                                 {
-                                    text: _(
-                                        'Who are you? At the end of next question response, ask me my name. I like to be called by name.',
-                                    ),
+                                    text: _('Who are you?'),
                                 },
                             ],
                         });
