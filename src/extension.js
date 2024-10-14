@@ -405,7 +405,7 @@ const Gemini = GObject.registerClass(
                             parts: [
                                 {
                                     text: _(
-                                        'For next responses, please respond in ANSI format with line breaks where necessary, ensuring no word is cut off for a 900px display window. Use colors for better readability: yellow for titles, green for quotes, red for errors or warnings, and cyan for code examples. Format code blocks clearly for improved visibility.',
+                                        'For next responses, please respond with line breaks where necessary, ensuring no word is cut off for a 900px display window. Use colors for better readability: yellow for titles, green for quotes, red for errors or warnings, and cyan for code examples. Format code blocks clearly for improved visibility.',
                                     ),
                                 },
                             ],
