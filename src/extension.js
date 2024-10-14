@@ -376,13 +376,29 @@ const Gemini = GObject.registerClass(
 
         // Line breaker
         lineBreaker(text) {
-            // Break lines each 100 characters
-            let lines = text.match(/.{1,100}/g);
-            let newText = '';
+            // Break lines each 90 characters, but dont break the word.
+            let lines = text.split('\n');
+            let result = '';
             for (let i = 0; i < lines.length; i++) {
-                newText += lines[i] + '\n';
+                let line = lines[i];
+                if (line.length > 90) {
+                    let words = line.split(' ');
+                    let currentLine = '';
+                    for (let j = 0; j < words.length; j++) {
+                        let word = words[j];
+                        if (currentLine.length + word.length > 90) {
+                            result += currentLine + '\n';
+                            currentLine = word + ' ';
+                        } else {
+                            currentLine += word + ' ';
+                        }
+                    }
+                    result += currentLine + '\n';
+                } else {
+                    result += line + '\n';
+                }
             }
-            return newText;
+            return result;
         }
 
         // Create history.json file if not exist
