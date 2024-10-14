@@ -406,7 +406,7 @@ const Gemini = GObject.registerClass(
                             parts: [
                                 {
                                     text: _(
-                                        'For next responses, please use Pango Markup to format text for better readability. Format code blocks clearly for improved visibility.',
+                                        'For next responses, please use Pango Markup Language to format text for better readability. Format code blocks clearly for improved visibility.',
                                     ),
                                 },
                             ],
