@@ -322,11 +322,10 @@ const Gemini = GObject.registerClass(
 
                     if (responseChat !== undefined) {
                         // Convert response to HTML
-                        let htmlResponse = format(aiResponse);
-                        let formatRespose = this.lineBreaker(htmlResponse);
+                        let formatedResponse = format(aiResponse);
                         // Set response
                         responseChat.label.clutter_text.set_markup(
-                            '<b>Gemini: </b> ' + formatRespose,
+                            '<b>Gemini: </b> ' + formatedResponse,
                         );
                     }
                 },
