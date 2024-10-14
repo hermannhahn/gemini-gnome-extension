@@ -32,7 +32,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
-import {format} from './text_format.js';
+// import {format} from './text_format.js';
 
 // Global variables
 let GEMINIAPIKEY = '';
@@ -117,14 +117,6 @@ const Gemini = GObject.registerClass(
                 can_focus: false,
             });
 
-            // Create chat section
-            this.chatSection = new PopupMenu.PopupMenuSection();
-
-            // Create scrollbar
-            this.scrollView = new St.ScrollView({
-                style_class: 'chat-scroll-section',
-            });
-
             // Create search entry
             let searchEntry = new St.Entry({
                 name: 'aiEntry',
@@ -155,6 +147,14 @@ const Gemini = GObject.registerClass(
                 can_focus: true,
                 toggle_mode: true,
                 style_class: 'settings-icon',
+            });
+
+            // Create chat section
+            this.chatSection = new PopupMenu.PopupMenuSection();
+
+            // Create scrollbar
+            this.scrollView = new St.ScrollView({
+                style_class: 'chat-scroll-section',
             });
 
             // Add scroll to chat section
@@ -322,10 +322,10 @@ const Gemini = GObject.registerClass(
 
                     if (responseChat !== undefined) {
                         // Convert response to HTML
-                        let formatedResponse = format(aiResponse);
+                        // let formatedResponse = format(aiResponse);
                         // Set response
                         responseChat.label.clutter_text.set_markup(
-                            '<b>Gemini: </b> ' + formatedResponse,
+                            '<b>Gemini: </b> ' + aiResponse,
                         );
                     }
                 },
@@ -396,6 +396,16 @@ const Gemini = GObject.registerClass(
                                 {
                                     text: _(
                                         'I am Gemini, your helpfull assistant.',
+                                    ),
+                                },
+                            ],
+                        });
+                        this.chatHistory.push({
+                            role: 'user',
+                            parts: [
+                                {
+                                    text: _(
+                                        'For next responses, please respond in ANSI format with line breaks where necessary, ensuring no word is cut off for a 900px display window. Use colors for better readability: yellow for titles, green for quotes, red for errors or warnings, and cyan for code examples. Format code blocks clearly for improved visibility.',
                                     ),
                                 },
                             ],
