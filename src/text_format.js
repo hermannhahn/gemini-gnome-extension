@@ -4,6 +4,13 @@
  * @param {string} text
  */
 export function format(text) {
+    // Remove all * char from text
+    text = text.replace(/\*/g, ' ');
+    // Remove first word after triple ` char
+    text = text.replace(/`{3}\s*\w+\s*/g, '`{3}');
+    // Replace triple ` char
+    text = text.replace(/`{3}/g, '');
+    // Line breaker
     let lines = text.split('\n');
     let result = '';
     for (let i = 0; i < lines.length; i++) {
