@@ -35,6 +35,9 @@
     text-wrap: wrap;
     padding-top: 10px;
 }
+.chat-section {
+    text-wrap: break-word;
+}
 .google-gemini-icon {
     background-image: url('assets/icon_gemini.png');
     background-size: 24px;
