@@ -23,6 +23,7 @@ import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
+import Pango from 'gi://Pango';
 
 import {
     Extension,
@@ -221,6 +222,10 @@ const Gemini = GObject.registerClass(
             // Add temporary message to chat while whait for ai response
             responseChat.label.clutter_text.set_markup(aiResponse);
 
+            // Accept Pango Markup Language
+            inputChat.label.use_markup = true;
+            responseChat.label.use_markup = true;
+
             // Set mouse click to copy response to clipboard
             responseChat.connect('activate', (_self) => {
                 this.extension.clipboard.set_text(
@@ -322,11 +327,8 @@ const Gemini = GObject.registerClass(
 
                     if (responseChat !== undefined) {
                         log('[ AI ]' + aiResponse);
-                        // Format response
-                        let formatedResponse = format(aiResponse);
-                        // Set response
                         responseChat.label.clutter_text.set_markup(
-                            '<b>Gemini: </b> ' + formatedResponse,
+                            '<b>Gemini: </b> ' + aiResponse,
                         );
                     }
                 },
