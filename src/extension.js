@@ -406,7 +406,7 @@ const Gemini = GObject.registerClass(
                             parts: [
                                 {
                                     text: _(
-                                        'For next responses, please respond in HTML format for better readability. Format code blocks clearly for improved visibility.',
+                                        'For next responses, please respond with HTML elements to format text for better readability. Format code blocks clearly for improved visibility. E.g.: <i>, <b>, <code>, etc...',
                                     ),
                                 },
                             ],
