@@ -376,14 +376,11 @@ const Gemini = GObject.registerClass(
 
         // Line breaker
         lineBreaker(text) {
-            let textArray = text.split('\n');
+            // Break lines each 100 characters
+            let lines = text.match(/.{1,100}/g);
             let newText = '';
-            for (let i = 0; i < textArray.length; i++) {
-                if (textArray[i].length > 100) {
-                    newText += this.lineBreaker(textArray[i]);
-                } else {
-                    newText += textArray[i] + '\n';
-                }
+            for (let i = 0; i < lines.length; i++) {
+                newText += lines[i] + '\n';
             }
             return newText;
         }
