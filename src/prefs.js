@@ -37,6 +37,7 @@ class GeminiSettings {
         const defaultVoice = this.schema.get_string('azure-speech-voice');
         const defaultLog = this.schema.get_boolean('log-history');
 
+        // GEMINI API KEY
         const label = new Gtk.Label({
             label: _('Gemini API Key'),
             halign: Gtk.Align.START,
@@ -49,6 +50,7 @@ class GeminiSettings {
             uri: 'https://github.com/wwardaww/gnome-gemini-ai?tab=readme-ov-file#using-gemini-api-key',
         });
 
+        // AZURE API KEY
         const labelAzure = new Gtk.Label({
             label: _('Azure Speech API Key'),
             halign: Gtk.Align.START,
@@ -61,6 +63,7 @@ class GeminiSettings {
             uri: 'https://learn.microsoft.com/en-us/azure/cognitive-services/speech-service/get-started-speech-to-text',
         });
 
+        // AZURE REGION
         const labelRegion = new Gtk.Label({
             label: _('Azure Speech Region'),
             halign: Gtk.Align.START,
@@ -72,6 +75,7 @@ class GeminiSettings {
             label: _('e.g. eastus'),
         });
 
+        // AZURE LANGUAGE
         const labelLanguage = new Gtk.Label({
             label: _('Speech Language'),
             halign: Gtk.Align.START,
@@ -83,6 +87,7 @@ class GeminiSettings {
             label: _('e.g. en-US'),
         });
 
+        // AZURE VOICE
         const labelVoice = new Gtk.Label({
             label: _('Speech Language'),
             halign: Gtk.Align.START,
@@ -95,6 +100,7 @@ class GeminiSettings {
             uri: 'https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support?tabs=tts',
         });
 
+        // HISTORY LOG
         const histroyLabel = new Gtk.Label({
             label: _('Remember talk history'),
             halign: Gtk.Align.START,
@@ -170,5 +176,22 @@ class GeminiSettings {
         this.main.attach(statusLabel, 0, 7, 5, 1);
 
         this.ui.add(this.main);
+    }
+
+    create_language_selection() {
+        // Cria a ComboBoxText
+        let languageSelector = new Gtk.ComboBoxText();
+
+        // Adiciona as opções de línguas
+        languageSelector.append_text(_('English'));
+        languageSelector.append_text(_('Portuguese (Brazil)'));
+        languageSelector.append_text(_('Spanish'));
+        languageSelector.append_text(_('French'));
+
+        // Define o valor inicial selecionado (opcional)
+        languageSelector.set_active(0); // Seleciona a primeira língua como padrão
+
+        // Retorna o widget
+        return languageSelector;
     }
 }
