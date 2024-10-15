@@ -174,7 +174,7 @@ const Gemini = GObject.registerClass(
                 this.aiResponse(actor.text);
                 searchEntry.clutter_text.set_text('');
                 // Go to the end of chat
-                this.scrollView.scroll_to_end();
+                this.menu.box.scroll_to_end();
             });
             micButton.connect('clicked', (_self) => {
                 this.startRecording();
@@ -313,7 +313,7 @@ const Gemini = GObject.registerClass(
                             '<b>Gemini: </b> ' + formatedResponse,
                         );
                         // Go to the end of chat
-                        this.scrollView.scroll_to_end();
+                        this.menu.box.scroll_to_end();
 
                         // Extract code and tts from response
                         let answer = this.extractCodeAndTTS(aiResponse);
