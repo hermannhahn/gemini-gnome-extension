@@ -5,8 +5,16 @@ export class Formatter {
         this.lineLength = 150;
     }
 
-    // Pango
-    pango(text) {
+    // Return text with removeInvalidMarkups, breakLines and justifyText
+    chat(text) {
+        let formatedText = this.removeInvalidMarkups(text);
+        formatedText = this.breakLines(formatedText);
+        formatedText = this.justifyText(formatedText);
+        return formatedText;
+    }
+
+    // Replace or remove bad markups
+    removeInvalidMarkups(text) {
         let formatedText = text
             .replace(/<code>/g, '') // Remove tags de abertura <code>
             .replace(/<\/code>/g, '') // Remove tags de fechamento <code>
