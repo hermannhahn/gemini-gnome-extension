@@ -606,7 +606,7 @@ class GeminiSettings {
                 voiceOptions[language].forEach((option) => {
                     azureVoiceSelector.append(option.voice, option.label); // Adiciona as novas opções
                 });
-                // azureVoiceSelector.set_active(0); // Define a primeira opção como ativa por padrão
+                azureVoiceSelector.set_active(defaultVoice); // Define a primeira opção como ativa por padrão
             }
         };
 
