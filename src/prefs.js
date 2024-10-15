@@ -92,7 +92,7 @@ class GeminiSettings {
         });
         const howToVoice = new Gtk.LinkButton({
             label: _('All voices'),
-            uri: 'https://learn.microsoft.com/en-us/azure/cognitive-services/speech-service/rest-api-reference-speech-to-text#supported-voices',
+            uri: 'https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support?tabs=stt',
         });
 
         const histroyLabel = new Gtk.Label({
