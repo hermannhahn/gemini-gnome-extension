@@ -165,10 +165,25 @@ const Gemini = GObject.registerClass(
             // Create scrollbar
             this.scrollView = new St.ScrollView({
                 style_class: 'chat-scroll-section',
+                reactive: true,
+                overlay_scrollbars: true,
             });
 
             // Add scroll to chat section
             this.scrollView.add_child(this.chatSection.actor);
+
+            // Usa Clutter para garantir que a rolagem vai para o final
+            this.chatSection.actor.connect('notify::height', () => {
+                this.scrollView
+                    .get_vscroll_bar()
+                    .get_adjustment()
+                    .set_value(
+                        this.scrollView
+                            .get_vscroll_bar()
+                            .get_adjustment()
+                            .get_upper(),
+                    );
+            });
 
             searchEntry.clutter_text.connect('activate', (actor) => {
                 this.aiResponse(actor.text);
