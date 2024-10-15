@@ -335,7 +335,7 @@ const Gemini = GObject.registerClass(
                     if (responseChat !== undefined) {
                         log('[ AI ]' + aiResponse);
                         aiResponse = convertMD(aiResponse);
-                        aiResponse = format.pango(aiResponse);
+                        // aiResponse = format.pango(aiResponse);
                         aiResponse = format.breakLines(aiResponse);
                         // Set ai response to chat
                         responseChat.label.clutter_text.set_markup(
