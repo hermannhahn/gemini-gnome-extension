@@ -214,7 +214,7 @@ const Gemini = GObject.registerClass(
             const responseChat = new PopupMenu.PopupMenuItem('');
 
             // Add user question to chat
-            let formatedQuestion = format.breakLines(userQuestion);
+            let formatedQuestion = format.chat(userQuestion);
             inputChat.label.clutter_text.set_markup(
                 `<b>${USERNAME}: </b>${formatedQuestion}`,
             );
@@ -333,7 +333,7 @@ const Gemini = GObject.registerClass(
                         log('[ AI ]' + aiResponse);
                         aiResponse = convertMD(aiResponse);
                         // aiResponse = format.pango(aiResponse);
-                        aiResponse = format.breakLines(aiResponse);
+                        aiResponse = format.chat(aiResponse);
                         // Set ai response to chat
                         responseChat.label.clutter_text.set_markup(
                             '<b>Gemini: </b> ' + aiResponse,
