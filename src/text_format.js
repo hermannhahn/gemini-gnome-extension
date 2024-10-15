@@ -8,7 +8,7 @@ export class Formatter {
     // Return text with removeInvalidMarkups, breakLines and justifyText
     chat(text) {
         let formatedText = this.removeInvalidMarkups(text);
-        formatedText = this.breakLines(formatedText);
+        // formatedText = this.breakLines(formatedText);
         formatedText = this.justifyText(formatedText);
         return formatedText;
     }
