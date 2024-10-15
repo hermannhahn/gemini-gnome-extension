@@ -604,7 +604,7 @@ class GeminiSettings {
             azureVoiceSelector.remove_all(); // Limpa as opções atuais
             if (voiceOptions[language]) {
                 voiceOptions[language].forEach((option) => {
-                    azureVoiceSelector.append_text(option.voice); // Adiciona as novas opções
+                    azureVoiceSelector.append_text(option.label); // Adiciona as novas opções
                 });
                 azureVoiceSelector.set_active(0); // Define a primeira opção como ativa por padrão
             }
@@ -613,7 +613,7 @@ class GeminiSettings {
         // Atualiza as opções de voz quando a linguagem muda
         languageSelector.connect('changed', () => {
             const selectedLanguage = languageSelector.get_active_id();
-            updateVoices(selectedLanguage); // Chama a função para atualizar as vozes
+            updateVoices(selectedLanguage.voice); // Chama a função para atualizar as vozes
         });
 
         // Inicializa o `azureVoiceSelector` com base na linguagem armazenada
