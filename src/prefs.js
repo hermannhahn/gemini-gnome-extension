@@ -665,7 +665,14 @@ class GeminiSettings {
             this.schema.set_boolean('log-history', histroyButton.state);
             log('Selected language: ' + selectedLanguage);
             log('Selected voice: ' + selectedVoice);
-            statusLabel.set_markup(_('Your preferences have been saved'));
+            statusLabel.set_markup(
+                _(
+                    'Your preferences have been saved\nLanguage: ' +
+                        selectedLanguage +
+                        '\nSelected voice: ' +
+                        selectedVoice,
+                ),
+            );
         });
 
         // Adicionar elementos à grade
