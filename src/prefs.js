@@ -613,7 +613,7 @@ class GeminiSettings {
         // Atualiza as opções de voz quando a linguagem muda
         languageSelector.connect('changed', () => {
             const selectedLanguage = languageSelector.get_active_id();
-            updateVoices(selectedLanguage.voice); // Chama a função para atualizar as vozes
+            updateVoices(selectedLanguage); // Chama a função para atualizar as vozes
         });
 
         // Inicializa o `azureVoiceSelector` com base na linguagem armazenada
@@ -658,10 +658,12 @@ class GeminiSettings {
 
             // Salva o valor selecionado da língua
             const selectedLanguage = languageSelector.get_active_id();
+            log('Selected Language: ' + selectedLanguage);
             this.schema.set_string('azure-speech-language', selectedLanguage);
 
             // Salva o valor selecionado da voz
             const selectedVoice = azureVoiceSelector.get_active_text();
+            log('Selected Voice: ' + selectedVoice);
             this.schema.set_string('azure-speech-voice', selectedVoice);
 
             this.schema.set_boolean('log-history', histroyButton.state);
