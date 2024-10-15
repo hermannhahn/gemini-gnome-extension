@@ -40,14 +40,14 @@ class GeminiSettings {
         const defaultLog = this.schema.get_boolean('log-history');
 
         // GEMINI API KEY
-        const label = new Gtk.Label({
+        const apiKeyLabel = new Gtk.Label({
             label: _('Gemini API Key'),
             halign: Gtk.Align.START,
         });
         const apiKey = new Gtk.Entry({
             buffer: new Gtk.EntryBuffer(),
         });
-        const howToButton = new Gtk.LinkButton({
+        const howToButtonApiKey = new Gtk.LinkButton({
             label: _('How to get API key?'),
             uri: 'https://github.com/wwardaww/gnome-gemini-ai?tab=readme-ov-file#using-gemini-api-key',
         });
@@ -635,6 +635,26 @@ class GeminiSettings {
             halign: Gtk.Align.CENTER,
         });
 
+        // Set labels property
+        apiKeyLabel.set_property('padding', 10);
+        apiKey.set_property('padding', 10);
+        howToButtonApiKey.set_property('padding', 10);
+        labelAzure.set_property('padding', 10);
+        azureSpeechKey.set_property('padding', 10);
+        howToButtonAzure.set_property('padding', 10);
+        labelRegion.set_property('padding', 10);
+        azureRegion.set_property('padding', 10);
+        howToRegion.set_property('padding', 10);
+        labelLanguage.set_property('padding', 10);
+        languageSelector.set_property('padding', 10);
+        labelVoice.set_property('padding', 10);
+        azureVoiceSelector.set_property('padding', 10);
+        histroyLabel.set_property('padding', 10);
+        histroyButton.set_property('padding', 10);
+        save.set_property('padding', 10);
+        statusLabel.set_property('padding', 10);
+
+        // Set default
         histroyButton.set_active(defaultLog);
         apiKey.set_text(defaultKey);
         azureSpeechKey.set_text(defaultSpeechKey);
@@ -677,9 +697,9 @@ class GeminiSettings {
         });
 
         // Adicionar elementos à grade
-        this.main.attach(label, 0, 0, 1, 1);
+        this.main.attach(apiKeyLabel, 0, 0, 1, 1);
         this.main.attach(apiKey, 2, 0, 2, 1);
-        this.main.attach(howToButton, 4, 0, 1, 1);
+        this.main.attach(howToButtonApiKey, 4, 0, 1, 1);
 
         this.main.attach(labelAzure, 0, 1, 1, 1);
         this.main.attach(azureSpeechKey, 2, 1, 2, 1);
