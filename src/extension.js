@@ -172,8 +172,10 @@ const Gemini = GObject.registerClass(
             // Add scroll to chat section
             this.scrollView.add_child(this.chatSection.actor);
 
-            // Usa Clutter para garantir que a rolagem vai para o final
-            this.chatSection.connect('notify::height', () => {
+            searchEntry.clutter_text.connect('activate', (actor) => {
+                this.aiResponse(actor.text);
+                searchEntry.clutter_text.set_text('');
+                // Usa Clutter para garantir que a rolagem vai para o final
                 this.scrollView
                     .get_vscroll_bar()
                     .get_adjustment()
@@ -183,11 +185,6 @@ const Gemini = GObject.registerClass(
                             .get_adjustment()
                             .get_upper(),
                     );
-            });
-
-            searchEntry.clutter_text.connect('activate', (actor) => {
-                this.aiResponse(actor.text);
-                searchEntry.clutter_text.set_text('');
             });
             micButton.connect('clicked', (_self) => {
                 this.startRecording();
@@ -325,6 +322,16 @@ const Gemini = GObject.registerClass(
                         responseChat.label.clutter_text.set_markup(
                             '<b>Gemini: </b> ' + formatedResponse,
                         );
+                        // Usa Clutter para garantir que a rolagem vai para o final
+                        this.scrollView
+                            .get_vscroll_bar()
+                            .get_adjustment()
+                            .set_value(
+                                this.scrollView
+                                    .get_vscroll_bar()
+                                    .get_adjustment()
+                                    .get_upper(),
+                            );
 
                         // Extract code and tts from response
                         let answer = this.extractCodeAndTTS(aiResponse);
