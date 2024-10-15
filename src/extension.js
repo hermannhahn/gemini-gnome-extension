@@ -301,7 +301,7 @@ const Gemini = GObject.registerClass(
                     ) {
                         log('[ AI ]' + aiResponse);
                         let formatedResponse = convertMD(aiResponse);
-                        // formatedResponse = format.chat(formatedResponse);
+                        formatedResponse = format.chat(formatedResponse);
                         // Set ai response to chat
                         responseChat.label.clutter_text.set_markup(
                             '<b>Gemini: </b> ' + formatedResponse,
@@ -754,16 +754,42 @@ const Gemini = GObject.registerClass(
             const regex = /`{3}([\s\S]*?)`{3}/;
             const match = text.match(regex);
             let tts = text;
-            tts = text.replace(regex, '').trim();
+            // tts = text.replace(regex, '').trim();
             // Replace * char with space
-            tts = tts.split('*').join(' ');
+            // tts = tts.split('*').join(' ');
+            tts = tts
+                .replace(/&/g, '')
+                .replace(/</g, '')
+                .replace(/>/g, '')
+                .replace(/\*/g, '')
+                .replace(/`{3}/g, '')
+                .replace(/<code>/g, '') // Remove tags de abertura <code>
+                .replace(/<\/code>/g, '') // Remove tags de fechamento <code>
+                .replace(/\[red\](.*?)\[\/red\]/g, '')
+                .replace(/\[green\](.*?)\[\/green\]/g, '')
+                .replace(/\[yellow\](.*?)\[\/yellow\]/g, '')
+                .replace(/\[cyan\](.*?)\[\/cyan\]/g, '')
+                .replace(/\[white\](.*?)\[\/white\]/g, '')
+                .replace(/\[black\](.*?)\[\/black\]/g, '')
+                .replace(/\[gray\](.*?)\[\/gray\]/g, '')
+                .replace(/\[brown\](.*?)\[\/brown\]/g, '')
+                .replace(/\[blue\](.*?)\[\/blue\]/g, '');
+
             // If tts is more then 100 characters, change tts text
             if (tts.length > 1000) {
                 tts = this.randomPhraseToShowOnScreen(AZURE_SPEECH_LANGUAGE);
             }
 
             if (match) {
-                const code = match[1]; // Captura o conteúdo entre os acentos graves
+                // const code = match[1]; // Captura o conteúdo entre os acentos graves
+                // If found more match, add to code result
+                let code = match[1];
+                let nextMatch = text.match(regex);
+                while (nextMatch) {
+                    code += nextMatch[1];
+                    text = text.replace(nextMatch[0], '');
+                    nextMatch = text.match(regex);
+                }
                 // Remove o bloco de código do texto original para formar o TTS
                 return {code, tts};
             } else {
