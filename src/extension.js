@@ -214,7 +214,7 @@ const Gemini = GObject.registerClass(
             const responseChat = new PopupMenu.PopupMenuItem('');
 
             // Add user question to chat
-            let formatedQuestion = format.breakLines(userQuestion);
+            let formatedQuestion = format.pango(userQuestion);
             inputChat.label.clutter_text.set_markup(
                 `<b>${USERNAME}: </b>${formatedQuestion}`,
             );
