@@ -173,6 +173,8 @@ const Gemini = GObject.registerClass(
             searchEntry.clutter_text.connect('activate', (actor) => {
                 this.aiResponse(actor.text);
                 searchEntry.clutter_text.set_text('');
+                // Go to the end of chat
+                this.scrollView.scroll_to_end();
             });
             micButton.connect('clicked', (_self) => {
                 this.startRecording();
@@ -187,7 +189,7 @@ const Gemini = GObject.registerClass(
             });
             settingsButton.connect('clicked', (_self) => {
                 this.openSettings();
-                // Close Tray
+                // Close App
                 this.menu.close();
             });
 
@@ -310,6 +312,8 @@ const Gemini = GObject.registerClass(
                         responseChat.label.clutter_text.set_markup(
                             '<b>Gemini: </b> ' + formatedResponse,
                         );
+                        // Go to the end of chat
+                        this.scrollView.scroll_to_end();
 
                         // Extract code and tts from response
                         let answer = this.extractCodeAndTTS(aiResponse);
