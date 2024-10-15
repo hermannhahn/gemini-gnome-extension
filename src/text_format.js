@@ -119,7 +119,7 @@ export class Formatter {
 
         for (let i = 0; i < words.length - 1; i++) {
             justifiedLine += words[i];
-            justifiedLine += '&lt;space&gt;'.repeat(
+            justifiedLine += '&nbsp;'.repeat(
                 spacesBetweenWords + (i < extraSpaces ? 1 : 0),
             ); // Distribui os espaços extras nas primeiras palavras
         }
