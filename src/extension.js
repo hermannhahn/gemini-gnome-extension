@@ -171,10 +171,6 @@ const Gemini = GObject.registerClass(
             searchEntry.clutter_text.connect('activate', (actor) => {
                 this.aiResponse(actor.text);
                 searchEntry.clutter_text.set_text('');
-                // Go to the end of scrollbar
-                this.scrollView
-                    .get_vadjustment()
-                    .set_value(this.scrollView.get_vadjustment().get_upper());
             });
             micButton.connect('clicked', (_self) => {
                 this.startRecording();
