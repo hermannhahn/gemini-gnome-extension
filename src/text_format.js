@@ -75,7 +75,43 @@ export class Formatter {
 
     // Função para calcular os pontos de uma palavra ou caractere
     calculatePoints(char) {
-        if (char === 'l' || char === 'i' || char === 'I') {
+        if (
+            char === 'l' ||
+            char === 'i' ||
+            char === 'I' ||
+            char === 'j' ||
+            char === '!' ||
+            char === '.' ||
+            char === ',' ||
+            char === ':' ||
+            char === ';' ||
+            char === '?' ||
+            char === '-' ||
+            char === '(' ||
+            char === ')' ||
+            char === '[' ||
+            char === ']' ||
+            char === '{' ||
+            char === '}' ||
+            char === '/' ||
+            char === '\\' ||
+            char === '*' ||
+            char === '+' ||
+            char === '=' ||
+            char === '<' ||
+            char === '>' ||
+            char === '|' ||
+            char === '~' ||
+            char === '`' ||
+            char === '@' ||
+            char === '#' ||
+            char === '$' ||
+            char === '%' ||
+            char === '^' ||
+            char === '&' ||
+            char === '_' ||
+            char === ' '
+        ) {
             return 0.5; // Caractere "l", "i" ou "I" vale 0,5 ponto
         }
         return 1; // Outros caracteres valem 1 ponto
