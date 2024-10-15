@@ -75,17 +75,21 @@ class GeminiSettings {
             label: _('e.g. eastus'),
         });
 
-        // AZURE LANGUAGE
+        // AZURE LANGUAGE (ComboBoxText para seleção de língua)
         const labelLanguage = new Gtk.Label({
-            label: _('Speech Language'),
+            label: _('Select Language'),
             halign: Gtk.Align.START,
         });
-        const azureLanguage = new Gtk.Entry({
-            buffer: new Gtk.EntryBuffer(),
-        });
-        const howToLanguage = new Gtk.Label({
-            label: _('e.g. en-US'),
-        });
+
+        // Caixa de seleção (ComboBoxText) com opções de línguas
+        const languageSelector = new Gtk.ComboBoxText();
+        languageSelector.append('en-US', _('English'));
+        languageSelector.append('pt-BR', _('Portuguese (Brazil)'));
+        languageSelector.append('es', _('Spanish'));
+        languageSelector.append('fr', _('French'));
+
+        // Define a língua padrão selecionada, com base no valor armazenado
+        languageSelector.set_active_id(defaultLanguage); // Seleciona o valor armazenado
 
         // AZURE VOICE
         const labelVoice = new Gtk.Label({
@@ -120,7 +124,6 @@ class GeminiSettings {
         apiKey.set_text(defaultKey);
         azureSpeechKey.set_text(defaultSpeechKey);
         azureRegion.set_text(defaultRegion);
-        azureLanguage.set_text(defaultLanguage);
         azureVoice.set_text(defaultVoice);
 
         save.connect('clicked', () => {
@@ -136,10 +139,11 @@ class GeminiSettings {
                 'azure-speech-region',
                 azureRegion.get_buffer().get_text(),
             );
-            this.schema.set_string(
-                'azure-speech-language',
-                azureLanguage.get_buffer().get_text(),
-            );
+
+            // Salva o valor selecionado da língua
+            const selectedLanguage = languageSelector.get_active_id();
+            this.schema.set_string('azure-speech-language', selectedLanguage);
+
             this.schema.set_string(
                 'azure-speech-voice',
                 azureVoice.get_buffer().get_text(),
@@ -148,7 +152,7 @@ class GeminiSettings {
             statusLabel.set_markup(_('Your preferences have been saved'));
         });
 
-        // col, row, 1, 1
+        // Adicionar elementos à grade
         this.main.attach(label, 0, 0, 1, 1);
         this.main.attach(apiKey, 2, 0, 2, 1);
         this.main.attach(howToButton, 4, 0, 1, 1);
@@ -162,8 +166,7 @@ class GeminiSettings {
         this.main.attach(howToRegion, 4, 2, 1, 1);
 
         this.main.attach(labelLanguage, 0, 3, 1, 1);
-        this.main.attach(azureLanguage, 2, 3, 2, 1);
-        this.main.attach(howToLanguage, 4, 3, 1, 1);
+        this.main.attach(languageSelector, 2, 3, 2, 1);
 
         this.main.attach(labelVoice, 0, 4, 1, 1);
         this.main.attach(azureVoice, 2, 4, 2, 1);
@@ -176,22 +179,5 @@ class GeminiSettings {
         this.main.attach(statusLabel, 0, 7, 5, 1);
 
         this.ui.add(this.main);
-    }
-
-    create_language_selection() {
-        // Cria a ComboBoxText
-        let languageSelector = new Gtk.ComboBoxText();
-
-        // Adiciona as opções de línguas
-        languageSelector.append_text(_('English'));
-        languageSelector.append_text(_('Portuguese (Brazil)'));
-        languageSelector.append_text(_('Spanish'));
-        languageSelector.append_text(_('French'));
-
-        // Define o valor inicial selecionado (opcional)
-        languageSelector.set_active(0); // Seleciona a primeira língua como padrão
-
-        // Retorna o widget
-        return languageSelector;
     }
 }
