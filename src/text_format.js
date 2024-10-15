@@ -3,13 +3,17 @@
 export class Formatter {
     pango(text) {
         let formatedText = text
-            .replace(/<\/?p>/g, '\n') // <p> -> quebra de linha
-            .replace(/<li>/g, '• ') // <li> -> bullet point
-            .replace(/<\/li>/g, '\n') // Fecha <li> -> nova linha
-            .replace(/<br\s*\/?>/g, '\n') // <br> -> nova linha
-            .replace(/<\/?a[^>]*>/g, '') // Remove as tags <a>
-            .replace(/<\/a>/g, '') // Remove tags de fechamento <a>
-            .replace(/<a href="([^"]+)">/g, '<u>$1</u>'); // Converte links para texto sublinhado;
+            .replace(/<code>/g, '') // Remove tags de abertura <code>
+            .replace(/<\/code>/g, '') // Remove tags de fechamento <code>
+            .replace(/\[red\](.*?)\[\/red\]/g, '\x1b[31m$1\x1b[0m')
+            .replace(/\[green\](.*?)\[\/green\]/g, '\x1b[32m$1\x1b[0m')
+            .replace(/\[yellow\](.*?)\[\/yellow\]/g, '\x1b[33m$1\x1b[0m')
+            .replace(/\[cyan\](.*?)\[\/cyan\]/g, '\x1b[36m$1\x1b[0m')
+            .replace(/\[white\](.*?)\[\/white\]/g, '\x1b[37m$1\x1b[0m')
+            .replace(/\[black\](.*?)\[\/black\]/g, '\x1b[30m$1\x1b[0m')
+            .replace(/\[gray\](.*?)\[\/gray\]/g, '\x1b[90m$1\x1b[0m')
+            .replace(/\[brown\](.*?)\[\/brown\]/g, '\x1b[33m$1\x1b[0m')
+            .replace(/\[blue\](.*?)\[\/blue\]/g, '\x1b[34m$1\x1b[0m');
 
         return formatedText;
     }
@@ -25,7 +29,7 @@ export class Formatter {
                 let currentLine = '';
                 for (let j = 0; j < words.length; j++) {
                     let word = words[j];
-                    if (currentLine.length + word.length > 90) {
+                    if (currentLine.length + word.length > 120) {
                         result += currentLine + '\n';
                         currentLine = word + ' ';
                     } else {
