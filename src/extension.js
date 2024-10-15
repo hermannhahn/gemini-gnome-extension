@@ -301,8 +301,7 @@ const Gemini = GObject.registerClass(
                     ) {
                         log('[ AI ]' + aiResponse);
                         let formatedResponse = convertMD(aiResponse);
-                        // aiResponse = format.pango(aiResponse);
-                        formatedResponse = format.chat(formatedResponse);
+                        // formatedResponse = format.chat(formatedResponse);
                         // Set ai response to chat
                         responseChat.label.clutter_text.set_markup(
                             '<b>Gemini: </b> ' + formatedResponse,
