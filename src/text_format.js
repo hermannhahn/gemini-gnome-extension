@@ -29,12 +29,12 @@ export class Formatter {
         let result = '';
         for (let i = 0; i < lines.length; i++) {
             let line = lines[i];
-            if (line.length > 150) {
+            if (line.length > this.lineLength) {
                 let words = line.split(' ');
                 let currentLine = '';
                 for (let j = 0; j < words.length; j++) {
                     let word = words[j];
-                    if (currentLine.length + word.length > 150) {
+                    if (currentLine.length + word.length > this.lineLength) {
                         result += currentLine + '\n';
                         currentLine = word + ' ';
                     } else {
