@@ -33,6 +33,7 @@ import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import {convertMD} from './md2pango.js';
+import {Formatter} from './text_format.js';
 
 // Global variables
 let GEMINIAPIKEY = '';
@@ -54,6 +55,7 @@ let extensionDir = GLib.build_filenamev([
     'gnome-extension@gemini-assist.vercel.app',
 ]);
 let historyFilePath = GLib.build_filenamev([extensionDir, 'history.json']);
+let format = new Formatter();
 
 // Log function
 
@@ -220,28 +222,16 @@ const Gemini = GObject.registerClass(
                 `<b>${USERNAME}: </b>${userQuestion}`,
             );
 
+            // Add ai response to chat
+            responseChat.label.clutter_text.set_markup(aiResponse);
+
             // Chat settings
             inputChat.label.x_expand = true;
-            inputChat.label.style_class += ' m-w-100';
-            inputChat.style_class += ' m-w-100';
             responseChat.label.x_expand = true;
-            responseChat.label.style_class += ' m-w-100';
+            inputChat.style_class += ' m-w-100';
             responseChat.style_class += ' m-w-100';
             this.chatSection.style_class += ' m-w-100';
             this.scrollView.style_class += ' m-w-100';
-            inputChat.label.clutter_text.style_class += ' m-w-100';
-            responseChat.label.clutter_text.style_class += ' m-w-100';
-
-            // Add temporary message to chat while whait for ai response
-            responseChat.label.clutter_text.set_markup(aiResponse);
-
-            // Accept Pango Markup Language
-            inputChat.label.use_markup = true;
-            responseChat.label.use_markup = true;
-
-            // Pango
-            inputChat.label.clutter_text.set_use_markup(true);
-            responseChat.label.clutter_text.set_use_markup(true);
 
             // Set mouse click to copy response to clipboard
             responseChat.connect('activate', (_self) => {
@@ -344,8 +334,9 @@ const Gemini = GObject.registerClass(
 
                     if (responseChat !== undefined) {
                         log('[ AI ]' + aiResponse);
-                        // Replace html tags to pango markup
                         aiResponse = convertMD(aiResponse);
+                        aiResponse = format.pango(aiResponse);
+                        aiResponse = format.breakLines(aiResponse);
                         // Set ai response to chat
                         responseChat.label.clutter_text.set_markup(
                             '<b>Gemini: </b> ' + aiResponse,
