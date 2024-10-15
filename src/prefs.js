@@ -100,498 +100,498 @@ class GeminiSettings {
         const voiceOptions = {
             'en-US': [
                 {
-                    label: 'Ava Multilingual Neural (4x)',
                     voice: 'en-US-AvaMultilingualNeural',
+                    label: 'Ava Multilingual Neural (4x)',
                 },
                 {
-                    label: 'Andrew Multilingual Neural (4x)',
                     voice: 'en-US-AndrewMultilingualNeural',
+                    label: 'Andrew Multilingual Neural (4x)',
                 },
                 {
-                    label: 'Emma Multilingual Neural (4x)',
                     voice: 'en-US-EmmaMultilingualNeural',
+                    label: 'Emma Multilingual Neural (4x)',
                 },
                 {
-                    label: 'Brian Multilingual Neural (4x)',
                     voice: 'en-US-BrianMultilingualNeural',
+                    label: 'Brian Multilingual Neural (4x)',
                 },
                 {
-                    label: 'Ava Neural',
                     voice: 'en-US-AvaNeural',
+                    label: 'Ava Neural',
                 },
                 {
-                    label: 'Andrew Neural',
                     voice: 'en-US-AndrewNeural',
+                    label: 'Andrew Neural',
                 },
                 {
-                    label: 'Emma Neural',
                     voice: 'en-US-EmmaNeural',
+                    label: 'Emma Neural',
                 },
                 {
-                    label: 'Brian Neural',
                     voice: 'en-US-BrianNeural',
+                    label: 'Brian Neural',
                 },
                 {
-                    label: 'Jenny Neural',
                     voice: 'en-US-JennyNeural',
+                    label: 'Jenny Neural',
                 },
                 {
-                    label: 'Guy Neural',
                     voice: 'en-US-GuyNeural',
+                    label: 'Guy Neural',
                 },
                 {
-                    label: 'Aria Neural',
                     voice: 'en-US-AriaNeural',
+                    label: 'Aria Neural',
                 },
                 {
-                    label: 'Davis Neural',
                     voice: 'en-US-DavisNeural',
+                    label: 'Davis Neural',
                 },
                 {
-                    label: 'Jane Neural',
                     voice: 'en-US-JaneNeural',
+                    label: 'Jane Neural',
                 },
                 {
-                    label: 'Jason Neural',
                     voice: 'en-US-JasonNeural',
+                    label: 'Jason Neural',
                 },
                 {
-                    label: 'Sara Neural',
                     voice: 'en-US-SaraNeural',
+                    label: 'Sara Neural',
                 },
                 {
-                    label: 'Tony Neural',
                     voice: 'en-US-TonyNeural',
+                    label: 'Tony Neural',
                 },
                 {
-                    label: 'Nancy Neural',
                     voice: 'en-US-NancyNeural',
+                    label: 'Nancy Neural',
                 },
                 {
-                    label: 'Amber Neural',
                     voice: 'en-US-AmberNeural',
+                    label: 'Amber Neural',
                 },
                 {
-                    label: 'Ana Neural',
                     voice: 'en-US-AnaNeural',
+                    label: 'Ana Neural',
                 },
                 {
-                    label: 'Ashley Neural',
                     voice: 'en-US-AshleyNeural',
+                    label: 'Ashley Neural',
                 },
                 {
-                    label: 'Brandon Neural',
                     voice: 'en-US-BrandonNeural',
+                    label: 'Brandon Neural',
                 },
                 {
-                    label: 'Christopher Neural',
                     voice: 'en-US-ChristopherNeural',
+                    label: 'Christopher Neural',
                 },
                 {
-                    label: 'Cora Neural',
                     voice: 'en-US-CoraNeural',
+                    label: 'Cora Neural',
                 },
                 {
-                    label: 'Elizabeth Neural',
                     voice: 'en-US-ElizabethNeural',
+                    label: 'Elizabeth Neural',
                 },
                 {
-                    label: 'Eric Neural',
                     voice: 'en-US-EricNeural',
+                    label: 'Eric Neural',
                 },
                 {
-                    label: 'Jacob Neural',
                     voice: 'en-US-JacobNeural',
+                    label: 'Jacob Neural',
                 },
                 {
-                    label: 'Jenny Multilingual Neural (4x)',
                     voice: 'en-US-JennyMultilingualNeural',
+                    label: 'Jenny Multilingual Neural (4x)',
                 },
                 {
-                    label: 'Michelle Neural',
                     voice: 'en-US-MichelleNeural',
+                    label: 'Michelle Neural',
                 },
                 {
-                    label: 'Monica Neural',
                     voice: 'en-US-MonicaNeural',
+                    label: 'Monica Neural',
                 },
                 {
-                    label: 'Roger Neural',
                     voice: 'en-US-RogerNeural',
+                    label: 'Roger Neural',
                 },
                 {
-                    label: 'Ryan Multilingual Neural (4x)',
                     voice: 'en-US-RyanMultilingualNeural',
+                    label: 'Ryan Multilingual Neural (4x)',
                 },
                 {
-                    label: 'Steffan Neural',
                     voice: 'en-US-SteffanNeural',
+                    label: 'Steffan Neural',
                 },
                 {
-                    label: 'Adam Multilingual Neural (1.4x)',
                     voice: 'en-US-AdamMultilingualNeural',
+                    label: 'Adam Multilingual Neural (1.4x)',
                 },
                 {
-                    label: 'AIGenerate 1 Neural (1x)',
                     voice: 'en-US-AIGenerate1Neural',
+                    label: 'AIGenerate 1 Neural (1x)',
                 },
                 {
-                    label: 'AIGenerate 2 Neural (1x)',
                     voice: 'en-US-AIGenerate2Neural',
+                    label: 'AIGenerate 2 Neural (1x)',
                 },
                 {
-                    label: 'Alloy Turbo Multilingual Neural (1.4x)',
                     voice: 'en-US-AlloyTurboMultilingualNeural',
+                    label: 'Alloy Turbo Multilingual Neural (1.4x)',
                 },
                 {
-                    label: 'Amanda Multilingual Neural (1.4x)',
                     voice: 'en-US-AmandaMultilingualNeural',
+                    label: 'Amanda Multilingual Neural (1.4x)',
                 },
                 {
-                    label: 'Blue Neural (1)',
                     voice: 'en-US-BlueNeural',
+                    label: 'Blue Neural (1)',
                 },
                 {
-                    label: 'Brandon Multilingual Neural (1.4x)',
                     voice: 'en-US-BrandonMultilingualNeural',
+                    label: 'Brandon Multilingual Neural (1.4x)',
                 },
                 {
-                    label: 'Christopher Multilingual Neural (1.4x)',
                     voice: 'en-US-ChristopherMultilingualNeural',
+                    label: 'Christopher Multilingual Neural (1.4x)',
                 },
                 {
-                    label: 'Cora Multilingual Neural (1.4x)',
                     voice: 'en-US-CoraMultilingualNeural',
+                    label: 'Cora Multilingual Neural (1.4x)',
                 },
                 {
-                    label: 'Davis Multilingual Neural (1.4x)',
                     voice: 'en-US-DavisMultilingualNeural',
+                    label: 'Davis Multilingual Neural (1.4x)',
                 },
                 {
-                    label: 'Derek Multilingual Neural (1.4x)',
                     voice: 'en-US-DerekMultilingualNeural',
+                    label: 'Derek Multilingual Neural (1.4x)',
                 },
                 {
-                    label: 'Dustin Multilingual Neural (1.4x)',
                     voice: 'en-US-DustinMultilingualNeural',
+                    label: 'Dustin Multilingual Neural (1.4x)',
                 },
                 {
-                    label: 'Evelyn Multilingual Neural (1.4x)',
                     voice: 'en-US-EvelynMultilingualNeural',
+                    label: 'Evelyn Multilingual Neural (1.4x)',
                 },
                 {
-                    label: 'Kai Neural (1x)',
                     voice: 'en-US-KaiNeural',
+                    label: 'Kai Neural (1x)',
                 },
                 {
-                    label: 'Lewis Multilingual Neural (1.4x)',
                     voice: 'en-US-LewisMultilingualNeural',
+                    label: 'Lewis Multilingual Neural (1.4x)',
                 },
                 {
-                    label: 'Lola Multilingual Neural (1.4x)',
                     voice: 'en-US-LolaMultilingualNeural',
+                    label: 'Lola Multilingual Neural (1.4x)',
                 },
                 {
-                    label: 'Luna Neural (1x)',
                     voice: 'en-US-LunaNeural',
+                    label: 'Luna Neural (1x)',
                 },
                 {
-                    label: 'Nancy Multilingual Neural (1.4x)',
                     voice: 'en-US-NancyMultilingualNeural',
+                    label: 'Nancy Multilingual Neural (1.4x)',
                 },
                 {
-                    label: 'Nova Turbo Multilingual Neural (1.4x)',
                     voice: 'en-US-NovaTurboMultilingualNeural',
+                    label: 'Nova Turbo Multilingual Neural (1.4x)',
                 },
                 {
-                    label: 'Phoebe Multilingual Neural (1.4x)',
                     voice: 'en-US-PhoebeMultilingualNeural',
+                    label: 'Phoebe Multilingual Neural (1.4x)',
                 },
                 {
-                    label: 'Samuel Multilingual Neural (1.4x)',
                     voice: 'en-US-SamuelMultilingualNeural',
+                    label: 'Samuel Multilingual Neural (1.4x)',
                 },
                 {
-                    label: 'Serena Multilingual Neural (1.4x)',
                     voice: 'en-US-SerenaMultilingualNeural',
+                    label: 'Serena Multilingual Neural (1.4x)',
                 },
                 {
-                    label: 'Steffan Multilingual Neural (1.4x)',
                     voice: 'en-US-SteffanMultilingualNeural',
+                    label: 'Steffan Multilingual Neural (1.4x)',
                 },
                 {
-                    label: 'Alloy Multilingual Neural HD (5x)',
                     voice: 'en-US-AlloyMultilingualNeural',
-                },
-                {
-                    label: 'Echo Multilingual Neural HD (5x)',
-                    voice: 'en-US-EchoMultilingualNeural',
-                },
-                {
-                    label: 'Fable Multilingual Neural HD (5x)',
-                    voice: 'en-US-FableMultilingualNeural',
-                },
-                {
-                    label: 'Onyx Multilingual Neural HD (5x)',
-                    voice: 'en-US-OnyxMultilingualNeural',
-                },
-                {
-                    label: 'Nova Multilingual Neural HD (5x)',
-                    voice: 'en-US-NovaMultilingualNeural',
-                },
-                {
-                    label: 'Shimmer Multilingual Neural HD (5x)',
-                    voice: 'en-US-ShimmerMultilingualNeural',
-                },
-                {
                     label: 'Alloy Multilingual Neural HD (5x)',
-                    voice: 'en-US-AlloyMultilingualNeuralHD',
                 },
                 {
+                    voice: 'en-US-EchoMultilingualNeural',
                     label: 'Echo Multilingual Neural HD (5x)',
-                    voice: 'en-US-EchoMultilingualNeuralHD',
                 },
                 {
+                    voice: 'en-US-FableMultilingualNeural',
                     label: 'Fable Multilingual Neural HD (5x)',
-                    voice: 'en-US-FableMultilingualNeuralHD',
                 },
                 {
+                    voice: 'en-US-OnyxMultilingualNeural',
                     label: 'Onyx Multilingual Neural HD (5x)',
-                    voice: 'en-US-OnyxMultilingualNeuralHD',
                 },
                 {
+                    voice: 'en-US-NovaMultilingualNeural',
                     label: 'Nova Multilingual Neural HD (5x)',
-                    voice: 'en-US-NovaMultilingualNeuralHD',
                 },
                 {
+                    voice: 'en-US-ShimmerMultilingualNeural',
                     label: 'Shimmer Multilingual Neural HD (5x)',
+                },
+                {
+                    voice: 'en-US-AlloyMultilingualNeuralHD',
+                    label: 'Alloy Multilingual Neural HD (5x)',
+                },
+                {
+                    voice: 'en-US-EchoMultilingualNeuralHD',
+                    label: 'Echo Multilingual Neural HD (5x)',
+                },
+                {
+                    voice: 'en-US-FableMultilingualNeuralHD',
+                    label: 'Fable Multilingual Neural HD (5x)',
+                },
+                {
+                    voice: 'en-US-OnyxMultilingualNeuralHD',
+                    label: 'Onyx Multilingual Neural HD (5x)',
+                },
+                {
+                    voice: 'en-US-NovaMultilingualNeuralHD',
+                    label: 'Nova Multilingual Neural HD (5x)',
+                },
+                {
                     voice: 'en-US-ShimmerMultilingualNeuralHD',
+                    label: 'Shimmer Multilingual Neural HD (5x)',
                 },
             ],
             'pt-BR': [
                 {
-                    label: 'Francisca Neural',
                     voice: 'pt-BR-FranciscaNeural',
+                    label: 'Francisca Neural',
                 },
                 {
-                    label: 'Antônio Neural',
                     voice: 'pt-BR-AntonioNeural',
+                    label: 'Antônio Neural',
                 },
                 {
-                    label: 'Brenda Neural',
                     voice: 'pt-BR-BrendaNeural',
+                    label: 'Brenda Neural',
                 },
                 {
-                    label: 'Donato Neural',
                     voice: 'pt-BR-DonatoNeural',
+                    label: 'Donato Neural',
                 },
                 {
-                    label: 'Elza Neural',
                     voice: 'pt-BR-ElzaNeural',
+                    label: 'Elza Neural',
                 },
                 {
-                    label: 'Fábio Neural',
                     voice: 'pt-BR-FabioNeural',
+                    label: 'Fábio Neural',
                 },
                 {
-                    label: 'Giovanna Neural',
                     voice: 'pt-BR-GiovannaNeural',
+                    label: 'Giovanna Neural',
                 },
                 {
-                    label: 'Humberto Neural',
                     voice: 'pt-BR-HumbertoNeural',
+                    label: 'Humberto Neural',
                 },
                 {
-                    label: 'Júlio Neural',
                     voice: 'pt-BR-JulioNeural',
+                    label: 'Júlio Neural',
                 },
                 {
-                    label: 'Leila Neural',
                     voice: 'pt-BR-LeilaNeural',
+                    label: 'Leila Neural',
                 },
                 {
-                    label: 'Letícia Neural',
                     voice: 'pt-BR-LeticiaNeural',
+                    label: 'Letícia Neural',
                 },
                 {
-                    label: 'Manuela Neural',
                     voice: 'pt-BR-ManuelaNeural',
+                    label: 'Manuela Neural',
                 },
                 {
-                    label: 'Nicolau Neural',
                     voice: 'pt-BR-NicolauNeural',
+                    label: 'Nicolau Neural',
                 },
                 {
-                    label: 'Thalita Neural',
                     voice: 'pt-BR-ThalitaNeural',
+                    label: 'Thalita Neural',
                 },
                 {
-                    label: 'Valério Neural',
                     voice: 'pt-BR-ValerioNeural',
+                    label: 'Valério Neural',
                 },
                 {
-                    label: 'Yara Neural',
                     voice: 'pt-BR-YaraNeural',
+                    label: 'Yara Neural',
                 },
                 {
-                    label: 'Macério Multilingual Neural (1.4x)',
                     voice: 'pt-BR-MacerioMultilingualNeural',
+                    label: 'Macério Multilingual Neural (1.4x)',
                 },
                 {
-                    label: 'Thalita Multilingual Neural (1.4x)',
                     voice: 'pt-BR-ThalitaMultilingualNeural',
+                    label: 'Thalita Multilingual Neural (1.4x)',
                 },
             ],
             'es-ES': [
                 {
-                    label: 'Elvira Neural',
                     voice: 'es-ES-ElviraNeural',
+                    label: 'Elvira Neural',
                 },
                 {
-                    label: 'Álvaro Neural',
                     voice: 'es-ES-AlvaroNeural',
+                    label: 'Álvaro Neural',
                 },
                 {
-                    label: 'Abril Neural',
                     voice: 'es-ES-AbrilNeural',
+                    label: 'Abril Neural',
                 },
                 {
-                    label: 'Arnau Neural',
                     voice: 'es-ES-ArnauNeural',
+                    label: 'Arnau Neural',
                 },
                 {
-                    label: 'Darío Neural',
                     voice: 'es-ES-DarioNeural',
+                    label: 'Darío Neural',
                 },
                 {
-                    label: 'Elías Neural',
                     voice: 'es-ES-EliasNeural',
+                    label: 'Elías Neural',
                 },
                 {
-                    label: 'Estrella Neural',
                     voice: 'es-ES-EstrellaNeural',
+                    label: 'Estrella Neural',
                 },
                 {
-                    label: 'Irene Neural',
                     voice: 'es-ES-IreneNeural',
+                    label: 'Irene Neural',
                 },
                 {
-                    label: 'Laia Neural',
                     voice: 'es-ES-LaiaNeural',
+                    label: 'Laia Neural',
                 },
                 {
-                    label: 'Lía Neural',
                     voice: 'es-ES-LiaNeural',
+                    label: 'Lía Neural',
                 },
                 {
-                    label: 'Nil Neural',
                     voice: 'es-ES-NilNeural',
+                    label: 'Nil Neural',
                 },
                 {
-                    label: 'Saúl Neural',
                     voice: 'es-ES-SaulNeural',
+                    label: 'Saúl Neural',
                 },
                 {
-                    label: 'Teo Neural',
                     voice: 'es-ES-TeoNeural',
+                    label: 'Teo Neural',
                 },
                 {
-                    label: 'Triana Neural',
                     voice: 'es-ES-TrianaNeural',
+                    label: 'Triana Neural',
                 },
                 {
-                    label: 'Vera Neural',
                     voice: 'es-ES-VeraNeural',
+                    label: 'Vera Neural',
                 },
                 {
-                    label: 'Ximena Neural',
                     voice: 'es-ES-XimenaNeural',
+                    label: 'Ximena Neural',
                 },
                 {
-                    label: 'Arabella Multilingüe Neural (1.4x)',
                     voice: 'es-ES-ArabellaMultilingualNeural',
+                    label: 'Arabella Multilingüe Neural (1.4x)',
                 },
                 {
-                    label: 'Isidora Multilingüe Neural (1.4x)',
                     voice: 'es-ES-IsidoraMultilingualNeural',
+                    label: 'Isidora Multilingüe Neural (1.4x)',
                 },
                 {
-                    label: 'Tristan Multilingüe Neural (1.4x)',
                     voice: 'es-ES-TristanMultilingualNeural',
+                    label: 'Tristan Multilingüe Neural (1.4x)',
                 },
                 {
-                    label: 'Ximena Multilingüe Neural (1.4x)',
                     voice: 'es-ES-XimenaMultilingualNeural',
+                    label: 'Ximena Multilingüe Neural (1.4x)',
                 },
             ],
             'fr-FR': [
                 {
-                    label: 'Denise Neural',
                     voice: 'fr-FR-DeniseNeural',
+                    label: 'Denise Neural',
                 },
                 {
-                    label: 'Henri Neural',
                     voice: 'fr-FR-HenriNeural',
+                    label: 'Henri Neural',
                 },
                 {
-                    label: 'Alain Neural',
                     voice: 'fr-FR-AlainNeural',
+                    label: 'Alain Neural',
                 },
                 {
-                    label: 'Brigitte Neural',
                     voice: 'fr-FR-BrigitteNeural',
+                    label: 'Brigitte Neural',
                 },
                 {
-                    label: 'Céleste Neural',
                     voice: 'fr-FR-CelesteNeural',
+                    label: 'Céleste Neural',
                 },
                 {
-                    label: 'Claude Neural',
                     voice: 'fr-FR-ClaudeNeural',
+                    label: 'Claude Neural',
                 },
                 {
-                    label: 'Coralie Neural',
                     voice: 'fr-FR-CoralieNeural',
+                    label: 'Coralie Neural',
                 },
                 {
-                    label: 'Éloïse Neural',
                     voice: 'fr-FR-EloiseNeural',
+                    label: 'Éloïse Neural',
                 },
                 {
-                    label: 'Jacqueline Neural',
                     voice: 'fr-FR-JacquelineNeural',
+                    label: 'Jacqueline Neural',
                 },
                 {
-                    label: 'Jérôme Neural',
                     voice: 'fr-FR-JeromeNeural',
+                    label: 'Jérôme Neural',
                 },
                 {
-                    label: 'Joséphine Neural',
                     voice: 'fr-FR-JosephineNeural',
+                    label: 'Joséphine Neural',
                 },
                 {
-                    label: 'Maurice Neural',
                     voice: 'fr-FR-MauriceNeural',
+                    label: 'Maurice Neural',
                 },
                 {
-                    label: 'Rémy Multilingue Neural (4x)',
                     voice: 'fr-FR-RemyMultilingualNeural',
+                    label: 'Rémy Multilingue Neural (4x)',
                 },
                 {
-                    label: 'Vivienne Multilingue Neural (4x)',
                     voice: 'fr-FR-VivienneMultilingualNeural',
+                    label: 'Vivienne Multilingue Neural (4x)',
                 },
                 {
-                    label: 'Yves Neural',
                     voice: 'fr-FR-YvesNeural',
+                    label: 'Yves Neural',
                 },
                 {
-                    label: 'Yvette Neural',
                     voice: 'fr-FR-YvetteNeural',
+                    label: 'Yvette Neural',
                 },
                 {
-                    label: 'Lucien Multilingue Neural (1.4x)',
                     voice: 'fr-FR-LucienMultilingualNeural',
+                    label: 'Lucien Multilingue Neural (1.4x)',
                 },
             ],
         };
