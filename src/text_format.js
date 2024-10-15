@@ -21,6 +21,7 @@ export class Formatter {
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&apos;');
+        formatedText = this.breakLines(formatedText);
         return formatedText;
     }
 
