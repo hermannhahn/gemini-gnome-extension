@@ -85,32 +85,7 @@ export class Formatter {
             char === ',' ||
             char === ':' ||
             char === ';' ||
-            char === '?' ||
-            char === '-' ||
-            char === '(' ||
-            char === ')' ||
-            char === '[' ||
-            char === ']' ||
-            char === '{' ||
-            char === '}' ||
-            char === '/' ||
-            char === '\\' ||
-            char === '*' ||
-            char === '+' ||
-            char === '=' ||
-            char === '<' ||
-            char === '>' ||
-            char === '|' ||
-            char === '~' ||
-            char === '`' ||
-            char === '@' ||
-            char === '#' ||
-            char === '$' ||
-            char === '%' ||
-            char === '^' ||
-            char === '&' ||
-            char === '_' ||
-            char === ' '
+            char === '`'
         ) {
             return 0.5; // Caractere "l", "i" ou "I" vale 0,5 ponto
         }
