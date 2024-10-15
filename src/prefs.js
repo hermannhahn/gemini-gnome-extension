@@ -606,7 +606,7 @@ class GeminiSettings {
                 voiceOptions[language].forEach((option) => {
                     azureVoiceSelector.append(option.voice, option.label); // Adiciona as novas opções
                 });
-                azureVoiceSelector.set_active(0); // Define a primeira opção como ativa por padrão
+                // azureVoiceSelector.set_active(0); // Define a primeira opção como ativa por padrão
             }
         };
 
@@ -636,23 +636,23 @@ class GeminiSettings {
         });
 
         // Set labels property
-        apiKeyLabel.set_property('padding', 10);
-        apiKey.set_property('padding', 10);
-        howToButtonApiKey.set_property('padding', 10);
-        labelAzure.set_property('padding', 10);
-        azureSpeechKey.set_property('padding', 10);
-        howToButtonAzure.set_property('padding', 10);
-        labelRegion.set_property('padding', 10);
-        azureRegion.set_property('padding', 10);
-        howToRegion.set_property('padding', 10);
-        labelLanguage.set_property('padding', 10);
-        languageSelector.set_property('padding', 10);
-        labelVoice.set_property('padding', 10);
-        azureVoiceSelector.set_property('padding', 10);
-        histroyLabel.set_property('padding', 10);
-        histroyButton.set_property('padding', 10);
-        save.set_property('padding', 10);
-        statusLabel.set_property('padding', 10);
+        apiKeyLabel.set_property('padding', 20);
+        apiKey.set_property('padding', 20);
+        howToButtonApiKey.set_property('padding', 20);
+        labelAzure.set_property('padding', 20);
+        azureSpeechKey.set_property('padding', 20);
+        howToButtonAzure.set_property('padding', 20);
+        labelRegion.set_property('padding', 20);
+        azureRegion.set_property('padding', 20);
+        howToRegion.set_property('padding', 20);
+        labelLanguage.set_property('padding', 20);
+        languageSelector.set_property('padding', 20);
+        labelVoice.set_property('padding', 20);
+        azureVoiceSelector.set_property('padding', 20);
+        histroyLabel.set_property('padding', 20);
+        histroyButton.set_property('padding', 20);
+        save.set_property('padding', 20);
+        statusLabel.set_property('padding', 20);
 
         // Set default
         histroyButton.set_active(defaultLog);
