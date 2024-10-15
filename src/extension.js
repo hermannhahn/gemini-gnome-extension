@@ -187,6 +187,8 @@ const Gemini = GObject.registerClass(
             });
             settingsButton.connect('clicked', (_self) => {
                 this.openSettings();
+                // Close Tray
+                this.menu.close();
             });
 
             // Add search entry, mic button, clear button and settings button to menu
