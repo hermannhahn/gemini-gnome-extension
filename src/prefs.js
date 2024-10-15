@@ -43,44 +43,55 @@ class GeminiSettings {
         const label = new Gtk.Label({
             label: _('Gemini API Key'),
             halign: Gtk.Align.START,
+            style_class: 'inputLabel',
         });
         const apiKey = new Gtk.Entry({
             buffer: new Gtk.EntryBuffer(),
+            style_class: 'inputEntry',
         });
         const howToButton = new Gtk.LinkButton({
             label: _('How to get API key?'),
             uri: 'https://github.com/wwardaww/gnome-gemini-ai?tab=readme-ov-file#using-gemini-api-key',
+            style_class: 'howToButton',
         });
 
         // AZURE API KEY
         const labelAzure = new Gtk.Label({
             label: _('Azure Speech API Key'),
             halign: Gtk.Align.START,
+            style_class: 'inputLabel',
         });
         const azureSpeechKey = new Gtk.Entry({
             buffer: new Gtk.EntryBuffer(),
+            style_class: 'inputEntry',
         });
         const howToButtonAzure = new Gtk.LinkButton({
             label: _('How to get API key?'),
             uri: 'https://learn.microsoft.com/en-us/azure/cognitive-services/speech-service/get-started-speech-to-text',
+            style_class: 'howToButton',
         });
 
         // AZURE REGION
         const labelRegion = new Gtk.Label({
             label: _('Azure Speech Region'),
             halign: Gtk.Align.START,
+            style_class: 'inputLabel',
         });
         const azureRegion = new Gtk.Entry({
             buffer: new Gtk.EntryBuffer(),
+            style_class: 'inputEntry',
         });
         const howToRegion = new Gtk.Label({
             label: _('e.g. eastus'),
+            halign: Gtk.Align.START,
+            style_class: 'howToButton',
         });
 
         // AZURE LANGUAGE (ComboBoxText para seleção de língua)
         const labelLanguage = new Gtk.Label({
             label: _('Select Language'),
             halign: Gtk.Align.START,
+            style_class: 'inputLabel',
         });
 
         // Caixa de seleção (ComboBoxText) com opções de línguas
@@ -94,6 +105,7 @@ class GeminiSettings {
         const labelVoice = new Gtk.Label({
             label: _('Select Voice'),
             halign: Gtk.Align.START,
+            style_class: 'inputLabel',
         });
 
         const azureVoiceSelector = new Gtk.ComboBoxText();
@@ -622,16 +634,19 @@ class GeminiSettings {
         const histroyLabel = new Gtk.Label({
             label: _('Remember talk history'),
             halign: Gtk.Align.START,
+            style_class: 'inputLabel',
         });
         const histroyButton = new Gtk.Switch();
 
         const save = new Gtk.Button({
             label: _('Save'),
+            style_class: 'saveButton',
         });
         const statusLabel = new Gtk.Label({
             label: '',
             useMarkup: true,
             halign: Gtk.Align.CENTER,
+            style_class: 'statusLabel',
         });
 
         histroyButton.set_active(defaultLog);
