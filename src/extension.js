@@ -414,6 +414,24 @@ const Gemini = GObject.registerClass(
                                 },
                             ],
                         });
+                        this.chatHistory.push({
+                            role: 'user',
+                            parts: [
+                                {
+                                    text: _(
+                                        'For next responses, please use Pango Markup Language to format text for better readability. Format code blocks clearly for improved visibility.',
+                                    ),
+                                },
+                            ],
+                        });
+                        this.chatHistory.push({
+                            role: 'model',
+                            parts: [
+                                {
+                                    text: _('\x1b[38;5;220mOk!\x1b[0m'),
+                                },
+                            ],
+                        });
                         // Save history.json
                         this.saveHistory();
                     }
