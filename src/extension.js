@@ -773,7 +773,7 @@ const Gemini = GObject.registerClass(
                 // Se não encontrar código, retorna apenas o texto original no campo tts
                 // Replace * char with space
                 tts = tts.split('*').join(' ');
-                if (tts.length > 100) {
+                if (tts.length > 1000) {
                     tts = this.randomPhraseToShowOnScreen(
                         AZURE_SPEECH_LANGUAGE,
                     );
