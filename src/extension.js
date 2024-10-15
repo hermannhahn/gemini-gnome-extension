@@ -46,6 +46,8 @@ let LOCATION = '';
 let RECURSIVETALK = true;
 let pipeline;
 let isRecording = false;
+let isPlaying = false;
+let playingPid = null;
 let extensionDir = GLib.build_filenamev([
     GLib.get_home_dir(),
     '.local',
@@ -490,18 +492,29 @@ const Gemini = GObject.registerClass(
 
         // Play audio
         playAudio(audiofile) {
-            // Process sync, not async
-            const process = GLib.spawn_async(
-                null, // pasta de trabalho
-                ['/bin/sh', '-c', `play ${audiofile}`], // comando e argumentos
-                null, // opções
-                GLib.SpawnFlags.SEARCH_PATH, // flags
-                null, // PID
-            );
-            if (process) {
-                log('Audio played successfully.');
+            if (!isPlaying) {
+                log('Playing audio: ' + audiofile);
+                // Process sync, not async
+                const process = GLib.spawn_async(
+                    null, // pasta de trabalho
+                    ['/bin/sh', '-c', `play ${audiofile}`], // comando e argumentos
+                    null, // opções
+                    GLib.SpawnFlags.SEARCH_PATH, // flags
+                    null, // PID
+                );
+                if (process) {
+                    playingPid = process.pid;
+                    isPlaying = true;
+                    log('Audio played successfully.');
+                } else {
+                    log('Error playing audio.');
+                }
             } else {
-                log('Error playing audio.');
+                log('Audio already playing.');
+                // Kill player pid
+                GLib.spawn_command_line_async('kill ' + playingPid);
+                isPlaying = false;
+                this.playAudio(audiofile);
             }
         }
 
