@@ -16,8 +16,8 @@ export class Formatter {
         return formatedText;
     }
 
-    // Add escapes for user question
-    pango(text) {
+    // Format input chat
+    inputChat(text) {
         let formatedText = text
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
