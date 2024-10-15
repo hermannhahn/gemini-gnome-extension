@@ -2,14 +2,17 @@
 
 export class Formatter {
     constructor() {
-        this.lineLength = 110;
+        this.lineLength = 100;
+        this.MAX_POINTS = this.lineLength; // Comprimento máximo da linha em pontos
+        this.spaceChar = '\x20'; // Espaço definido por \x20
+        this.newlineChar = '\n'; // Quebra de linha definida por \n
     }
 
     // Return text with removeInvalidMarkups, breakLines and justifyText
     chat(text) {
         let formatedText = this.removeInvalidMarkups(text);
         // formatedText = this.breakLines(formatedText);
-        formatedText = this.justifyText(formatedText);
+        formatedText = this.insertLineBreaks(formatedText);
         return formatedText;
     }
 
@@ -70,62 +73,75 @@ export class Formatter {
         return result;
     }
 
-    justifyText(text) {
-        const lines = text.split('\n');
-        let result = '';
-
-        lines.forEach((line) => {
-            if (line.length > this.lineLength) {
-                let words = line.split(' ');
-                let currentWords = [];
-                let currentLength = 0;
-
-                words.forEach((word) => {
-                    if (
-                        currentLength + word.length + currentWords.length <=
-                        this.lineLength
-                    ) {
-                        currentWords.push(word);
-                        currentLength += word.length;
-                    } else {
-                        result += this.justifyLine(currentWords) + '\n';
-                        currentWords = [word];
-                        currentLength = word.length;
-                    }
-                });
-
-                // Adiciona a última linha (não justificada)
-                result += currentWords.join(' ') + '\n';
-            } else {
-                result += line + '\n';
-            }
-        });
-
-        return result;
+    // Função para calcular os pontos de uma palavra ou caractere
+    calculatePoints(char) {
+        if (char === 'l' || char === 'i' || char === 'I') {
+            return 0.5; // Caractere "l", "i" ou "I" vale 0,5 ponto
+        }
+        return 1; // Outros caracteres valem 1 ponto
     }
 
-    justifyLine(words) {
-        if (words.length === 1) return words[0]; // Não justifica se for só uma palavra
+    // Função que justifica uma linha inserindo espaços uniformemente
+    justifyLine(words, totalPoints) {
+        if (words.length === 1) return words[0]; // Não justifica se for uma única palavra
 
-        const totalWordsLength = words.reduce(
-            (sum, word) => sum + word.length,
-            0,
-        );
-        const totalSpaces = this.lineLength - totalWordsLength;
-        const spacesBetweenWords = Math.floor(totalSpaces / (words.length - 1));
-        const extraSpaces = totalSpaces % (words.length - 1);
+        const spacesNeeded = this.MAX_POINTS - totalPoints; // Espaços necessários para preencher a linha
+        const numGaps = words.length - 1; // Quantidade de lacunas entre as palavras
+
+        const spaceWidth = Math.floor(spacesNeeded / numGaps); // Espaços uniformes
+        let extraSpaces = spacesNeeded % numGaps; // Espaços extras a distribuir
 
         let justifiedLine = '';
 
         for (let i = 0; i < words.length - 1; i++) {
             justifiedLine += words[i];
-            justifiedLine += '\x20 '.repeat(
-                spacesBetweenWords + (i < extraSpaces ? 1 : 0),
-            ); // Distribui os espaços extras nas primeiras palavras
+            justifiedLine += this.spaceChar.repeat(
+                spaceWidth + (extraSpaces > 0 ? 1 : 0),
+            ); // Adiciona espaços extras nas primeiras lacunas
+            if (extraSpaces > 0) extraSpaces--; // Reduz os espaços extras
         }
 
-        justifiedLine += words[words.length - 1]; // Adiciona a última palavra sem espaço extra
+        justifiedLine += words[words.length - 1]; // Adiciona a última palavra
 
         return justifiedLine;
+    }
+
+    // Função que insere as quebras de linha
+    insertLineBreaks(text) {
+        let result = '';
+        let lines = text.split(this.newlineChar); // Preserva as quebras de linha existentes
+
+        lines.forEach((line, index) => {
+            let words = line.split(this.spaceChar);
+            let currentLine = [];
+            let currentPoints = 0;
+
+            words.forEach((word) => {
+                let wordPoints = word
+                    .split('')
+                    .reduce((sum, char) => sum + this.calculatePoints(char), 0);
+
+                // Verifica se a palavra cabe na linha atual
+                if (
+                    currentPoints + wordPoints + currentLine.length <=
+                    this.MAX_POINTS
+                ) {
+                    currentLine.push(word);
+                    currentPoints += wordPoints;
+                } else {
+                    // Justifica e quebra a linha quando atinge o limite
+                    result +=
+                        this.justifyLine(currentLine, currentPoints) +
+                        this.newlineChar;
+                    currentLine = [word]; // Inicia nova linha com a palavra atual
+                    currentPoints = wordPoints;
+                }
+            });
+
+            // Adiciona a última linha processada, não precisa justificar se for a última linha sem atingir o limite
+            result += currentLine.join(this.spaceChar);
+            if (index < lines.length - 1) result += this.newlineChar; // Adiciona a quebra de linha original
+        });
+        return result;
     }
 }
