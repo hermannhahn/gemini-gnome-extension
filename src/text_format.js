@@ -28,6 +28,7 @@ export class Formatter {
     // Replace or remove bad markups
     removeInvalidMarkups(text) {
         let formatedText = text
+            .replace(/&/g, '&amp;')
             .replace(/<code>/g, '') // Remove tags de abertura <code>
             .replace(/<\/code>/g, '') // Remove tags de fechamento <code>
             .replace(/\[red\](.*?)\[\/red\]/g, '\x1b[31m$1\x1b[0m')
@@ -118,7 +119,7 @@ export class Formatter {
 
         for (let i = 0; i < words.length - 1; i++) {
             justifiedLine += words[i];
-            justifiedLine += ' '.repeat(
+            justifiedLine += '&nbsp;'.repeat(
                 spacesBetweenWords + (i < extraSpaces ? 1 : 0),
             ); // Distribui os espaços extras nas primeiras palavras
         }
