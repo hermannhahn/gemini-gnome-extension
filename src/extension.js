@@ -173,7 +173,7 @@ const Gemini = GObject.registerClass(
             this.scrollView.add_child(this.chatSection.actor);
 
             // Usa Clutter para garantir que a rolagem vai para o final
-            this.chatSection.actor.connect('notify::height', () => {
+            this.chatSection.connect('notify::height', () => {
                 this.scrollView
                     .get_vscroll_bar()
                     .get_adjustment()
