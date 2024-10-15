@@ -74,7 +74,7 @@ class GeminiSettings {
             buffer: new Gtk.EntryBuffer(),
         });
         const howToRegion = new Gtk.Label({
-            label: _('e.g. eastus'),
+            label: _('e.g.: eastus, westus, ...'),
             halign: Gtk.Align.START,
         });
 
@@ -609,7 +609,6 @@ class GeminiSettings {
                         azureVoiceSelector.set_active_id(option.voice);
                     }
                 });
-                // azureVoiceSelector.set_active(defaultVoice); // Define a primeira opção como ativa por padrão
             }
         };
 
