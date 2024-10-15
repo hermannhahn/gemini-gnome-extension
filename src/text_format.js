@@ -2,7 +2,7 @@
 
 export class Formatter {
     constructor() {
-        this.lineLength = 150;
+        this.lineLength = 130;
     }
 
     // Return text with removeInvalidMarkups, breakLines and justifyText
