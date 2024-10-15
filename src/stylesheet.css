@@ -82,3 +82,27 @@
     background-color: rgb(42, 42, 42);
     border-radius: 150px;
 }
+.inputLabel {
+    color: black;
+    font-weight: bold;
+    padding: 1px;
+}
+.inputEntry {
+    color: black;
+    padding: 1px;
+}
+.howToButton {
+    color: black;
+    font-weight: bold;
+    padding: 1px;
+}
+.saveButton {
+    color: black;
+    font-weight: bold;
+    padding: 1px;
+}
+.statusLabel {
+    color: black;
+    font-weight: bold;
+    padding: 1px;
+}
