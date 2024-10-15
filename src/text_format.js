@@ -13,6 +13,17 @@ export class Formatter {
         return formatedText;
     }
 
+    // Add escapes for user question
+    pango(text) {
+        let formatedText = text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&apos;');
+        return formatedText;
+    }
+
     // Replace or remove bad markups
     removeInvalidMarkups(text) {
         let formatedText = text
