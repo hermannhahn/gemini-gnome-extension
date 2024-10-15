@@ -214,7 +214,7 @@ const Gemini = GObject.registerClass(
             const responseChat = new PopupMenu.PopupMenuItem('');
 
             // Add user question to chat
-            let formatedQuestion = format.pango(userQuestion);
+            let formatedQuestion = format.inputChat(userQuestion);
             inputChat.label.clutter_text.set_markup(
                 `<b>${USERNAME}: </b>${formatedQuestion}`,
             );
@@ -300,12 +300,12 @@ const Gemini = GObject.registerClass(
                         responseChat !== undefined
                     ) {
                         log('[ AI ]' + aiResponse);
-                        aiResponse = convertMD(aiResponse);
+                        let formatedResponse = convertMD(aiResponse);
                         // aiResponse = format.pango(aiResponse);
-                        aiResponse = format.chat(aiResponse);
+                        formatedResponse = format.chat(formatedResponse);
                         // Set ai response to chat
                         responseChat.label.clutter_text.set_markup(
-                            '<b>Gemini: </b> ' + aiResponse,
+                            '<b>Gemini: </b> ' + formatedResponse,
                         );
 
                         // Extract code and tts from response
