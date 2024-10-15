@@ -656,15 +656,15 @@ class GeminiSettings {
 
             // Salva o valor selecionado da língua
             const selectedLanguage = languageSelector.get_active_id();
-            log('Selected language: ' + selectedLanguage);
             this.schema.set_string('azure-speech-language', selectedLanguage);
 
             // Salva o valor selecionado da voz
             const selectedVoice = azureVoiceSelector.get_active_text();
-            log('Selected voice: ' + selectedVoice);
             this.schema.set_string('azure-speech-voice', selectedVoice);
 
             this.schema.set_boolean('log-history', histroyButton.state);
+            log('Selected language: ' + selectedLanguage);
+            log('Selected voice: ' + selectedVoice);
             statusLabel.set_markup(_('Your preferences have been saved'));
         });
 
