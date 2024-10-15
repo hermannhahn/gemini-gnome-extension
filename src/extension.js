@@ -294,7 +294,20 @@ const Gemini = GObject.registerClass(
                     let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
                     // log('[ AI-RES ] ' + aiResponse);
 
-                    if (aiResponse !== null && aiResponse !== undefined) {
+                    if (
+                        aiResponse !== null &&
+                        aiResponse !== undefined &&
+                        responseChat !== undefined
+                    ) {
+                        log('[ AI ]' + aiResponse);
+                        aiResponse = convertMD(aiResponse);
+                        // aiResponse = format.pango(aiResponse);
+                        aiResponse = format.chat(aiResponse);
+                        // Set ai response to chat
+                        responseChat.label.clutter_text.set_markup(
+                            '<b>Gemini: </b> ' + aiResponse,
+                        );
+
                         // Extract code and tts from response
                         let answer = this.extractCodeAndTTS(aiResponse);
 
@@ -327,17 +340,6 @@ const Gemini = GObject.registerClass(
                             // Save history.json
                             this.saveHistory();
                         }
-                    }
-
-                    if (responseChat !== undefined) {
-                        log('[ AI ]' + aiResponse);
-                        aiResponse = convertMD(aiResponse);
-                        // aiResponse = format.pango(aiResponse);
-                        aiResponse = format.chat(aiResponse);
-                        // Set ai response to chat
-                        responseChat.label.clutter_text.set_markup(
-                            '<b>Gemini: </b> ' + aiResponse,
-                        );
                     }
                 },
             );
