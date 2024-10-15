@@ -763,7 +763,7 @@ const Gemini = GObject.registerClass(
                 // Replace * char with space
                 tts = tts.split('*').join(' ');
                 // If tts is more then 100 characters, change tts text
-                if (tts.length > 100) {
+                if (tts.length > 1000) {
                     tts = this.randomPhraseToShowOnScreen(
                         AZURE_SPEECH_LANGUAGE,
                     );
