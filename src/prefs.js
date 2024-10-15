@@ -29,8 +29,8 @@ class GeminiSettings {
             column_spacing: 14,
             column_homogeneous: false,
             row_homogeneous: false,
-            width_request: 550,
-            height_request: 500,
+            width_request: 650,
+            height_request: 400,
         });
         const defaultKey = this.schema.get_string('gemini-api-key');
         const defaultSpeechKey = this.schema.get_string('azure-speech-key');
