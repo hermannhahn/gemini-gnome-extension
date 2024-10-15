@@ -12,6 +12,8 @@ export default class ClipboardIndicatorPreferences extends ExtensionPreferences 
         const settingsUI = new GeminiSettings(window._settings);
         const page = new Adw.PreferencesPage();
         page.add(settingsUI.ui);
+        // Set window size to 800x600
+        window.set_default_size(800, 600);
         window.add(page);
     }
 }
@@ -29,8 +31,6 @@ class GeminiSettings {
             column_spacing: 14,
             column_homogeneous: false,
             row_homogeneous: false,
-            width_request: 650,
-            height_request: 400,
         });
         const defaultKey = this.schema.get_string('gemini-api-key');
         const defaultSpeechKey = this.schema.get_string('azure-speech-key');
