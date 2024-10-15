@@ -1,6 +1,11 @@
 // Text Format
 
 export class Formatter {
+    constructor() {
+        this.lineLength = 150;
+    }
+
+    // Pango
     pango(text) {
         let formatedText = text
             .replace(/<code>/g, '') // Remove tags de abertura <code>
@@ -42,5 +47,64 @@ export class Formatter {
             }
         }
         return result;
+    }
+
+    justifyText(text) {
+        const lines = text.split('\n');
+        let result = '';
+
+        lines.forEach((line) => {
+            if (line.length > this.lineLength) {
+                let words = line.split(' ');
+                let currentWords = [];
+                let currentLength = 0;
+
+                words.forEach((word) => {
+                    if (
+                        currentLength + word.length + currentWords.length <=
+                        this.lineLength
+                    ) {
+                        currentWords.push(word);
+                        currentLength += word.length;
+                    } else {
+                        result += this.justifyLine(currentWords) + '\n';
+                        currentWords = [word];
+                        currentLength = word.length;
+                    }
+                });
+
+                // Adiciona a última linha (não justificada)
+                result += currentWords.join(' ') + '\n';
+            } else {
+                result += line + '\n';
+            }
+        });
+
+        return result;
+    }
+
+    justifyLine(words) {
+        if (words.length === 1) return words[0]; // Não justifica se for só uma palavra
+
+        const totalWordsLength = words.reduce(
+            (sum, word) => sum + word.length,
+            0,
+        );
+        const totalSpaces = this.lineLength - totalWordsLength;
+        const spacesBetweenWords = Math.floor(totalSpaces / (words.length - 1));
+        const extraSpaces = totalSpaces % (words.length - 1);
+
+        let justifiedLine = '';
+
+        for (let i = 0; i < words.length - 1; i++) {
+            justifiedLine += words[i];
+            justifiedLine += ' '.repeat(
+                spacesBetweenWords + (i < extraSpaces ? 1 : 0),
+            ); // Distribui os espaços extras nas primeiras palavras
+        }
+
+        justifiedLine += words[words.length - 1]; // Adiciona a última palavra sem espaço extra
+
+        return justifiedLine;
     }
 }
