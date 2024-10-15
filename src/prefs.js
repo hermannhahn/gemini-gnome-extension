@@ -88,9 +88,6 @@ class GeminiSettings {
         languageSelector.append('es', _('Spanish'));
         languageSelector.append('fr', _('French'));
 
-        // Define a língua padrão selecionada, com base no valor armazenado
-        languageSelector.set_active_id(defaultLanguage); // Seleciona o valor armazenado
-
         // AZURE VOICE (ComboBoxText para seleção de voz)
         const labelVoice = new Gtk.Label({
             label: _('Select Voice'),
@@ -618,7 +615,6 @@ class GeminiSettings {
 
         // Inicializa o `azureVoiceSelector` com base na linguagem armazenada
         updateVoices(defaultLanguage);
-        azureVoiceSelector.set_active_id(defaultVoice); // Seleciona a voz armazenada
 
         // HISTORY LOG
         const histroyLabel = new Gtk.Label({
@@ -641,7 +637,9 @@ class GeminiSettings {
         azureSpeechKey.set_text(defaultSpeechKey);
         azureRegion.set_text(defaultRegion);
         azureVoiceSelector.set_active_id(defaultVoice);
+        languageSelector.set_active_id(defaultLanguage);
 
+        // Adicionar eventos
         save.connect('clicked', () => {
             this.schema.set_string(
                 'gemini-api-key',
@@ -658,12 +656,10 @@ class GeminiSettings {
 
             // Salva o valor selecionado da língua
             const selectedLanguage = languageSelector.get_active_id();
-            log('Selected Language: ' + selectedLanguage);
             this.schema.set_string('azure-speech-language', selectedLanguage);
 
             // Salva o valor selecionado da voz
             const selectedVoice = azureVoiceSelector.get_active_text();
-            log('Selected Voice: ' + selectedVoice);
             this.schema.set_string('azure-speech-voice', selectedVoice);
 
             this.schema.set_boolean('log-history', histroyButton.state);
