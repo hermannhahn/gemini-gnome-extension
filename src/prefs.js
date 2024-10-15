@@ -29,6 +29,8 @@ class GeminiSettings {
             column_spacing: 14,
             column_homogeneous: false,
             row_homogeneous: false,
+            width_request: 550,
+            height_request: 500,
         });
         const defaultKey = this.schema.get_string('gemini-api-key');
         const defaultSpeechKey = this.schema.get_string('azure-speech-key');
@@ -663,11 +665,9 @@ class GeminiSettings {
             this.schema.set_string('azure-speech-voice', selectedVoice);
 
             this.schema.set_boolean('log-history', histroyButton.state);
-            log('Selected language: ' + selectedLanguage);
-            log('Selected voice: ' + selectedVoice);
             statusLabel.set_markup(
                 _(
-                    'Your preferences have been saved\nLanguage: ' +
+                    'Your preferences have been saved\n\nLanguage: ' +
                         selectedLanguage +
                         '\nSelected voice: ' +
                         selectedVoice,
