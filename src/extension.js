@@ -755,29 +755,20 @@ const Gemini = GObject.registerClass(
             const regex = /`{3}([\s\S]*?)`{3}/;
             const match = text.match(regex);
             let tts = text;
+            tts = text.replace(regex, '').trim();
+            // Replace * char with space
+            tts = tts.split('*').join(' ');
+            // If tts is more then 100 characters, change tts text
+            if (tts.length > 1000) {
+                tts = this.randomPhraseToShowOnScreen(AZURE_SPEECH_LANGUAGE);
+            }
 
             if (match) {
                 const code = match[1]; // Captura o conteúdo entre os acentos graves
                 // Remove o bloco de código do texto original para formar o TTS
-                tts = text.replace(regex, '').trim();
-                // Replace * char with space
-                tts = tts.split('*').join(' ');
-                // If tts is more then 100 characters, change tts text
-                if (tts.length > 1000) {
-                    tts = this.randomPhraseToShowOnScreen(
-                        AZURE_SPEECH_LANGUAGE,
-                    );
-                }
                 return {code, tts};
             } else {
                 // Se não encontrar código, retorna apenas o texto original no campo tts
-                // Replace * char with space
-                tts = tts.split('*').join(' ');
-                if (tts.length > 1000) {
-                    tts = this.randomPhraseToShowOnScreen(
-                        AZURE_SPEECH_LANGUAGE,
-                    );
-                }
                 return {code: null, tts};
             }
         }
