@@ -258,13 +258,21 @@ const Gemini = GObject.registerClass(
             this.chatSection.style_class += 'm-w-100';
             this.scrollView.style_class += 'm-w-100';
 
+            // Set mouse click to copy response to clipboard
+            // responseChat.connect('activate', (_self) => {
+            //     this.extension.clipboard.set_text(
+            //         St.ClipboardType.CLIPBOARD,
+            //         responseChat.label.text,
+            //     );
+            // });
+
             // Copy selected text
             // responseChat.connect('button-release-event', (_actor, _event) => {
             //     this._copySelectedText(responseChat);
             // });
 
             // Open context menu with second mouse button
-            responseChat.connect('button-press-event', (_actor, event) => {
+            responseChat.connect('button-release-event', (_actor, event) => {
                 log(event.button);
                 if (event.button === 3) {
                     // Cria um menu de contexto
