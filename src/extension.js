@@ -230,10 +230,11 @@ const Gemini = GObject.registerClass(
             });
 
             // Create voice activation button
-            const copyButton = new St.Button({
-                can_focus: true,
-                toggle_mode: true,
+            const copyButton = new PopupMenu.PopupMenuItem('', {
                 style_class: 'copy-icon',
+                reactive: true,
+                can_focus: false,
+                hover: true,
             });
 
             // Add user question to chat
@@ -266,7 +267,7 @@ const Gemini = GObject.registerClass(
             this.scrollView.style_class += 'm-w-100';
 
             // Set mouse click to copy response to clipboard
-            copyButton.connect('clicked', (_self) => {
+            copyButton.connect('activate', (_self) => {
                 this.extension.clipboard.set_text(
                     St.ClipboardType.CLIPBOARD,
                     this._copySelectedText(responseChat),
