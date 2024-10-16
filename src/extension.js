@@ -255,7 +255,9 @@ const Gemini = GObject.registerClass(
             this.chatSection.addMenuItem(responseChat);
 
             // Scroll down
-            this.scrollToBottom(responseChat);
+            if (responseChat !== undefined) {
+                this.scrollToBottom(responseChat);
+            }
 
             // Get ai response for user question
             this.getAireponse(responseChat, userQuestion);
@@ -317,9 +319,6 @@ const Gemini = GObject.registerClass(
                             '<b>Gemini: </b> ' + formatedResponse,
                         );
 
-                        // Scroll down
-                        this.scrollToBottom(responseChat);
-
                         // Extract code and tts from response
                         let answer = this.extractCodeAndTTS(aiResponse);
 
@@ -352,6 +351,8 @@ const Gemini = GObject.registerClass(
                             // Save history.json
                             this.saveHistory();
                         }
+                        // Scroll down
+                        this.scrollToBottom(responseChat);
                     }
                 },
             );
