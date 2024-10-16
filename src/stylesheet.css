@@ -31,14 +31,14 @@
     text-align: justify;
 }
 .response-chat {
-    color: burlywood;
+    color: rgb(243, 232, 212);
     max-width: 960px;
     text-wrap: wrap;
     text-align: justify;
     word-wrap: break-word;
 }
 .input-chat {
-    color: wheat;
+    color: rgb(243, 232, 212);
     max-width: 960px;
     text-wrap: wrap;
     text-align: justify;
