@@ -27,9 +27,7 @@
     max-width: 960px;
     text-wrap: wrap;
     overflow-y: auto;
-    overflow-x: scroll;
     word-wrap: break-word;
-    padding: 20px;
 }
 .response-chat {
     max-width: 940px;
@@ -59,9 +57,13 @@
     max-height: 800px;
     text-wrap: wrap;
     padding-top: 10px;
+    text-align: justify;
+    font-family: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif';
 }
 .chat-section {
     text-wrap: break-word;
+    text-align: justify;
+    font-family: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif';
 }
 .google-gemini-icon {
     background-image: url('assets/icon_gemini.png');
