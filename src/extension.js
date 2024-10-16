@@ -175,16 +175,6 @@ const Gemini = GObject.registerClass(
             searchEntry.clutter_text.connect('activate', (actor) => {
                 this.aiResponse(actor.text);
                 searchEntry.clutter_text.set_text('');
-                // Usa Clutter para garantir que a rolagem vai para o final
-                this.scrollView
-                    .get_vscroll_bar()
-                    .get_adjustment()
-                    .set_value(
-                        this.scrollView
-                            .get_vscroll_bar()
-                            .get_adjustment()
-                            .get_upper(),
-                    );
             });
             micButton.connect('clicked', (_self) => {
                 this.startRecording();
@@ -263,6 +253,10 @@ const Gemini = GObject.registerClass(
             this.chatSection.addMenuItem(inputChat);
             this.chatSection.addMenuItem(responseChat);
 
+            // Scroll down
+            let verticalScrollBar = this.scrollView.get_vscroll_bar();
+            verticalScrollBar.set_value(verticalScrollBar.get_max_value());
+
             // Get ai response for user question
             this.getAireponse(responseChat, userQuestion);
         }
@@ -322,16 +316,13 @@ const Gemini = GObject.registerClass(
                         responseChat.label.clutter_text.set_markup(
                             '<b>Gemini: </b> ' + formatedResponse,
                         );
-                        // Usa Clutter para garantir que a rolagem vai para o final
-                        this.scrollView
-                            .get_vscroll_bar()
-                            .get_adjustment()
-                            .set_value(
-                                this.scrollView
-                                    .get_vscroll_bar()
-                                    .get_adjustment()
-                                    .get_upper(),
-                            );
+
+                        // Scroll down
+                        let verticalScrollBar =
+                            this.scrollView.get_vscroll_bar();
+                        verticalScrollBar.set_value(
+                            verticalScrollBar.get_max_value(),
+                        );
 
                         // Extract code and tts from response
                         let answer = this.extractCodeAndTTS(aiResponse);
