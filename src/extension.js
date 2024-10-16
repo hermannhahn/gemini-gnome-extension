@@ -227,9 +227,6 @@ const Gemini = GObject.registerClass(
                 reactive: true,
                 can_focus: false,
                 hover: true,
-                clutter_text: {
-                    selectable: true,
-                },
             });
 
             // Add user question to chat
@@ -240,8 +237,8 @@ const Gemini = GObject.registerClass(
 
             // Add ai response to chat
             responseChat.label.clutter_text.set_markup(aiResponse);
+            responseChat.label.clutter_text.selectable = true;
             // responseChat.label.clutter_text.reactive = true;
-            // responseChat.label.clutter_text.selectable = true;
 
             // Chat settings
             inputChat.label.x_expand = true;
