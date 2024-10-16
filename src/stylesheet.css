@@ -83,13 +83,6 @@
     height: 24px;
     padding: 10px;
 }
-.copy-icon:not(:hover) {
-    background-image: url('assets/icon_copy.png');
-    background-size: 26px;
-    width: 24px;
-    height: 24px;
-    padding: 10px;
-}
 .copy-icon:active {
     background-image: url('assets/icon_check.png');
     background-size: 26px;
