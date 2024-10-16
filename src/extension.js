@@ -218,13 +218,13 @@ const Gemini = GObject.registerClass(
             // Create input and response chat items
             const inputChat = new PopupMenu.PopupMenuItem('', {
                 style_class: 'input-chat',
-                reactive: false,
+                reactive: true,
                 can_focus: false,
                 hover: true,
             });
             const responseChat = new PopupMenu.PopupMenuItem('', {
                 style_class: 'response-chat',
-                reactive: false,
+                reactive: true,
                 can_focus: false,
                 hover: true,
             });
