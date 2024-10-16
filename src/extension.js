@@ -266,7 +266,7 @@ const Gemini = GObject.registerClass(
             this.scrollView.style_class += 'm-w-100';
 
             // Set mouse click to copy response to clipboard
-            copyButton.connect('activate', (_self) => {
+            copyButton.connect('clicked', (_self) => {
                 this.extension.clipboard.set_text(
                     St.ClipboardType.CLIPBOARD,
                     this._copySelectedText(responseChat),
