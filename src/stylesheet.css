@@ -35,27 +35,23 @@
     max-width: 940px;
     text-wrap: wrap;
     overflow-y: auto;
-    overflow-x: scroll;
     word-wrap: break-word;
     text-align: justify;
     font-family: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif';
 }
 .response-chat:hover {
-    background-color: transparent;
-    background: none;
+    background-color: rgb(39, 39, 39);
 }
 .input-chat {
     max-width: 940px;
     text-wrap: wrap;
     overflow-y: auto;
-    overflow-x: scroll;
     word-wrap: break-word;
     text-align: justify;
     font-family: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif';
 }
 .input-chat:hover {
-    background-color: transparent;
-    background: none;
+    background-color: rgb(39, 39, 39);
 }
 .chat-scroll-section {
     max-height: 800px;
