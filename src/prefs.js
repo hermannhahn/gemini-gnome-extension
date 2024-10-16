@@ -638,23 +638,23 @@ class GeminiSettings {
         });
 
         // Set labels property
-        apiKeyLabel.set_property('padding', 20);
-        apiKey.set_property('padding', 20);
-        howToButtonApiKey.set_property('padding', 20);
-        labelAzure.set_property('padding', 20);
-        azureSpeechKey.set_property('padding', 20);
-        howToButtonAzure.set_property('padding', 20);
-        labelRegion.set_property('padding', 20);
-        azureRegion.set_property('padding', 20);
-        howToRegion.set_property('padding', 20);
-        labelLanguage.set_property('padding', 20);
-        languageSelector.set_property('padding', 20);
-        labelVoice.set_property('padding', 20);
-        azureVoiceSelector.set_property('padding', 20);
-        histroyLabel.set_property('padding', 20);
-        histroyButton.set_property('padding', 20);
-        save.set_property('padding', 20);
-        statusLabel.set_property('padding', 20);
+        apiKeyLabel.set_property('padding', 40);
+        apiKey.set_property('padding', 40);
+        howToButtonApiKey.set_property('padding', 40);
+        labelAzure.set_property('padding', 40);
+        azureSpeechKey.set_property('padding', 40);
+        howToButtonAzure.set_property('padding', 40);
+        labelRegion.set_property('padding', 40);
+        azureRegion.set_property('padding', 40);
+        howToRegion.set_property('padding', 40);
+        labelLanguage.set_property('padding', 40);
+        languageSelector.set_property('padding', 40);
+        labelVoice.set_property('padding', 40);
+        azureVoiceSelector.set_property('padding', 40);
+        histroyLabel.set_property('padding', 40);
+        histroyButton.set_property('padding', 40);
+        save.set_property('padding', 40);
+        statusLabel.set_property('padding', 40);
 
         // Set default
         histroyButton.set_active(defaultLog);
