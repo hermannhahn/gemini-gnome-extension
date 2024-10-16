@@ -41,7 +41,7 @@
     z-index: 1;
 }
 .response-chat:hover {
-    background-color: rgb(39, 39, 39);
+    background-color: rgb(58, 57, 57);
 }
 .input-chat {
     max-width: 940px;
@@ -53,7 +53,7 @@
     z-index: 1;
 }
 .input-chat:hover {
-    background-color: rgb(39, 39, 39);
+    background-color: rgb(58, 57, 57);
 }
 .chat-scroll-section {
     max-height: 800px;
