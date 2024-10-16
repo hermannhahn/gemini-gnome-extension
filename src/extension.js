@@ -235,8 +235,8 @@ const Gemini = GObject.registerClass(
 
             // Add ai response to chat
             responseChat.label.clutter_text.set_markup(aiResponse);
-            responseChat.label.clutter_text.reactive = true;
-            responseChat.label.clutter_text.selectable = true;
+            // responseChat.label.clutter_text.reactive = true;
+            // responseChat.label.clutter_text.selectable = true;
 
             // Chat settings
             inputChat.label.x_expand = true;
