@@ -76,6 +76,13 @@
     height: 24px;
     padding: 0px;
 }
+.copy-icon {
+    background-image: url('assets/icon_copy.png');
+    background-size: 26px;
+    width: 24px;
+    height: 24px;
+    padding: 10px;
+}
 .mic-icon {
     background-image: url('assets/icon_mic.png');
     background-size: 26px;
