@@ -268,13 +268,7 @@ const Gemini = GObject.registerClass(
 
             // Set mouse click to copy response to clipboard
             copyButton.connect('activate', (_self) => {
-                if (responseChat.label.text) {
-                    copyButton.label.text = responseChat.label.text;
-                }
-                this.extension.clipboard.set_text(
-                    St.ClipboardType.CLIPBOARD,
-                    this._copySelectedText(responseChat),
-                );
+                this._copySelectedText(responseChat);
             });
 
             // Add separator to chat
