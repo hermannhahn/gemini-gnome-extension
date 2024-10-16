@@ -367,7 +367,7 @@ const Gemini = GObject.registerClass(
             // Conecta ao sinal que notifica quando o layout estiver pronto
             responseChat.connect('notify::height', (_self) => {
                 // Define o valor superior e garante a rolagem até o final
-                adjustment.set_value(adjustment.upper);
+                adjustment.set_value(adjustment.upper - adjustment.page_size);
             });
         }
 
