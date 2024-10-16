@@ -31,24 +31,24 @@
     word-wrap: break-word;
 }
 .response-chat {
-    max-width: 960px;
+    max-width: 940px;
     text-wrap: wrap;
     overflow-y: auto;
     overflow-x: scroll;
     word-wrap: break-word;
-    padding-right: 20px;
+    margin-right: 20px;
 }
 .response-chat:hover {
     background-color: transparent;
     background: none;
 }
 .input-chat {
-    max-width: 960px;
+    max-width: 940px;
     text-wrap: wrap;
     overflow-y: auto;
     overflow-x: scroll;
     word-wrap: break-word;
-    padding-right: 20px;
+    margin-right: 20px;
 }
 .input-chat:hover {
     background-color: transparent;
