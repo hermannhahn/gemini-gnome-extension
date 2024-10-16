@@ -166,7 +166,7 @@ const Gemini = GObject.registerClass(
             this.scrollView = new St.ScrollView({
                 style_class: 'chat-scroll-section',
                 reactive: true,
-                overlay_scrollbars: true,
+                overlay_scrollbars: false,
             });
 
             // Add scroll to chat section
