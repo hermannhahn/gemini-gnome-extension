@@ -46,7 +46,15 @@
     background-color: rgb(112, 112, 112);
     color: rgb(44, 44, 44);
 }
+.response-chat .clutter-text::selection {
+    background-color: rgb(112, 112, 112);
+    color: rgb(44, 44, 44);
+}
 .clutter-text::selection {
+    background-color: rgb(112, 112, 112);
+    color: rgb(44, 44, 44);
+}
+.ai-entry::selection {
     background-color: rgb(112, 112, 112);
     color: rgb(44, 44, 44);
 }
