@@ -235,6 +235,13 @@ const Gemini = GObject.registerClass(
                 `<b>${USERNAME}: </b>${formatedQuestion}`,
             );
 
+            // Enable text selection
+            inputChat.label.clutter_text.reactive = true;
+            inputChat.label.clutter_text.selectable = true;
+
+            // Disable clutter_text hover
+            inputChat.label.clutter_text.hover = false;
+
             // Add ai response to chat
             responseChat.label.clutter_text.set_markup(aiResponse);
 
