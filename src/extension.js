@@ -218,7 +218,6 @@ const Gemini = GObject.registerClass(
             // Create input and response chat items
             const inputChat = new PopupMenu.PopupMenuItem('');
             const responseChat = new PopupMenu.PopupMenuItem('');
-            this.chat = responseChat;
 
             // Add user question to chat
             let formatedQuestion = format.inputChat(userQuestion);
@@ -238,12 +237,12 @@ const Gemini = GObject.registerClass(
             this.scrollView.style_class += ' m-w-100';
 
             // Set mouse click to copy response to clipboard
-            responseChat.connect('activate', (_self) => {
-                this.extension.clipboard.set_text(
-                    St.ClipboardType.CLIPBOARD,
-                    responseChat.label.text,
-                );
-            });
+            // responseChat.connect('activate', (_self) => {
+            //    this.extension.clipboard.set_text(
+            //        St.ClipboardType.CLIPBOARD,
+            //        responseChat.label.text,
+            //    );
+            // });
 
             // Add separator to chat
             this.chatSection.addMenuItem(
@@ -372,7 +371,7 @@ const Gemini = GObject.registerClass(
 
                     // Define o valor superior e garante a rolagem até o final
                     adjustment.set_value(
-                        adjustment.get_upper() - adjustment.get_page_size(),
+                        adjustment.upper - adjustment.page_size,
                     );
 
                     return GLib.SOURCE_REMOVE; // Remove o callback após execução
