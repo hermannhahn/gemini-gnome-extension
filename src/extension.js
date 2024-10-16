@@ -216,7 +216,11 @@ const Gemini = GObject.registerClass(
             let aiResponse = _('<b>Gemini: </b> ...');
 
             // Create input and response chat items
-            const inputChat = new PopupMenu.PopupMenuItem('');
+            const inputChat = new PopupMenu.PopupMenuItem('', {
+                reactive: false,
+                can_focus: false,
+                style_class: 'input-chat',
+            });
             const responseChat = new PopupMenu.PopupMenuItem('', {
                 reactive: false,
                 can_focus: false,
@@ -235,8 +239,6 @@ const Gemini = GObject.registerClass(
             // Chat settings
             inputChat.label.x_expand = true;
             responseChat.label.x_expand = true;
-            inputChat.style_class += 'input-chat';
-            responseChat.style_class += 'response-chat';
             this.chatSection.style_class += 'm-w-100';
             this.scrollView.style_class += 'm-w-100';
 
