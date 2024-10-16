@@ -507,7 +507,7 @@ const Gemini = GObject.registerClass(
         // Remove all .wav file from /tmp folder
         removeWavFiles() {
             log('Removing all .wav files from /tmp folder');
-            const command = 'rm /tmp/gva*.wav';
+            const command = 'rm /tmp/gemini-assit/*.wav';
             const process = GLib.spawn_async(
                 null, // pasta de trabalho
                 ['/bin/sh', '-c', command], // comando e argumentos
@@ -684,7 +684,7 @@ const Gemini = GObject.registerClass(
 
             // Criar um arquivo temporário para armazenar o áudio binário (opcional)
             const [success, tempFilePath] = GLib.file_open_tmp(
-                'gva_azure_att_audio_XXXXXX.wav',
+                'gemini-assist/gva_azure_att_audio_XXXXXX.wav',
             );
             if (!success) {
                 log('Error creating temporary audio file.');
@@ -864,7 +864,7 @@ const Gemini = GObject.registerClass(
 
             // Criar um arquivo temporário para salvar o áudio gerado
             const [success, tempFilePath] = GLib.file_open_tmp(
-                'gva_azure_tts_audio_XXXXXX.wav',
+                '/gemini-assist/gva_azure_tts_audio_XXXXXX.wav',
             );
             if (!success) {
                 log('Error creating temporary audio file.');
