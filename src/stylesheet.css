@@ -87,9 +87,17 @@
     padding: 10px;
     text-align: justify;
 }
+.chat-scroll-section::selection {
+    background-color: rgb(112, 112, 112);
+    color: rgb(44, 44, 44);
+}
 .chat-section {
     text-wrap: break-word;
     text-align: justify;
+}
+.chat-section::selection {
+    background-color: rgb(112, 112, 112);
+    color: rgb(44, 44, 44);
 }
 .google-gemini-icon {
     background-image: url('assets/icon_gemini.png');
