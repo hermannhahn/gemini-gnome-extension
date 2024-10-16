@@ -31,16 +31,16 @@
     text-align: justify;
 }
 .response-chat {
+    color: burlywood;
     text-wrap: wrap;
-}
-.response-chat:hover {
-    background-color: rgb(87, 87, 87);
+    text-align: justify;
+    word-wrap: break-word;
 }
 .input-chat {
+    color: wheat;
     text-wrap: wrap;
-}
-.input-chat:hover {
-    background-color: rgb(87, 87, 87);
+    text-align: justify;
+    word-wrap: break-word;
 }
 .chat-scroll-section {
     max-height: 800px;
