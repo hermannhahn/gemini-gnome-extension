@@ -218,6 +218,7 @@ const Gemini = GObject.registerClass(
             // Create input and response chat items
             const inputChat = new PopupMenu.PopupMenuItem('');
             const responseChat = new PopupMenu.PopupMenuItem('');
+            this.chat = responseChat;
 
             // Add user question to chat
             let formatedQuestion = format.inputChat(userQuestion);
@@ -361,10 +362,10 @@ const Gemini = GObject.registerClass(
             let adjustment = vscrollBar.get_adjustment();
 
             // Força uma nova disposição do layout
-            this.responseChat.queue_relayout();
+            this.chat.queue_relayout();
 
             // Conecta ao sinal que notifica quando o layout estiver pronto
-            this.responseChat.connect('notify::height', () => {
+            this.chat.connect('notify::height', () => {
                 // Define o valor superior e garante a rolagem até o final
                 adjustment.set_value(
                     adjustment.get_upper() - adjustment.get_page_size(),
