@@ -31,13 +31,27 @@
     text-align: justify;
 }
 .response-chat {
+    background-color: rgb(42, 42, 42);
+    color: rgb(243, 232, 212);
+    max-width: 960px;
+    text-wrap: wrap;
+    text-align: justify;
+    word-wrap: break-word;
+    cursor: text;
+}
+.response-chat:hover {
+    background-color: rgb(243, 232, 212);
+    color: rgb(42, 42, 42);
+    cursor: text;
+}
+.response-chat2 {
     color: rgb(243, 232, 212);
     max-width: 960px;
     text-wrap: wrap;
     text-align: justify;
     word-wrap: break-word;
 }
-.response-chat:hover {
+.response-chat2:hover {
     background-color: rgb(42, 42, 42);
     color: white;
     cursor: text;
