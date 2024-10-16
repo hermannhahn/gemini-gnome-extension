@@ -258,17 +258,33 @@ const Gemini = GObject.registerClass(
             this.chatSection.style_class += 'm-w-100';
             this.scrollView.style_class += 'm-w-100';
 
-            // Set mouse click to copy response to clipboard
-            responseChat.connect('activate', (_self) => {
-                this.extension.clipboard.set_text(
-                    St.ClipboardType.CLIPBOARD,
-                    // Get text selection
-                    responseChat.label.text,
-                );
-            });
-
+            // Copy selected text
             responseChat.connect('button-release-event', (_actor, _event) => {
                 this._copySelectedText(responseChat);
+            });
+
+            // Open context menu with second mouse button
+            responseChat.connect('button-press-event', (_actor, event) => {
+                if (event.button === 3) {
+                    // Cria um menu de contexto
+                    let contextMenu = new PopupMenu.PopupMenu();
+
+                    // Cria um item de menu para copiar o texto
+                    let copyItem = new PopupMenu.PopupMenuItem(_('Copy'));
+                    copyItem.connect('activate', () => {
+                        this._copySelectedText(responseChat);
+                    });
+                    contextMenu.addMenuItem(copyItem);
+
+                    // Mostra o menu de contexto
+                    contextMenu.popup(
+                        event.get_stage(),
+                        event.get_device(),
+                        event.get_time(),
+                        event.get_position(),
+                        PopupMenu.Position.AUTO,
+                    );
+                }
             });
 
             // Add separator to chat
@@ -281,16 +297,16 @@ const Gemini = GObject.registerClass(
             this.chatSection.addMenuItem(responseChat);
 
             // Get ai response for user question
-            this.getAireponse(responseChat, userQuestion);
+            // this.getAireponse(responseChat, userQuestion);
 
             // DEBUG
-            // let debugPhrase =
-            //     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius la';
-            // let formatedResponse = convertMD(debugPhrase);
-            // formatedResponse = format.chat(formatedResponse);
-            // responseChat.label.clutter_text.set_markup(
-            //     '<b>Gemini: </b> ' + formatedResponse,
-            // );
+            let debugPhrase =
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius la';
+            let formatedResponse = convertMD(debugPhrase);
+            formatedResponse = format.chat(formatedResponse);
+            responseChat.label.clutter_text.set_markup(
+                '<b>Gemini: </b> ' + formatedResponse,
+            );
         }
 
         getAireponse(
