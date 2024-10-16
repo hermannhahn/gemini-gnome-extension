@@ -360,14 +360,14 @@ const Gemini = GObject.registerClass(
         }
 
         scrollToBottom(responseChat) {
-            let vscrollBar = this.scrollView.get_vscroll_bar();
-            let adjustment = vscrollBar.get_adjustment();
-
             // Força uma nova disposição do layout
             responseChat.queue_relayout();
 
             // Conecta ao sinal que notifica quando o layout estiver pronto
             responseChat.connect('notify::height', (_self) => {
+                let vscrollBar = this.scrollView.get_vscroll_bar();
+                let adjustment = vscrollBar.get_adjustment();
+
                 // Define o valor superior e garante a rolagem até o final
                 adjustment.set_value(adjustment.upper - adjustment.page_size);
             });
