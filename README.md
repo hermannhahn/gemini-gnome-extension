@@ -74,6 +74,7 @@ Other files may be included but they aren't directly related to extension develo
 -   [x] Implement README
 -   [x] Implement Clear History Button
 -   [x] Implement Random response to wait AI response
+-   [x] Implement select box to Voice language options
 -   [ ] Implement Voice activation with hotkeys
 -   [ ] Implement Stop Button to stop speech
 -   [ ] Implement Imports and Code Separators
