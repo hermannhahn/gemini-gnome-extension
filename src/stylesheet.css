@@ -37,6 +37,9 @@
     overflow-x: scroll;
     word-wrap: break-word;
     margin-right: 20px;
+    cursor: text;
+    user-select: text;
+    -webkit-user-select: text;
 }
 .response-chat:hover {
     background-color: transparent;
@@ -49,6 +52,9 @@
     overflow-x: scroll;
     word-wrap: break-word;
     margin-right: 20px;
+    cursor: text;
+    user-select: text;
+    -webkit-user-select: text;
 }
 .input-chat:hover {
     background-color: transparent;
