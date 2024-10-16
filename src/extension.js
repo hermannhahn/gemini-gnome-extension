@@ -273,14 +273,6 @@ const Gemini = GObject.registerClass(
                 );
             });
 
-            // Set mouse click to copy response to clipboard
-            copyButton.connect('clicked', (_self) => {
-                this.extension.clipboard.set_text(
-                    St.ClipboardType.CLIPBOARD,
-                    this._copySelectedText(responseChat),
-                );
-            });
-
             // Add separator to chat
             this.chatSection.addMenuItem(
                 new PopupMenu.PopupSeparatorMenuItem(),
