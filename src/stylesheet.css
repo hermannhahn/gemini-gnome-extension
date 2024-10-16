@@ -90,7 +90,7 @@
     height: 24px;
     padding: 10px;
 }
-.copy-icon:checked {
+.copy-icon:active {
     background-image: url('assets/icon_check.png');
     background-size: 26px;
     width: 24px;
