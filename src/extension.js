@@ -619,7 +619,12 @@ const Gemini = GObject.registerClass(
                 );
                 log(`Texto copiado: ${selectedText}`);
             } else {
-                log('Nenhum texto selecionado.');
+                this.extension.clipboard.set_text(
+                    St.ClipboardType.CLIPBOARD,
+                    // Get text selection
+                    responseChat.label.text,
+                );
+                log(`Texto copiado: ${responseChat.label.text}`);
             }
         }
 
