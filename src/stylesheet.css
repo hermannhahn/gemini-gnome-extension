@@ -29,6 +29,7 @@
     overflow-y: auto;
     overflow-x: scroll;
     word-wrap: break-word;
+    padding: 20px;
 }
 .response-chat {
     max-width: 940px;
