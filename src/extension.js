@@ -361,10 +361,10 @@ const Gemini = GObject.registerClass(
             let adjustment = vscrollBar.get_adjustment();
 
             // Força uma nova disposição do layout
-            this.messageBox.queue_relayout();
+            this.responseChat.queue_relayout();
 
             // Conecta ao sinal que notifica quando o layout estiver pronto
-            this.messageBox.connect('notify::height', () => {
+            this.responseChat.connect('notify::height', () => {
                 // Define o valor superior e garante a rolagem até o final
                 adjustment.set_value(
                     adjustment.get_upper() - adjustment.get_page_size(),
