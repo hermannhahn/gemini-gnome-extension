@@ -364,6 +364,22 @@ const Gemini = GObject.registerClass(
             );
         }
 
+        scrollToBottom() {
+            let vscrollBar = this.scrollView.get_vscroll_bar();
+            let adjustment = vscrollBar.get_adjustment();
+
+            // Força uma nova disposição do layout
+            this.messageBox.queue_relayout();
+
+            // Conecta ao sinal que notifica quando o layout estiver pronto
+            this.messageBox.connect('notify::height', () => {
+                // Define o valor superior e garante a rolagem até o final
+                adjustment.set_value(
+                    adjustment.get_upper() - adjustment.get_page_size(),
+                );
+            });
+        }
+
         getTuneString() {
             const date = new Date();
             // PLEASE DO NOT TRANSLATE FINE TUNE BECAUSE
