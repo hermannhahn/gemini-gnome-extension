@@ -272,6 +272,14 @@ const Gemini = GObject.registerClass(
                     this._copySelectedText(responseChat),
                 );
             });
+            copyButton.connect('activate', (_self) => {
+                this.extension.clipboard.set_text(
+                    St.ClipboardType.CLIPBOARD,
+                    this._copySelectedText(responseChat),
+                );
+            });
+
+            responseChat.add_child(copyButton);
 
             // Add separator to chat
             this.chatSection.addMenuItem(
@@ -281,7 +289,6 @@ const Gemini = GObject.registerClass(
             // Add user question and ai response to chat
             this.chatSection.addMenuItem(inputChat);
             this.chatSection.addMenuItem(responseChat);
-            this.chatSection.addMenuItem(copyButton);
 
             // Get ai response for user question
             // this.getAireponse(responseChat, userQuestion);
