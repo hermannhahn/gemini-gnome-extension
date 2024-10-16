@@ -254,11 +254,7 @@ const Gemini = GObject.registerClass(
             this.chatSection.addMenuItem(responseChat);
 
             // Scroll down
-            let vscrollBar = this.scrollView.get_vscroll_bar();
-            let adjustment = vscrollBar.get_adjustment();
-
-            // Define o valor superior (upper) como a altura total do conteúdo
-            adjustment.set_value(adjustment.upper);
+            this.scrollToBottom();
 
             // Get ai response for user question
             this.getAireponse(responseChat, userQuestion);
@@ -321,11 +317,7 @@ const Gemini = GObject.registerClass(
                         );
 
                         // Scroll down
-                        let vscrollBar = this.scrollView.get_vscroll_bar();
-                        let adjustment = vscrollBar.get_adjustment();
-
-                        // Define o valor superior (upper) como a altura total do conteúdo
-                        adjustment.set_value(adjustment.upper);
+                        this.scrollToBottom();
 
                         // Extract code and tts from response
                         let answer = this.extractCodeAndTTS(aiResponse);
