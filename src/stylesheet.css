@@ -42,34 +42,6 @@
     color: white;
     cursor: text;
 }
-.response-chat::selection {
-    background-color: rgb(112, 112, 112);
-    color: rgb(44, 44, 44);
-}
-.response-chat .clutter-text::selection {
-    background-color: rgb(112, 112, 112);
-    color: rgb(44, 44, 44);
-}
-.response-chat .label .clutter-text::selection {
-    background-color: rgb(112, 112, 112);
-    color: rgb(44, 44, 44);
-}
-.response-chat .label::selection {
-    background-color: rgb(112, 112, 112);
-    color: rgb(44, 44, 44);
-}
-.clutter-text::selection {
-    background-color: rgb(112, 112, 112);
-    color: rgb(44, 44, 44);
-}
-.ai-entry::selection {
-    background-color: rgb(112, 112, 112);
-    color: rgb(44, 44, 44);
-}
-.label::selection {
-    background-color: rgb(112, 112, 112);
-    color: rgb(44, 44, 44);
-}
 .input-chat {
     color: rgb(243, 232, 212);
     max-width: 960px;
@@ -87,17 +59,9 @@
     padding: 10px;
     text-align: justify;
 }
-.chat-scroll-section::selection {
-    background-color: rgb(112, 112, 112);
-    color: rgb(44, 44, 44);
-}
 .chat-section {
     text-wrap: break-word;
     text-align: justify;
-}
-.chat-section::selection {
-    background-color: rgb(112, 112, 112);
-    color: rgb(44, 44, 44);
 }
 .google-gemini-icon {
     background-image: url('assets/icon_gemini.png');
