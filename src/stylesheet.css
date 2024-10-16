@@ -32,12 +32,14 @@
 }
 .response-chat {
     color: burlywood;
+    width: 960px;
     text-wrap: wrap;
     text-align: justify;
     word-wrap: break-word;
 }
 .input-chat {
     color: wheat;
+    width: 960px;
     text-wrap: wrap;
     text-align: justify;
     word-wrap: break-word;
