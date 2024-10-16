@@ -255,7 +255,7 @@ const Gemini = GObject.registerClass(
             this.chatSection.addMenuItem(responseChat);
 
             // Scroll down
-            this.scrollToBottom();
+            this.scrollToBottom(responseChat);
 
             // Get ai response for user question
             this.getAireponse(responseChat, userQuestion);
@@ -318,7 +318,7 @@ const Gemini = GObject.registerClass(
                         );
 
                         // Scroll down
-                        this.scrollToBottom();
+                        this.scrollToBottom(responseChat);
 
                         // Extract code and tts from response
                         let answer = this.extractCodeAndTTS(aiResponse);
@@ -357,15 +357,15 @@ const Gemini = GObject.registerClass(
             );
         }
 
-        scrollToBottom() {
+        scrollToBottom(responseChat) {
             let vscrollBar = this.scrollView.get_vscroll_bar();
             let adjustment = vscrollBar.get_adjustment();
 
             // Força uma nova disposição do layout
-            this.chat.queue_relayout();
+            responseChat.queue_relayout();
 
             // Conecta ao sinal que notifica quando o layout estiver pronto
-            this.chat.connect('notify::height', () => {
+            responseChat.connect('notify::height', () => {
                 // Define o valor superior e garante a rolagem até o final
                 adjustment.set_value(
                     adjustment.get_upper() - adjustment.get_page_size(),
