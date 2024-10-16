@@ -119,7 +119,7 @@ const Gemini = GObject.registerClass(
 
             // Create app item section
             let item = new PopupMenu.PopupBaseMenuItem({
-                reactive: true,
+                reactive: false,
                 can_focus: false,
             });
 
@@ -237,7 +237,7 @@ const Gemini = GObject.registerClass(
 
             // Add ai response to chat
             responseChat.label.clutter_text.set_markup(aiResponse);
-            // responseChat.label.clutter_text.selectable = true;
+            responseChat.label.clutter_text.selectable = true;
             // responseChat.label.clutter_text.reactive = true;
 
             // Chat settings
