@@ -259,41 +259,42 @@ const Gemini = GObject.registerClass(
             this.scrollView.style_class += 'm-w-100';
 
             // Set mouse click to copy response to clipboard
-            // responseChat.connect('activate', (_self) => {
-            //     this.extension.clipboard.set_text(
-            //         St.ClipboardType.CLIPBOARD,
-            //         responseChat.label.text,
-            //     );
-            // });
+            responseChat.connect('activate', (_self) => {
+                //     this.extension.clipboard.set_text(
+                //         St.ClipboardType.CLIPBOARD,
+                //         responseChat.label.text,
+                //     );
+                // });
 
-            // Copy selected text
-            // responseChat.connect('button-release-event', (_actor, _event) => {
-            //     this._copySelectedText(responseChat);
-            // });
+                // Copy selected text
+                // responseChat.connect('button-release-event', (_actor, _event) => {
+                //     this._copySelectedText(responseChat);
+                // });
 
-            // Open context menu with second mouse button
-            responseChat.connect('activate', (_actor, event) => {
-                log(event.button);
-                if (event.button === 3) {
-                    // Cria um menu de contexto
-                    let contextMenu = new PopupMenu.PopupMenu();
+                // Open context menu with second mouse button
+                responseChat.connect('button-press-event', (_actor, event) => {
+                    log(event.button);
+                    if (event.button === 3) {
+                        // Cria um menu de contexto
+                        let contextMenu = new PopupMenu.PopupMenu();
 
-                    // Cria um item de menu para copiar o texto
-                    let copyItem = new PopupMenu.PopupMenuItem(_('Copy'));
-                    copyItem.connect('activate', () => {
-                        this._copySelectedText(responseChat);
-                    });
-                    contextMenu.addMenuItem(copyItem);
+                        // Cria um item de menu para copiar o texto
+                        let copyItem = new PopupMenu.PopupMenuItem(_('Copy'));
+                        copyItem.connect('activate', () => {
+                            this._copySelectedText(responseChat);
+                        });
+                        contextMenu.addMenuItem(copyItem);
 
-                    // Mostra o menu de contexto
-                    contextMenu.popup(
-                        event.get_stage(),
-                        event.get_device(),
-                        event.get_time(),
-                        event.get_position(),
-                        PopupMenu.Position.AUTO,
-                    );
-                }
+                        // Mostra o menu de contexto
+                        contextMenu.popup(
+                            event.get_stage(),
+                            event.get_device(),
+                            event.get_time(),
+                            event.get_position(),
+                            PopupMenu.Position.AUTO,
+                        );
+                    }
+                });
             });
 
             // Add separator to chat
