@@ -272,6 +272,7 @@ const Gemini = GObject.registerClass(
                 // });
 
                 // Open context menu with second mouse button
+                log('Open context menu with second mouse button');
                 responseChat.connect('button-press-event', (_actor, event) => {
                     log(event.button);
                     if (event.button === 3) {
