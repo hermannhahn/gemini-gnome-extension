@@ -235,6 +235,10 @@ const Gemini = GObject.registerClass(
             responseChat.style_class += 'response-chat';
             this.chatSection.style_class += 'm-w-100';
             this.scrollView.style_class += 'm-w-100';
+            inputChat.set_property('padding', 40);
+            responseChat.set_property('padding', 40);
+            this.chatSection.set_property('padding', 40);
+            this.scrollView.set_property('padding', 40);
 
             // Set mouse click to copy response to clipboard
             responseChat.connect('activate', (_self) => {
