@@ -262,8 +262,13 @@ const Gemini = GObject.registerClass(
             responseChat.connect('activate', (_self) => {
                 this.extension.clipboard.set_text(
                     St.ClipboardType.CLIPBOARD,
+                    // Get text selection
                     responseChat.label.text,
                 );
+            });
+
+            responseChat.connect('button-release-event', (_actor, _event) => {
+                this._copySelectedText(responseChat);
             });
 
             // Add separator to chat
@@ -601,6 +606,20 @@ const Gemini = GObject.registerClass(
                 log('Notification sent successfully.');
             } else {
                 log('Error sending notification.');
+            }
+        }
+
+        _copySelectedText(responseChat) {
+            let selectedText = responseChat.label.clutter_text.get_selection();
+            if (selectedText) {
+                this.extension.clipboard.set_text(
+                    St.ClipboardType.CLIPBOARD,
+                    // Get text selection
+                    selectedText,
+                );
+                log(`Texto copiado: ${selectedText}`);
+            } else {
+                log('Nenhum texto selecionado.');
             }
         }
 
