@@ -38,6 +38,7 @@
     word-wrap: break-word;
     text-align: justify;
     font-family: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif';
+    z-index: 1;
 }
 .response-chat:hover {
     background-color: rgb(39, 39, 39);
@@ -49,6 +50,7 @@
     word-wrap: break-word;
     text-align: justify;
     font-family: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif';
+    z-index: 1;
 }
 .input-chat:hover {
     background-color: rgb(39, 39, 39);
