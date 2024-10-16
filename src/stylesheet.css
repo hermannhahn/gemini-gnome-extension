@@ -37,8 +37,8 @@
     overflow-y: auto;
     overflow-x: scroll;
     word-wrap: break-word;
-    border-right: 5px solid black;
-    margin-right: 20px;
+    text-align: justify;
+    font-family: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif';
 }
 .response-chat:hover {
     background-color: transparent;
@@ -50,8 +50,8 @@
     overflow-y: auto;
     overflow-x: scroll;
     word-wrap: break-word;
-    border-right: 5px solid black;
-    margin-right: 20px;
+    text-align: justify;
+    font-family: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif';
 }
 .input-chat:hover {
     background-color: transparent;
