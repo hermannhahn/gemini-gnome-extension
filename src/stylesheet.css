@@ -56,6 +56,9 @@
     background-color: rgb(42, 42, 42);
     color: white;
 }
+.input-chat::selection {
+    color: black;
+}
 .chat-scroll-section {
     max-height: 800px;
     text-wrap: wrap;
