@@ -237,12 +237,12 @@ const Gemini = GObject.registerClass(
             this.scrollView.style_class += ' m-w-100';
 
             // Set mouse click to copy response to clipboard
-            // responseChat.connect('activate', (_self) => {
-            //    this.extension.clipboard.set_text(
-            //        St.ClipboardType.CLIPBOARD,
-            //        responseChat.label.text,
-            //    );
-            // });
+            responseChat.connect('activate', (_self) => {
+                this.extension.clipboard.set_text(
+                    St.ClipboardType.CLIPBOARD,
+                    responseChat.label.text,
+                );
+            });
 
             // Add separator to chat
             this.chatSection.addMenuItem(
