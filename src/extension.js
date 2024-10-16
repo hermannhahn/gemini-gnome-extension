@@ -229,6 +229,13 @@ const Gemini = GObject.registerClass(
                 hover: true,
             });
 
+            // Create voice activation button
+            const copyButton = new St.Button({
+                can_focus: true,
+                toggle_mode: true,
+                style_class: 'copy-icon',
+            });
+
             // Add user question to chat
             let formatedQuestion = format.inputChat(userQuestion);
             inputChat.label.clutter_text.set_markup(
@@ -260,42 +267,18 @@ const Gemini = GObject.registerClass(
 
             // Set mouse click to copy response to clipboard
             responseChat.connect('activate', (_self) => {
-                //     this.extension.clipboard.set_text(
-                //         St.ClipboardType.CLIPBOARD,
-                //         responseChat.label.text,
-                //     );
-                // });
+                this.extension.clipboard.set_text(
+                    St.ClipboardType.CLIPBOARD,
+                    this._copySelectedText(responseChat),
+                );
+            });
 
-                // Copy selected text
-                // responseChat.connect('button-release-event', (_actor, _event) => {
-                //     this._copySelectedText(responseChat);
-                // });
-
-                // Open context menu with second mouse button
-                log('Open context menu with second mouse button');
-                responseChat.connect('button-press-event', (_actor, event) => {
-                    log(event.button);
-                    if (event.button === 3) {
-                        // Cria um menu de contexto
-                        let contextMenu = new PopupMenu.PopupMenu();
-
-                        // Cria um item de menu para copiar o texto
-                        let copyItem = new PopupMenu.PopupMenuItem(_('Copy'));
-                        copyItem.connect('activate', () => {
-                            this._copySelectedText(responseChat);
-                        });
-                        contextMenu.addMenuItem(copyItem);
-
-                        // Mostra o menu de contexto
-                        contextMenu.popup(
-                            event.get_stage(),
-                            event.get_device(),
-                            event.get_time(),
-                            event.get_position(),
-                            PopupMenu.Position.AUTO,
-                        );
-                    }
-                });
+            // Set mouse click to copy response to clipboard
+            copyButton.connect('clicked', (_self) => {
+                this.extension.clipboard.set_text(
+                    St.ClipboardType.CLIPBOARD,
+                    this._copySelectedText(responseChat),
+                );
             });
 
             // Add separator to chat
@@ -306,6 +289,7 @@ const Gemini = GObject.registerClass(
             // Add user question and ai response to chat
             this.chatSection.addMenuItem(inputChat);
             this.chatSection.addMenuItem(responseChat);
+            this.chatSection.addMenuItem(copyButton);
 
             // Get ai response for user question
             // this.getAireponse(responseChat, userQuestion);
