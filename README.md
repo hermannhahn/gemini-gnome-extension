@@ -87,10 +87,10 @@ Other files may be included but they aren't directly related to extension develo
 
 -   [x] Chat Scrolling
 -   [x] Form focus
+-   [x] Go to end of chat after send new question and after receive response
+-   [x] Formatting chat messages
+-   [x] Increase chat width size
 -   [ ] Fix gnome notify function
--   [ ] Go to end of chat after send new question and after receive response
--   [ ] Formatting chat messages
--   [ ] Increase chat width size
 -   [ ] Fix chat form, after create scroll, only click if scroll to begin
 
 ## License
