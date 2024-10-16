@@ -237,8 +237,12 @@ const Gemini = GObject.registerClass(
 
             // Add ai response to chat
             responseChat.label.clutter_text.set_markup(aiResponse);
+
+            // Enable text selection
             responseChat.label.clutter_text.reactive = true;
             responseChat.label.clutter_text.selectable = true;
+
+            // Disable clutter_text hover
             responseChat.label.clutter_text.hover = false;
 
             // Chat settings
