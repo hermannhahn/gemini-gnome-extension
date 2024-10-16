@@ -367,9 +367,11 @@ const Gemini = GObject.registerClass(
             responseChat.connect('notify::height', (_self) => {
                 let vscrollBar = this.scrollView.get_vscroll_bar();
                 let adjustment = vscrollBar.get_adjustment();
+                log('[ ADJUSTMENT UPPER ]' + adjustment.upper);
+                log('[ ADJUSTMENT PAGE SIZE ]' + adjustment.page_size);
 
                 // Define o valor superior e garante a rolagem até o final
-                adjustment.set_value(adjustment.upper - adjustment.page_size);
+                adjustment.set_value(adjustment.upper + 1000);
             });
         }
 
