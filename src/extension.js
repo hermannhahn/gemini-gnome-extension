@@ -266,14 +266,12 @@ const Gemini = GObject.registerClass(
             this.scrollView.style_class += 'm-w-100';
 
             // Set mouse click to copy response to clipboard
-            responseChat.connect('activate', (_self) => {
+            copyButton.connect('activate', (_self) => {
                 this.extension.clipboard.set_text(
                     St.ClipboardType.CLIPBOARD,
                     this._copySelectedText(responseChat),
                 );
             });
-
-            const responseText = responseChat;
 
             // Add separator to chat
             this.chatSection.addMenuItem(
@@ -284,13 +282,6 @@ const Gemini = GObject.registerClass(
             this.chatSection.addMenuItem(inputChat);
             this.chatSection.addMenuItem(responseChat);
             this.chatSection.addMenuItem(copyButton);
-
-            copyButton.connect('activate', (_self) => {
-                this.extension.clipboard.set_text(
-                    St.ClipboardType.CLIPBOARD,
-                    this._copySelectedText(responseText),
-                );
-            });
 
             // Get ai response for user question
             // this.getAireponse(responseChat, userQuestion);
