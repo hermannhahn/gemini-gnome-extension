@@ -231,10 +231,10 @@ const Gemini = GObject.registerClass(
             // Chat settings
             inputChat.label.x_expand = true;
             responseChat.label.x_expand = true;
-            inputChat.style_class += ' m-w-100';
-            responseChat.style_class += ' m-w-100';
-            this.chatSection.style_class += ' m-w-100';
-            this.scrollView.style_class += ' m-w-100';
+            inputChat.style_class += 'm-w-100';
+            responseChat.style_class += 'response-chat';
+            this.chatSection.style_class += 'm-w-100';
+            this.scrollView.style_class += 'm-w-100';
 
             // Set mouse click to copy response to clipboard
             responseChat.connect('activate', (_self) => {
