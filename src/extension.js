@@ -259,12 +259,13 @@ const Gemini = GObject.registerClass(
             this.scrollView.style_class += 'm-w-100';
 
             // Copy selected text
-            responseChat.connect('button-release-event', (_actor, _event) => {
-                this._copySelectedText(responseChat);
-            });
+            // responseChat.connect('button-release-event', (_actor, _event) => {
+            //     this._copySelectedText(responseChat);
+            // });
 
             // Open context menu with second mouse button
             responseChat.connect('button-press-event', (_actor, event) => {
+                log(event.button);
                 if (event.button === 3) {
                     // Cria um menu de contexto
                     let contextMenu = new PopupMenu.PopupMenu();
