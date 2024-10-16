@@ -231,7 +231,7 @@ const Gemini = GObject.registerClass(
             // Chat settings
             inputChat.label.x_expand = true;
             responseChat.label.x_expand = true;
-            inputChat.style_class += 'm-w-100';
+            inputChat.style_class += 'input-chat';
             responseChat.style_class += 'response-chat';
             this.chatSection.style_class += 'm-w-100';
             this.scrollView.style_class += 'm-w-100';
