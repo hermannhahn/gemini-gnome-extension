@@ -36,10 +36,8 @@
     overflow-y: auto;
     overflow-x: scroll;
     word-wrap: break-word;
+    border-right: 5px solid black;
     margin-right: 20px;
-    cursor: text;
-    user-select: text;
-    -webkit-user-select: text;
 }
 .response-chat:hover {
     background-color: transparent;
@@ -51,10 +49,8 @@
     overflow-y: auto;
     overflow-x: scroll;
     word-wrap: break-word;
+    border-right: 5px solid black;
     margin-right: 20px;
-    cursor: text;
-    user-select: text;
-    -webkit-user-select: text;
 }
 .input-chat:hover {
     background-color: transparent;
