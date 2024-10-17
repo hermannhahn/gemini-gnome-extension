@@ -232,9 +232,6 @@ const Gemini = GObject.registerClass(
             // Create voice activation button
             const copyButton = new PopupMenu.PopupMenuItem('', {
                 style_class: 'copy-icon',
-                reactive: true,
-                can_focus: false,
-                hover: false,
             });
 
             // Add user question to chat
