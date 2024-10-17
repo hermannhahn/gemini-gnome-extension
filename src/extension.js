@@ -632,6 +632,12 @@ const Gemini = GObject.registerClass(
                     copyButton.label.clutter_text.set_markup(
                         _('[ Selected Text Copied to clipboard ]'),
                     );
+                    GLib.timeout_add(
+                        GLib.PRIORITY_DEFAULT,
+                        3000,
+                        this.copyButtonTextRemove,
+                        copyButton,
+                    );
                 }
                 log(`Texto copiado: ${selectedText}`);
             } else {
@@ -647,13 +653,6 @@ const Gemini = GObject.registerClass(
                 }
                 log(`Texto copiado: ${responseChat.label.text}`);
             }
-            // Agendar execução com um atraso de 3000ms (3 segundos)
-            GLib.timeout_add(
-                GLib.PRIORITY_DEFAULT,
-                3000,
-                this.copyButtonTextRemove,
-                copyButton,
-            );
         }
 
         removeNotificationByTitle(title) {
