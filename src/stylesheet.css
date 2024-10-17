@@ -81,7 +81,7 @@
     background-size: 26px;
     width: 24px;
     height: 24px;
-    padding: 10px;
+    text-align: right;
 }
 .copy-icon:active {
     background-image: url('assets/icon_check.png');
