@@ -461,6 +461,11 @@ const Gemini = GObject.registerClass(
             super.destroy();
         }
 
+        copyButtonTextRemove(copyButton) {
+            copyButton.label.clutter_text.set_markup('');
+            return GLib.SOURCE_REMOVE; // Retorna isso para garantir que o timeout execute apenas uma vez
+        }
+
         // Create history.json file if not exist
         createHistoryFile() {
             if (!GLib.file_test(historyFilePath, GLib.FileTest.IS_REGULAR)) {
@@ -642,6 +647,12 @@ const Gemini = GObject.registerClass(
                 }
                 log(`Texto copiado: ${responseChat.label.text}`);
             }
+            // Agendar execução com um atraso de 3000ms (3 segundos)
+            GLib.timeout_add(
+                GLib.PRIORITY_DEFAULT,
+                3000,
+                this.copyButtonTextRemove(copyButton),
+            );
         }
 
         removeNotificationByTitle(title) {
