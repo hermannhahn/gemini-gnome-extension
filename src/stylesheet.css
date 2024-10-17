@@ -92,6 +92,7 @@
     background-size: 26px;
     width: 24px;
     height: 24px;
+    border: 1px solid transparent;
 }
 .mic-icon:hover {
     background-color: rgb(42, 42, 42);
