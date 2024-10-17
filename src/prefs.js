@@ -628,8 +628,6 @@ class GeminiSettings {
         });
         const histroyButton = new Gtk.Switch({
             valign: Gtk.Align.CENTER,
-            active_text: _('Yes'),
-            inactive_text: _('No'),
         });
 
         const save = new Gtk.Button({
@@ -643,23 +641,7 @@ class GeminiSettings {
         });
 
         // Set labels property
-        apiKeyLabel.set_property('padding', 40);
-        apiKey.set_property('padding', 40);
-        howToButtonApiKey.set_property('padding', 40);
-        labelAzure.set_property('padding', 40);
-        azureSpeechKey.set_property('padding', 40);
-        howToButtonAzure.set_property('padding', 40);
-        labelRegion.set_property('padding', 40);
-        azureRegion.set_property('padding', 40);
-        howToRegion.set_property('padding', 40);
-        labelLanguage.set_property('padding', 40);
-        languageSelector.set_property('padding', 40);
-        labelVoice.set_property('padding', 40);
-        azureVoiceSelector.set_property('padding', 40);
-        histroyLabel.set_property('padding', 40);
-        histroyButton.set_property('padding', 40);
-        save.set_property('padding', 40);
-        statusLabel.set_property('padding', 40);
+        // apiKeyLabel.set_property('padding', 40);
 
         // Set default
         histroyButton.set_active(defaultLog);
