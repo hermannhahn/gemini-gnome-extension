@@ -650,6 +650,12 @@ const Gemini = GObject.registerClass(
                     copyButton.label.clutter_text.set_markup(
                         _('[ Copied to clipboard ]'),
                     );
+                    GLib.timeout_add(
+                        GLib.PRIORITY_DEFAULT,
+                        3000,
+                        this.copyButtonTextRemove,
+                        copyButton,
+                    );
                 }
                 log(`Texto copiado: ${responseChat.label.text}`);
             }
