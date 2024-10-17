@@ -628,7 +628,8 @@ class GeminiSettings {
         });
         const histroyButton = new Gtk.Switch({
             valign: Gtk.Align.CENTER,
-            style_class: 'switch',
+            active_text: _('Yes'),
+            inactive_text: _('No'),
         });
 
         const save = new Gtk.Button({
