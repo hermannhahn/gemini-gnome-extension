@@ -57,7 +57,6 @@
 }
 .copy-icon {
     background-image: url('assets/icon_copy.png');
-    background-position-x: 80%;
     background-size: 26px;
     width: 24px;
     height: 24px;
