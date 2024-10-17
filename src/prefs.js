@@ -626,10 +626,14 @@ class GeminiSettings {
             label: _('Remember talk history'),
             halign: Gtk.Align.START,
         });
-        const histroyButton = new Gtk.Switch();
+        const histroyButton = new Gtk.Switch({
+            valign: Gtk.Align.CENTER,
+            style_class: 'switch',
+        });
 
         const save = new Gtk.Button({
             label: _('Save'),
+            style_class: 'save-button',
         });
         const statusLabel = new Gtk.Label({
             label: '',
