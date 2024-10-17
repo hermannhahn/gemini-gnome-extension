@@ -86,6 +86,9 @@
 .copy-icon:active {
     background-image: url('assets/icon_check.png');
     transform: scale(5.5);
+    -moz-animation-delay: 2s;
+    -webkit-animation-delay: 2s;
+    animation-delay: 2s;
 }
 .mic-icon {
     background-image: url('assets/icon_mic.png');
@@ -100,6 +103,19 @@
 }
 .mic-icon:checked {
     border: 1px solid rgb(226, 0, 0);
+    -webkit-animation: pulse 1s infinite;
+    animation: pulse 1s infinite;
+}
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 .trash-icon {
     background-image: url('assets/icon_trash.png');
@@ -112,9 +128,9 @@
     border-radius: 150px;
 }
 .trash-icon:active {
-    background-size: 14px;
-    width: 16px;
-    height: 16px;
+    background-size: 18px;
+    width: 20px;
+    height: 20px;
 }
 .settings-icon {
     background-image: url('assets/icon_settings.png');
@@ -127,9 +143,9 @@
     border-radius: 150px;
 }
 .settings-icon:active {
-    background-size: 14px;
-    width: 16px;
-    height: 16px;
+    background-size: 18px;
+    width: 20px;
+    height: 20px;
 }
 .inputLabel {
     color: black;
