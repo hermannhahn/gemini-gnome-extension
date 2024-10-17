@@ -277,11 +277,6 @@ const Gemini = GObject.registerClass(
             this.chatSection.addMenuItem(responseChat);
             this.chatSection.addMenuItem(copyButton);
 
-            // Add separator to chat
-            this.chatSection.addMenuItem(
-                new PopupMenu.PopupSeparatorMenuItem(),
-            );
-
             // Get ai response for user question
             // this.getAireponse(responseChat, userQuestion);
 
@@ -292,6 +287,10 @@ const Gemini = GObject.registerClass(
             formatedResponse = format.chat(formatedResponse);
             responseChat.label.clutter_text.set_markup(
                 '<b>Gemini: </b> ' + formatedResponse,
+            );
+            // Add separator to chat
+            this.chatSection.addMenuItem(
+                new PopupMenu.PopupSeparatorMenuItem(),
             );
         }
 
