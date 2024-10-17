@@ -235,7 +235,6 @@ const Gemini = GObject.registerClass(
                 reactive: true,
                 can_focus: false,
                 hover: false,
-                label: _('Copy'),
             });
 
             // Separator
@@ -279,7 +278,7 @@ const Gemini = GObject.registerClass(
 
             // Set mouse click to copy response to clipboard
             copyButton.connect('activate', (_self) => {
-                this._copySelectedText(responseChat);
+                this._copySelectedText(responseChat, copyButton);
             });
 
             // Get ai response for user question
@@ -615,7 +614,7 @@ const Gemini = GObject.registerClass(
             }
         }
 
-        _copySelectedText(responseChat) {
+        _copySelectedText(responseChat, copyButton = null) {
             let selectedText = responseChat.label.clutter_text.get_selection();
             if (selectedText) {
                 this.extension.clipboard.set_text(
@@ -624,7 +623,11 @@ const Gemini = GObject.registerClass(
                     selectedText,
                 );
                 // Create label
-
+                if (copyButton) {
+                    copyButton.label.clutter_text.set_markup(
+                        _('Copied to clipboard'),
+                    );
+                }
                 log(`Texto copiado: ${selectedText}`);
             } else {
                 this.extension.clipboard.set_text(
@@ -632,6 +635,11 @@ const Gemini = GObject.registerClass(
                     // Get text selection
                     responseChat.label.text,
                 );
+                if (copyButton) {
+                    copyButton.label.clutter_text.set_markup(
+                        _('Selected Text Copied to clipboard'),
+                    );
+                }
                 log(`Texto copiado: ${responseChat.label.text}`);
             }
         }
