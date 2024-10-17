@@ -289,9 +289,9 @@ const Gemini = GObject.registerClass(
                 '<b>Gemini: </b> ' + formatedResponse,
             );
             // Add separator to chat
-            this.chatSection.addMenuItem(
-                new PopupMenu.PopupSeparatorMenuItem(),
-            );
+            // this.chatSection.addMenuItem(
+            //     new PopupMenu.PopupSeparatorMenuItem(),
+            // );
         }
 
         getAireponse(
