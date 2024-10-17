@@ -89,7 +89,7 @@
     width: 24px;
     height: 24px;
     padding: 10px;
-    transform: scale(2);
+    transform: scale(0.9);
 }
 .mic-icon {
     background-image: url('assets/icon_mic.png');
