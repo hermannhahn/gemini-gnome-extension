@@ -85,10 +85,7 @@
 }
 .copy-icon:active {
     background-image: url('assets/icon_check.png');
-    transform: scale(5.5);
-    -moz-animation-delay: 2s;
-    -webkit-animation-delay: 2s;
-    animation-delay: 2s;
+    transform: scale(1.2);
 }
 .mic-icon {
     background-image: url('assets/icon_mic.png');
@@ -96,10 +93,10 @@
     width: 24px;
     height: 24px;
     border: 1px solid transparent;
+    border-radius: 150px;
 }
 .mic-icon:hover {
     background-color: rgb(42, 42, 42);
-    border-radius: 150px;
 }
 .mic-icon:checked {
     border: 1px solid rgb(226, 0, 0);
