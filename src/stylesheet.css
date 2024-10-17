@@ -1,40 +1,20 @@
 /* Add your custom extension styling here */
-.chatLog {
-    color: black;
-    text-wrap: wrap;
-}
-.chatType {
-    color: black;
-    font-weight: bold;
-    text-wrap: wrap;
-}
 .ai-entry {
     width: 250px;
     height: 20px !important;
     border-radius: 100px;
     text-wrap: wrap;
 }
-.mic-button {
-    width: 24px;
-}
-.clear-button {
-    width: 24px;
-}
-.copy-button {
-    width: 24px;
-}
 .m-w-100 {
     max-width: 960px;
     text-wrap: wrap;
     overflow-y: auto;
     word-wrap: break-word;
-    text-align: justify;
 }
 .response-chat {
     color: rgb(243, 232, 212);
     max-width: 960px;
     text-wrap: wrap;
-    text-align: justify;
     word-wrap: break-word;
     cursor: text;
 }
@@ -63,11 +43,10 @@
     max-height: 800px;
     text-wrap: wrap;
     padding: 10px;
-    text-align: justify;
 }
 .chat-section {
     text-wrap: break-word;
-    text-align: justify;
+    text-align: right;
 }
 .google-gemini-icon {
     background-image: url('assets/icon_gemini.png');
@@ -78,7 +57,7 @@
 }
 .copy-icon {
     background-image: url('assets/icon_copy.png');
-    background-position: 75% 50%;
+    background-position-x: 80%;
     background-size: 26px;
     width: 24px;
     height: 24px;
