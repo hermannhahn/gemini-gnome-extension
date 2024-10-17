@@ -270,16 +270,16 @@ const Gemini = GObject.registerClass(
             this.chatSection.style_class += 'm-w-100';
             this.scrollView.style_class += 'm-w-100';
 
+            // Add user question and ai response to chat
+            this.chatSection.addMenuItem(newSeparator);
+            this.chatSection.addMenuItem(inputChat);
+            this.chatSection.addMenuItem(responseChat);
+            this.chatSection.addMenuItem(copyButton);
+
             // Set mouse click to copy response to clipboard
             copyButton.connect('activate', (_self) => {
                 this._copySelectedText(responseChat);
             });
-
-            // Add user question and ai response to chat
-            this.chatSection.addMenuItem(inputChat);
-            this.chatSection.addMenuItem(responseChat);
-            this.chatSection.addMenuItem(copyButton);
-            this.chatSection.addMenuItem(newSeparator);
 
             // Get ai response for user question
             // this.getAireponse(responseChat, userQuestion);
