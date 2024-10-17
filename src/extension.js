@@ -625,7 +625,7 @@ const Gemini = GObject.registerClass(
                 // Create label
                 if (copyButton) {
                     copyButton.label.clutter_text.set_markup(
-                        _('Copied to clipboard'),
+                        _('[ Selected Text Copied to clipboard ]'),
                     );
                 }
                 log(`Texto copiado: ${selectedText}`);
@@ -637,7 +637,7 @@ const Gemini = GObject.registerClass(
                 );
                 if (copyButton) {
                     copyButton.label.clutter_text.set_markup(
-                        _('Selected Text Copied to clipboard'),
+                        _('[ Copied to clipboard ]'),
                     );
                 }
                 log(`Texto copiado: ${responseChat.label.text}`);
