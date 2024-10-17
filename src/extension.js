@@ -229,13 +229,16 @@ const Gemini = GObject.registerClass(
                 hover: true,
             });
 
-            // Create voice activation button
+            // Create copy button
             const copyButton = new PopupMenu.PopupMenuItem('', {
                 style_class: 'copy-icon',
                 reactive: true,
                 can_focus: false,
                 hover: false,
             });
+
+            // Separator
+            const newSeparator = new PopupMenu.PopupSeparatorMenuItem();
 
             // Add user question to chat
             let formatedQuestion = convertMD(userQuestion);
@@ -276,6 +279,7 @@ const Gemini = GObject.registerClass(
             this.chatSection.addMenuItem(inputChat);
             this.chatSection.addMenuItem(responseChat);
             this.chatSection.addMenuItem(copyButton);
+            this.chatSection.addMenuItem(newSeparator);
 
             // Get ai response for user question
             // this.getAireponse(responseChat, userQuestion);
