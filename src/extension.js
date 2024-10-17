@@ -234,7 +234,7 @@ const Gemini = GObject.registerClass(
                 style_class: 'copy-icon',
                 reactive: true,
                 can_focus: false,
-                hover: true,
+                hover: false,
             });
 
             // Add user question to chat
