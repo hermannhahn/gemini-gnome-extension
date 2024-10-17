@@ -463,7 +463,6 @@ const Gemini = GObject.registerClass(
 
         copyButtonTextRemove(copyButton) {
             copyButton.label.clutter_text.set_markup('');
-            return GLib.SOURCE_REMOVE; // Retorna isso para garantir que o timeout execute apenas uma vez
         }
 
         // Create history.json file if not exist
