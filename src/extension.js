@@ -463,7 +463,7 @@ const Gemini = GObject.registerClass(
 
         copyButtonTextRemove(copyButton) {
             copyButton.label.clutter_text.set_markup('');
-            return copyButton.label.clutter_text.set_markup('');
+            return GLib.SOURCE_REMOVE;
         }
 
         // Create history.json file if not exist
@@ -651,7 +651,8 @@ const Gemini = GObject.registerClass(
             GLib.timeout_add(
                 GLib.PRIORITY_DEFAULT,
                 3000,
-                this.copyButtonTextRemove(copyButton),
+                this.copyButtonTextRemove,
+                copyButton,
             );
         }
 
