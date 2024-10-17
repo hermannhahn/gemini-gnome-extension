@@ -272,15 +272,15 @@ const Gemini = GObject.registerClass(
                 this._copySelectedText(responseChat);
             });
 
-            // Add separator to chat
-            this.chatSection.addMenuItem(
-                new PopupMenu.PopupSeparatorMenuItem(),
-            );
-
             // Add user question and ai response to chat
             this.chatSection.addMenuItem(inputChat);
             this.chatSection.addMenuItem(responseChat);
             this.chatSection.addMenuItem(copyButton);
+
+            // Add separator to chat
+            this.chatSection.addMenuItem(
+                new PopupMenu.PopupSeparatorMenuItem(),
+            );
 
             // Get ai response for user question
             // this.getAireponse(responseChat, userQuestion);
