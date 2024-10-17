@@ -652,8 +652,7 @@ const Gemini = GObject.registerClass(
                     GLib.timeout_add(
                         GLib.PRIORITY_DEFAULT,
                         3000,
-                        this.copyButtonTextRemove,
-                        copyButton,
+                        this.copyButtonTextRemove(copyButton),
                     );
                 }
                 log(`Texto copiado: ${responseChat.label.text}`);
