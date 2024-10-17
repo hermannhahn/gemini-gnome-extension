@@ -111,6 +111,11 @@
     background-color: rgb(42, 42, 42);
     border-radius: 150px;
 }
+.trash-icon:active {
+    background-size: 14px;
+    width: 16px;
+    height: 16px;
+}
 .settings-icon {
     background-image: url('assets/icon_settings.png');
     background-size: 20px;
@@ -120,6 +125,11 @@
 .settings-icon:hover {
     background-color: rgb(42, 42, 42);
     border-radius: 150px;
+}
+.settings-icon:active {
+    background-size: 14px;
+    width: 16px;
+    height: 16px;
 }
 .inputLabel {
     color: black;
