@@ -28,7 +28,7 @@
     text-wrap: wrap;
     overflow-y: auto;
     word-wrap: break-word;
-    text-align: justify;
+    text-align: right;
 }
 .response-chat {
     color: rgb(243, 232, 212);
@@ -82,6 +82,9 @@
     width: 24px;
     height: 24px;
     text-align: right;
+    position: relative;
+    float: right;
+    right: 0px;
 }
 .copy-icon:hover {
     background-color: transparent;
