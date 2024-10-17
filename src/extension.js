@@ -238,8 +238,8 @@ const Gemini = GObject.registerClass(
             });
 
             // Add user question to chat
-            let formatedQuestion = convertMD(formatedQuestion);
-            formatedQuestion = format.inputChat(userQuestion);
+            let formatedQuestion = convertMD(userQuestion);
+            formatedQuestion = format.inputChat(formatedQuestion);
             inputChat.label.clutter_text.set_markup(
                 `<b>${USERNAME}: </b>${formatedQuestion}`,
             );
