@@ -632,7 +632,6 @@ class GeminiSettings {
 
         const save = new Gtk.Button({
             label: _('Save'),
-            style_class: 'save-button',
         });
         const statusLabel = new Gtk.Label({
             label: '',
