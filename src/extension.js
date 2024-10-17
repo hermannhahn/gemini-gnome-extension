@@ -235,6 +235,7 @@ const Gemini = GObject.registerClass(
                 reactive: true,
                 can_focus: false,
                 hover: false,
+                label: _('Copy'),
             });
 
             // Separator
@@ -622,6 +623,8 @@ const Gemini = GObject.registerClass(
                     // Get text selection
                     selectedText,
                 );
+                // Create label
+
                 log(`Texto copiado: ${selectedText}`);
             } else {
                 this.extension.clipboard.set_text(
