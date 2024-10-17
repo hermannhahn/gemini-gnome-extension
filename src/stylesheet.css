@@ -78,13 +78,10 @@
 }
 .copy-icon {
     background-image: url('assets/icon_copy.png');
+    background-position: 75% 50%;
     background-size: 26px;
     width: 24px;
     height: 24px;
-    text-align: right;
-    position: relative;
-    float: right;
-    right: 0px;
 }
 .copy-icon:hover {
     background-color: transparent;
