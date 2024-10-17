@@ -83,6 +83,9 @@
     height: 24px;
     text-align: right;
 }
+.copy-icon:hover {
+    background-color: transparent;
+}
 .copy-icon:active {
     background-image: url('assets/icon_check.png');
     transform: scale(1.2);
