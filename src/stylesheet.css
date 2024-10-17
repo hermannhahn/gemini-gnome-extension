@@ -28,7 +28,7 @@
     text-wrap: wrap;
     overflow-y: auto;
     word-wrap: break-word;
-    text-align: right;
+    text-align: justify;
 }
 .response-chat {
     color: rgb(243, 232, 212);
