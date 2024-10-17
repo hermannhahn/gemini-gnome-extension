@@ -280,6 +280,7 @@ const Gemini = GObject.registerClass(
             copyButton.connect('activate', (_self) => {
                 this._copySelectedText(responseChat, copyButton);
             });
+            this.copyButton = copyButton;
 
             // Get ai response for user question
             // this.getAireponse(responseChat, userQuestion);
@@ -461,8 +462,8 @@ const Gemini = GObject.registerClass(
             super.destroy();
         }
 
-        copyButtonTextRemove(copyButton) {
-            copyButton.label.clutter_text.set_markup('');
+        copyButtonTextRemove() {
+            this.copyButton.label.clutter_text.set_markup('');
             return GLib.SOURCE_REMOVE;
         }
 
@@ -635,7 +636,7 @@ const Gemini = GObject.registerClass(
                     GLib.timeout_add(
                         GLib.PRIORITY_DEFAULT,
                         3000,
-                        this.copyButtonTextRemove(copyButton),
+                        this.copyButtonTextRemove(),
                     );
                 }
                 log(`Texto copiado: ${selectedText}`);
@@ -652,7 +653,7 @@ const Gemini = GObject.registerClass(
                     GLib.timeout_add(
                         GLib.PRIORITY_DEFAULT,
                         3000,
-                        this.copyButtonTextRemove(copyButton),
+                        this.copyButtonTextRemove(),
                     );
                 }
                 log(`Texto copiado: ${responseChat.label.text}`);
