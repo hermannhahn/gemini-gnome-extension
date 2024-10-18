@@ -272,6 +272,12 @@ const Gemini = GObject.registerClass(
             // Set mouse click to copy response to clipboard
             copyButton.connect('activate', (_self) => {
                 this._copySelectedText(responseChat, copyButton);
+                // Change copyButton style class for 3 seconds
+                copyButton.style_class += 'copy-icon-checked';
+                GLib.timeout_add(GLib.PRIORITY_DEFAULT, 3000, () => {
+                    copyButton.style_class = 'copy-icon';
+                    return false; // Para garantir que o timeout execute apenas uma vez
+                });
             });
 
             // Add user question to chat
@@ -289,17 +295,17 @@ const Gemini = GObject.registerClass(
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius la';
             let formatedResponse = convertMD(debugPhrase);
             formatedResponse = format.chat(formatedResponse);
-            this.typeText(responseChat, formatedResponse);
+            // this.typeText(responseChat, formatedResponse);
 
-            // responseChat.label.clutter_text.set_markup(
-            //     '<b>Gemini: </b> ' + formatedResponse,
-            // );
+            responseChat.label.clutter_text.set_markup(
+                '<b>Gemini: </b> ' +
+                    this.typeText(responseChat, formatedResponse),
+            );
         }
 
         typeText(target, text) {
             let index = 0;
             let timeToScroll = false;
-            target.label.clutter_text.set_markup('<b>Gemini:</b> ');
             const scrollDown = () => {
                 // Scroll down
                 this.scrollToBottom(target);
