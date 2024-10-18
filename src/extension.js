@@ -463,7 +463,8 @@ const Gemini = GObject.registerClass(
         }
 
         copyButtonTextRemove() {
-            return this.copyButton.label.clutter_text.set_markup('');
+            this.copyButton.label.clutter_text.set_markup('');
+            return false;
         }
 
         // Create history.json file if not exist
