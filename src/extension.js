@@ -295,15 +295,21 @@ const Gemini = GObject.registerClass(
             let formatedResponse = convertMD(debugPhrase);
             formatedResponse = format.chat(formatedResponse);
             // this.typeText(responseChat, formatedResponse);
+            let textType = this.typeText(
+                responseChat,
+                formatedResponse,
+                copyButton,
+                this.chatSection,
+            );
+            const typing = () => {
+                if (textType === undefined) {
+                    return '';
+                }
+                return textType;
+            };
 
             responseChat.label.clutter_text.set_markup(
-                '<b>Gemini: </b> ' +
-                    this.typeText(
-                        responseChat,
-                        formatedResponse,
-                        copyButton,
-                        this.chatSection,
-                    ),
+                '<b>Gemini: </b> ' + typing(),
             );
         }
 
