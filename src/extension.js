@@ -299,57 +299,66 @@ const Gemini = GObject.registerClass(
         typeText(target, text) {
             let index = 0;
             target.label.clutter_text.set_markup('<b>Gemini: </b>');
+            let scrollDown = this.scrollToBottom(target);
+
+            // Função para gerar um intervalo aleatório de tempo
+            function getRandomInterval(char = '') {
+                if (char === '') {
+                    return 2000;
+                }
+                if (
+                    char === '.' ||
+                    char === '!' ||
+                    char === '?' ||
+                    char === ','
+                ) {
+                    return Math.floor(Math.random() * (300 - 10 + 1) + 100);
+                }
+                if (
+                    char === 'a' ||
+                    char === 'e' ||
+                    char === 'i' ||
+                    char === 'o' ||
+                    char === 'u'
+                ) {
+                    return Math.floor(Math.random() * (10 - 1 + 1) + 1);
+                }
+                if (char === '\n') {
+                    // Scroll down
+                    scrollDown();
+                    return 5;
+                }
+                return Math.floor(Math.random() * (100 - 10 + 1) + 10);
+            }
+
+            // Função que será chamada repetidamente para adicionar caracteres
+            function addCharacter() {
+                if (index < text.length) {
+                    // Adiciona o próximo caractere ao texto atual
+                    target.label.clutter_text.set_markup(
+                        target.label.text + text[index],
+                    );
+
+                    // Agendar o próximo caractere com um intervalo aleatório
+                    GLib.timeout_add(
+                        GLib.PRIORITY_DEFAULT,
+                        getRandomInterval(text[index]),
+                        addCharacter,
+                    );
+                    index++;
+
+                    return false; // Retorna false para parar o loop atual, e o próximo é iniciado no timeout agendado
+                }
+
+                return false; // Para parar quando o texto terminar
+            }
+
             // Inicia a execução com o primeiro intervalo aleatório
             GLib.timeout_add(
                 GLib.PRIORITY_DEFAULT,
-                this.getRandomInterval('', target),
-                this.addCharacter(index, target, text),
+                getRandomInterval(),
+                addCharacter,
             );
-        }
-
-        getRandomInterval(char = '', target) {
-            if (char === '') {
-                return 2000;
-            }
-            if (char === '.' || char === '!' || char === '?' || char === ',') {
-                return Math.floor(Math.random() * (300 - 10 + 1) + 100);
-            }
-            if (
-                char === 'a' ||
-                char === 'e' ||
-                char === 'i' ||
-                char === 'o' ||
-                char === 'u'
-            ) {
-                return Math.floor(Math.random() * (10 - 1 + 1) + 1);
-            }
-            if (char === '\n') {
-                // Scroll down
-                this.scrollToBottom(target);
-            }
-            return Math.floor(Math.random() * (100 - 10 + 1) + 10);
-        }
-
-        // Função que será chamada repetidamente para adicionar caracteres
-        addCharacter(index, target, text) {
-            if (index < text.length) {
-                // Adiciona o próximo caractere ao texto atual
-                target.label.clutter_text.set_markup(
-                    target.label.text + text[index],
-                );
-
-                // Agendar o próximo caractere com um intervalo aleatório
-                GLib.timeout_add(
-                    GLib.PRIORITY_DEFAULT,
-                    this.getRandomInterval(text[index], target),
-                    this.addCharacter(index, target, text),
-                );
-                index++;
-
-                return false; // Retorna false para parar o loop atual, e o próximo é iniciado no timeout agendado
-            }
-
-            return false; // Para parar quando o texto terminar
         }
 
         getAireponse(
