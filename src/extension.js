@@ -308,7 +308,7 @@ const Gemini = GObject.registerClass(
                     char === '?' ||
                     char === ','
                 ) {
-                    return 1000;
+                    return Math.floor(Math.random() * (300 - 10 + 1) + 100);
                 }
                 if (
                     char === 'a' ||
@@ -317,9 +317,9 @@ const Gemini = GObject.registerClass(
                     char === 'o' ||
                     char === 'u'
                 ) {
-                    return 1;
+                    return Math.floor(Math.random() * (10 - 1 + 1) + 1);
                 }
-                return Math.floor(Math.random() * (50 - 10 + 1) + 7);
+                return Math.floor(Math.random() * (100 - 10 + 1) + 10);
             }
 
             // Função que será chamada repetidamente para adicionar caracteres
