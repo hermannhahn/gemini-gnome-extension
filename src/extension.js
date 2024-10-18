@@ -271,12 +271,6 @@ const Gemini = GObject.registerClass(
             // Set mouse click to copy response to clipboard
             copyButton.connect('activate', (_self) => {
                 this._copySelectedText(responseChat, copyButton);
-                // Change copyButton style class for 3 seconds
-                copyButton.style_class += 'copy-icon-checked';
-                GLib.timeout_add(GLib.PRIORITY_DEFAULT, 3000, () => {
-                    copyButton.style_class = 'copy-icon';
-                    return false; // Para garantir que o timeout execute apenas uma vez
-                });
             });
 
             // Add user question to chat
