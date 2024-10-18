@@ -632,12 +632,10 @@ const Gemini = GObject.registerClass(
                     this.copyButton.label.clutter_text.set_markup(
                         _('[ Selected Text Copied to clipboard ]'),
                     );
-                    GLib.timeout_add(
-                        GLib.PRIORITY_DEFAULT,
-                        3000,
-                        this.copyButton.label.clutter_text.set_markup(''),
-                        '',
-                    );
+                    GLib.timeout_add(GLib.PRIORITY_DEFAULT, 3000, () => {
+                        this.copyButton.label.clutter_text.set_markup('');
+                        return false; // Para garantir que o timeout execute apenas uma vez
+                    });
                 }
                 log(`Texto copiado: ${selectedText}`);
             } else {
