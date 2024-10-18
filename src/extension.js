@@ -361,7 +361,7 @@ const Gemini = GObject.registerClass(
                 if (index < text.length) {
                     // Adiciona o próximo caractere ao texto atual
                     target.label.clutter_text.set_markup(
-                        target.label.text + text[index],
+                        target.label.clutter_text.get_text() + text[index],
                     );
 
                     // Agendar o próximo caractere com um intervalo aleatório
