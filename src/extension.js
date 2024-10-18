@@ -635,7 +635,7 @@ const Gemini = GObject.registerClass(
                     GLib.timeout_add(
                         GLib.PRIORITY_DEFAULT,
                         3000,
-                        this.copyButton.label.clutter_text.set_markup,
+                        this.copyButton.label.clutter_text.set_markup(''),
                         '',
                     );
                 }
@@ -653,8 +653,7 @@ const Gemini = GObject.registerClass(
                     GLib.timeout_add(
                         GLib.PRIORITY_DEFAULT,
                         3000,
-                        this.copyButton.label.clutter_text.set_markup,
-                        '',
+                        this.copyButton.label.clutter_text.set_markup(''),
                     );
                 }
                 log(`Texto copiado: ${responseChat.label.text}`);
