@@ -308,9 +308,7 @@ const Gemini = GObject.registerClass(
                 return textType;
             };
 
-            responseChat.label.clutter_text.set_markup(
-                '<b>Gemini: </b> ' + typing(),
-            );
+            responseChat.label.clutter_text.set_markup(typing());
         }
 
         typeText(target, text, copyButton = null, chatSection = null) {
