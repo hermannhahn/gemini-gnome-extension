@@ -310,6 +310,15 @@ const Gemini = GObject.registerClass(
                 ) {
                     return 1000;
                 }
+                if (
+                    char === 'a' ||
+                    char === 'e' ||
+                    char === 'i' ||
+                    char === 'o' ||
+                    char === 'u'
+                ) {
+                    return 1;
+                }
                 return Math.floor(Math.random() * (50 - 10 + 1) + 7);
             }
 
