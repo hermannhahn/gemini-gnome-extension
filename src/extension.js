@@ -267,7 +267,6 @@ const Gemini = GObject.registerClass(
             this.chatSection.addMenuItem(newSeparator);
             this.chatSection.addMenuItem(inputChat);
             this.chatSection.addMenuItem(responseChat);
-            this.chatSection.addMenuItem(copyButton);
 
             // Set mouse click to copy response to clipboard
             copyButton.connect('activate', (_self) => {
@@ -299,11 +298,16 @@ const Gemini = GObject.registerClass(
 
             responseChat.label.clutter_text.set_markup(
                 '<b>Gemini: </b> ' +
-                    this.typeText(responseChat, formatedResponse),
+                    this.typeText(
+                        responseChat,
+                        formatedResponse,
+                        copyButton,
+                        this.chatSection,
+                    ),
             );
         }
 
-        typeText(target, text) {
+        typeText(target, text, copyButton = null, chatSection = null) {
             let index = 0;
             let timeToScroll = false;
             const scrollDown = () => {
@@ -364,7 +368,7 @@ const Gemini = GObject.registerClass(
 
                     return false; // Retorna false para parar o loop atual, e o próximo é iniciado no timeout agendado
                 }
-
+                chatSection.addMenuItem(copyButton);
                 return false; // Para parar quando o texto terminar
             }
 
