@@ -298,7 +298,8 @@ const Gemini = GObject.registerClass(
 
         typeText(target, text) {
             let index = 0;
-            target.label.clutter_text.set_markup('<b>Gemini: </b>');
+            let timeToScroll = false;
+            target.label.clutter_text.set_markup('<b>Gemini:</b> ');
             const scrollDown = () => {
                 // Scroll down
                 this.scrollToBottom(target);
@@ -328,7 +329,7 @@ const Gemini = GObject.registerClass(
                 }
                 if (char === '\n') {
                     // Scroll down
-                    scrollDown();
+                    timeToScroll = true;
                     return 5;
                 }
                 return Math.floor(Math.random() * (100 - 10 + 1) + 10);
@@ -336,10 +337,15 @@ const Gemini = GObject.registerClass(
 
             // Função que será chamada repetidamente para adicionar caracteres
             function addCharacter() {
+                if (timeToScroll) {
+                    scrollDown();
+                    timeToScroll = false;
+                }
+
                 if (index < text.length) {
                     // Adiciona o próximo caractere ao texto atual
                     target.label.clutter_text.set_markup(
-                        target.label.text + text[index],
+                        target.label.clutter_text.get_markup() + text[index],
                     );
 
                     // Agendar o próximo caractere com um intervalo aleatório
