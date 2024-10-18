@@ -299,7 +299,7 @@ const Gemini = GObject.registerClass(
             let index = 0;
 
             function getRandomInterval() {
-                return Math.floor(Math.random() * (1000 - 100 + 1)) + 100; // Gera um valor aleatório entre 100ms e 1000ms
+                return Math.floor(Math.random() * (300 - 10 + 1)) + 10;
             }
 
             // Função que será chamada repetidamente para adicionar caracteres
