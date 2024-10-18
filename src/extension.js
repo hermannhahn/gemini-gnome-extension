@@ -292,10 +292,6 @@ const Gemini = GObject.registerClass(
             responseChat.label.clutter_text.set_markup(
                 '<b>Gemini: </b> ' + formatedResponse,
             );
-            // Add separator to chat
-            // this.chatSection.addMenuItem(
-            //     new PopupMenu.PopupSeparatorMenuItem(),
-            // );
         }
 
         getAireponse(
