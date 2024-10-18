@@ -299,7 +299,10 @@ const Gemini = GObject.registerClass(
         typeText(target, text) {
             let index = 0;
             target.label.clutter_text.set_markup('<b>Gemini: </b>');
-            let scrollDown = this.scrollToBottom(target);
+            const scrollDown = () => {
+                // Scroll down
+                this.scrollToBottom(target);
+            };
 
             // Função para gerar um intervalo aleatório de tempo
             function getRandomInterval(char = '') {
