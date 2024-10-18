@@ -289,10 +289,7 @@ const Gemini = GObject.registerClass(
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius la';
             let formatedResponse = convertMD(debugPhrase);
             formatedResponse = format.chat(formatedResponse);
-            this.typeText(
-                responseChat.label.clutter_text.set_markup,
-                formatedResponse,
-            );
+            this.typeText(responseChat, formatedResponse);
             // responseChat.label.clutter_text.set_markup(
             //     '<b>Gemini: </b> ' + formatedResponse,
             // );
@@ -309,7 +306,9 @@ const Gemini = GObject.registerClass(
             function addCharacter() {
                 if (index < text.length) {
                     // Adiciona o próximo caractere ao texto atual
-                    target.set_markup(target.get_text() + text[index]);
+                    target.label.clutter_text.set_markup(
+                        target.label.text + text[index],
+                    );
                     index++;
 
                     // Agendar o próximo caractere com um intervalo aleatório
