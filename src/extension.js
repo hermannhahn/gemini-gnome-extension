@@ -321,6 +321,10 @@ const Gemini = GObject.registerClass(
                 ) {
                     return Math.floor(Math.random() * (10 - 1 + 1) + 1);
                 }
+                if (char === '\n') {
+                    // Scroll down
+                    this.scrollToBottom(target);
+                }
                 return Math.floor(Math.random() * (100 - 10 + 1) + 10);
             }
 
@@ -342,6 +346,7 @@ const Gemini = GObject.registerClass(
 
                     return false; // Retorna false para parar o loop atual, e o próximo é iniciado no timeout agendado
                 }
+
                 return false; // Para parar quando o texto terminar
             }
 
