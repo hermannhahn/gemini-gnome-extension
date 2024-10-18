@@ -230,7 +230,7 @@ const Gemini = GObject.registerClass(
             });
 
             // Create copy button
-            const copyButton = new PopupMenu.PopupMenuItem('', {
+            this.copyButton = new PopupMenu.PopupMenuItem('', {
                 style_class: 'copy-icon',
                 reactive: true,
                 can_focus: false,
@@ -274,13 +274,12 @@ const Gemini = GObject.registerClass(
             this.chatSection.addMenuItem(newSeparator);
             this.chatSection.addMenuItem(inputChat);
             this.chatSection.addMenuItem(responseChat);
-            this.chatSection.addMenuItem(copyButton);
+            this.chatSection.addMenuItem(this.copyButton);
 
             // Set mouse click to copy response to clipboard
-            copyButton.connect('activate', (_self) => {
-                this._copySelectedText(responseChat, copyButton);
+            this.copyButton.connect('activate', (_self) => {
+                this._copySelectedText(responseChat);
             });
-            this.copyButton = copyButton;
 
             // Get ai response for user question
             // this.getAireponse(responseChat, userQuestion);
@@ -620,7 +619,7 @@ const Gemini = GObject.registerClass(
             }
         }
 
-        _copySelectedText(responseChat, copyButton = null) {
+        _copySelectedText(responseChat) {
             let selectedText = responseChat.label.clutter_text.get_selection();
             if (selectedText) {
                 this.extension.clipboard.set_text(
@@ -629,8 +628,8 @@ const Gemini = GObject.registerClass(
                     selectedText,
                 );
                 // Create label
-                if (copyButton) {
-                    copyButton.label.clutter_text.set_markup(
+                if (this.copyButton) {
+                    this.copyButton.label.clutter_text.set_markup(
                         _('[ Selected Text Copied to clipboard ]'),
                     );
                     GLib.timeout_add(
@@ -646,8 +645,8 @@ const Gemini = GObject.registerClass(
                     // Get text selection
                     responseChat.label.text,
                 );
-                if (copyButton) {
-                    copyButton.label.clutter_text.set_markup(
+                if (this.copyButton) {
+                    this.copyButton.label.clutter_text.set_markup(
                         _('[ Copied to clipboard ]'),
                     );
                     GLib.timeout_add(
