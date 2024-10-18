@@ -303,9 +303,9 @@ const Gemini = GObject.registerClass(
             );
             const typing = () => {
                 if (textType === undefined) {
-                    return '';
+                    return '<b>Gemini:</b> ';
                 }
-                return textType;
+                return '<b>Gemini:</b> ' + textType;
             };
 
             responseChat.label.clutter_text.set_markup(typing());
