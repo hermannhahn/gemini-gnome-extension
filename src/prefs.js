@@ -636,7 +636,7 @@ class GeminiSettings {
         const statusLabel = new Gtk.Label({
             label: '',
             useMarkup: true,
-            halign: Gtk.Align.CENTER,
+            halign: Gtk.Align.START,
         });
 
         // Set labels property
