@@ -298,6 +298,7 @@ const Gemini = GObject.registerClass(
 
         typeText(target, text) {
             let index = 0;
+            target.label.clutter_text.set_markup('');
 
             function getRandomInterval(char = '') {
                 if (char === '') {
