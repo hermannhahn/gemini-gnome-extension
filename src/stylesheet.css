@@ -61,6 +61,9 @@
     width: 24px;
     height: 24px;
 }
+.copy-icon:hover {
+    background-image: url('assets/icon_copy.png');
+}
 .copy-icon:active {
     background-image: url('assets/icon_check.png');
 }
@@ -70,9 +73,11 @@
     width: 24px;
     height: 24px;
 }
+.copy-icon-checked:hover {
+    background-image: url('assets/icon_check.png');
+}
 .copy-icon-checked:active {
     background-image: url('assets/icon_check.png');
-    transform: scale(1.2);
 }
 .mic-icon {
     background-image: url('assets/icon_mic.png');
