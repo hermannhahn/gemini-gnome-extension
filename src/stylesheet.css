@@ -74,9 +74,6 @@
     width: 24px;
     height: 24px;
 }
-.copy-icon-checked:hover {
-    background-color: transparent;
-}
 .mic-icon {
     background-image: url('assets/icon_mic.png');
     background-size: 26px;
