@@ -462,7 +462,9 @@ const Gemini = GObject.registerClass(
         }
 
         copyButtonTextRemove() {
-            this.copyButton.label.clutter_text.set_markup('');
+            if (this.copyButton) {
+                this.copyButton.label.clutter_text.set_markup('');
+            }
             return false;
         }
 
