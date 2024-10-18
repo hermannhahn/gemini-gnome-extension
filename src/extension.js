@@ -235,6 +235,7 @@ const Gemini = GObject.registerClass(
                 reactive: true,
                 can_focus: false,
                 hover: false,
+                halign: St.Align.START,
             });
 
             // Separator
