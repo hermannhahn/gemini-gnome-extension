@@ -289,8 +289,46 @@ const Gemini = GObject.registerClass(
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius la';
             let formatedResponse = convertMD(debugPhrase);
             formatedResponse = format.chat(formatedResponse);
-            responseChat.label.clutter_text.set_markup(
-                '<b>Gemini: </b> ' + formatedResponse,
+            this.typeText(
+                responseChat.label.clutter_text.set_markup,
+                formatedResponse,
+            );
+            // responseChat.label.clutter_text.set_markup(
+            //     '<b>Gemini: </b> ' + formatedResponse,
+            // );
+        }
+
+        typeText(target, text) {
+            let index = 0;
+
+            function getRandomInterval() {
+                return Math.floor(Math.random() * (1000 - 100 + 1)) + 100; // Gera um valor aleatório entre 100ms e 1000ms
+            }
+
+            // Função que será chamada repetidamente para adicionar caracteres
+            function addCharacter() {
+                if (index < text.length) {
+                    // Adiciona o próximo caractere ao texto atual
+                    target.set_markup(target.get_text() + text[index]);
+                    index++;
+
+                    // Agendar o próximo caractere com um intervalo aleatório
+                    GLib.timeout_add(
+                        GLib.PRIORITY_DEFAULT,
+                        getRandomInterval(),
+                        addCharacter,
+                    );
+
+                    return false; // Retorna false para parar o loop atual, e o próximo é iniciado no timeout agendado
+                }
+                return false; // Para parar quando o texto terminar
+            }
+
+            // Inicia a execução com o primeiro intervalo aleatório
+            GLib.timeout_add(
+                GLib.PRIORITY_DEFAULT,
+                getRandomInterval(),
+                addCharacter,
             );
         }
 
