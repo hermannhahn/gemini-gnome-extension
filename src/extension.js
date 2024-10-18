@@ -230,7 +230,7 @@ const Gemini = GObject.registerClass(
             });
 
             // Create copy button
-            this.copyButton = new PopupMenu.PopupMenuItem('', {
+            const copyButton = new PopupMenu.PopupMenuItem('', {
                 style_class: 'copy-icon',
                 reactive: true,
                 can_focus: false,
@@ -239,13 +239,6 @@ const Gemini = GObject.registerClass(
 
             // Separator
             const newSeparator = new PopupMenu.PopupSeparatorMenuItem();
-
-            // Add user question to chat
-            let formatedQuestion = convertMD(userQuestion);
-            formatedQuestion = format.inputChat(formatedQuestion);
-            inputChat.label.clutter_text.set_markup(
-                `<b>${USERNAME}: </b>${formatedQuestion}`,
-            );
 
             // Enable text selection
             inputChat.label.clutter_text.reactive = true;
@@ -274,12 +267,19 @@ const Gemini = GObject.registerClass(
             this.chatSection.addMenuItem(newSeparator);
             this.chatSection.addMenuItem(inputChat);
             this.chatSection.addMenuItem(responseChat);
-            this.chatSection.addMenuItem(this.copyButton);
+            this.chatSection.addMenuItem(copyButton);
 
             // Set mouse click to copy response to clipboard
-            this.copyButton.connect('activate', (_self) => {
-                this._copySelectedText(responseChat);
+            copyButton.connect('activate', (_self) => {
+                this._copySelectedText(responseChat, copyButton);
             });
+
+            // Add user question to chat
+            let formatedQuestion = convertMD(userQuestion);
+            formatedQuestion = format.inputChat(formatedQuestion);
+            inputChat.label.clutter_text.set_markup(
+                `<b>${USERNAME}: </b>${formatedQuestion}`,
+            );
 
             // Get ai response for user question
             // this.getAireponse(responseChat, userQuestion);
@@ -290,6 +290,7 @@ const Gemini = GObject.registerClass(
             let formatedResponse = convertMD(debugPhrase);
             formatedResponse = format.chat(formatedResponse);
             this.typeText(responseChat, formatedResponse);
+
             // responseChat.label.clutter_text.set_markup(
             //     '<b>Gemini: </b> ' + formatedResponse,
             // );
@@ -514,11 +515,6 @@ const Gemini = GObject.registerClass(
             super.destroy();
         }
 
-        copyButtonTextRemove() {
-            this.copyButton.label.clutter_text.set_markup('');
-            return false;
-        }
-
         // Create history.json file if not exist
         createHistoryFile() {
             if (!GLib.file_test(historyFilePath, GLib.FileTest.IS_REGULAR)) {
@@ -672,7 +668,7 @@ const Gemini = GObject.registerClass(
             }
         }
 
-        _copySelectedText(responseChat) {
+        _copySelectedText(responseChat, copyButton = null) {
             let selectedText = responseChat.label.clutter_text.get_selection();
             if (selectedText) {
                 this.extension.clipboard.set_text(
@@ -681,12 +677,12 @@ const Gemini = GObject.registerClass(
                     selectedText,
                 );
                 // Create label
-                if (this.copyButton) {
-                    this.copyButton.label.clutter_text.set_markup(
+                if (copyButton) {
+                    copyButton.label.clutter_text.set_markup(
                         _('[ Selected Text Copied to clipboard ]'),
                     );
                     GLib.timeout_add(GLib.PRIORITY_DEFAULT, 3000, () => {
-                        this.copyButton.label.clutter_text.set_markup('');
+                        copyButton.label.clutter_text.set_markup('');
                         return false; // Para garantir que o timeout execute apenas uma vez
                     });
                 }
@@ -697,12 +693,12 @@ const Gemini = GObject.registerClass(
                     // Get text selection
                     responseChat.label.text,
                 );
-                if (this.copyButton) {
-                    this.copyButton.label.clutter_text.set_markup(
+                if (copyButton) {
+                    copyButton.label.clutter_text.set_markup(
                         _('[ Copied to clipboard ]'),
                     );
                     GLib.timeout_add(GLib.PRIORITY_DEFAULT, 3000, () => {
-                        this.copyButton.label.clutter_text.set_markup('');
+                        copyButton.label.clutter_text.set_markup('');
                         return false; // Para garantir que o timeout execute apenas uma vez
                     });
                 }
