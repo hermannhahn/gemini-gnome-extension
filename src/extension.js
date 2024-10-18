@@ -298,7 +298,18 @@ const Gemini = GObject.registerClass(
         typeText(target, text) {
             let index = 0;
 
-            function getRandomInterval() {
+            function getRandomInterval(char = '') {
+                if (char === '') {
+                    return 2000;
+                }
+                if (
+                    char === '.' ||
+                    char === '!' ||
+                    char === '?' ||
+                    char === ','
+                ) {
+                    return 1000;
+                }
                 return Math.floor(Math.random() * (50 - 10 + 1) + 7);
             }
 
@@ -309,14 +320,14 @@ const Gemini = GObject.registerClass(
                     target.label.clutter_text.set_markup(
                         target.label.text + text[index],
                     );
-                    index++;
 
                     // Agendar o próximo caractere com um intervalo aleatório
                     GLib.timeout_add(
                         GLib.PRIORITY_DEFAULT,
-                        getRandomInterval(),
+                        getRandomInterval(text[index]),
                         addCharacter,
                     );
+                    index++;
 
                     return false; // Retorna false para parar o loop atual, e o próximo é iniciado no timeout agendado
                 }
