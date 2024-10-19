@@ -32,10 +32,6 @@ export class Formatter {
     removeInvalidMarkups(text) {
         let formatedText = text
             .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&apos;')
             .replace(/<code>/g, '') // Remove tags de abertura <code>
             .replace(/<\/code>/g, '') // Remove tags de fechamento <code>
             .replace(/\[red\](.*?)\[\/red\]/g, '\x1b[31m$1\x1b[0m')
