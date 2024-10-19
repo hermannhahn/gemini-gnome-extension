@@ -281,6 +281,8 @@ const Gemini = GObject.registerClass(
                 `<b>${USERNAME}: </b>${formatedQuestion}`,
             );
 
+            log(`[ USER ]: ${userQuestion}`);
+
             // Get ai response for user question
             this.getAireponse(responseChat, userQuestion, copyButton);
 
@@ -332,12 +334,12 @@ const Gemini = GObject.registerClass(
                     // Get response
                     let response = decoder.decode(bytes.get_data());
                     let res = JSON.parse(response);
+                    log('[ AI-RES ] ' + res);
                     if (res.error?.code !== 401 && res.error !== undefined) {
                         responseChat?.label.clutter_text.set_markup(response);
                         return;
                     }
                     let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
-                    // log('[ AI-RES ] ' + aiResponse);
 
                     if (
                         aiResponse !== null &&
