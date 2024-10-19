@@ -346,6 +346,8 @@ const Gemini = GObject.registerClass(
                     ) {
                         let formatedResponse = convertMD(aiResponse);
                         formatedResponse = format.chat(formatedResponse);
+                        log(formatedResponse);
+
                         let textType = this.typeText(
                             responseChat,
                             formatedResponse,
@@ -353,17 +355,13 @@ const Gemini = GObject.registerClass(
                             this.chatSection,
                             this.searchEntry,
                         );
-                        const typing = () => {
-                            if (textType === undefined) {
-                                return '';
-                            }
-                            return textType;
-                        };
 
                         // Set ai response to chat
-                        responseChat.label.clutter_text.set_markup(
-                            '<b>Gemini: </b> ' + typing(),
-                        );
+                        if (textType !== undefined) {
+                            responseChat.label.clutter_text.set_markup(
+                                '<b>Gemini: </b> ' + textType,
+                            );
+                        }
 
                         // Scroll down
                         this.scrollToBottom(responseChat);
