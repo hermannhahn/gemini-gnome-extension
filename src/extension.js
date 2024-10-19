@@ -281,9 +281,6 @@ const Gemini = GObject.registerClass(
                 `<b>${USERNAME}: </b>${formatedQuestion}`,
             );
 
-            // Disable searchEntry
-            this.searchEntry.clutter_text.reactive = false;
-
             // Get ai response for user question
             // this.getAireponse(responseChat, userQuestion);
 
@@ -298,6 +295,7 @@ const Gemini = GObject.registerClass(
                 formatedResponse,
                 copyButton,
                 this.chatSection,
+                this.searchEntry,
             );
             const typing = () => {
                 if (textType === undefined) {
@@ -309,7 +307,13 @@ const Gemini = GObject.registerClass(
             responseChat.label.clutter_text.set_markup(typing());
         }
 
-        typeText(target, text, copyButton = null, chatSection = null) {
+        typeText(
+            target,
+            text,
+            copyButton = null,
+            chatSection = null,
+            searchEntry = null,
+        ) {
             let index = 0;
             let timeToScroll = false;
             const scrollDown = () => {
@@ -370,6 +374,7 @@ const Gemini = GObject.registerClass(
 
                     return false; // Retorna false para parar o loop atual, e o próximo é iniciado no timeout agendado
                 }
+                searchEntry.clutter_text.reactive = true;
                 chatSection.addMenuItem(copyButton);
                 return false; // Para parar quando o texto terminar
             }
