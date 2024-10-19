@@ -282,29 +282,129 @@ const Gemini = GObject.registerClass(
             );
 
             // Get ai response for user question
-            // this.getAireponse(responseChat, userQuestion);
+            this.getAireponse(responseChat, userQuestion, copyButton);
 
             // DEBUG
-            let debugPhrase =
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius la';
-            let formatedResponse = convertMD(debugPhrase);
-            formatedResponse = format.chat(formatedResponse);
+            // let debugPhrase =
+            //     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius la';
+            // let formatedResponse = convertMD(debugPhrase);
+            // formatedResponse = format.chat(formatedResponse);
             // this.typeText(responseChat, formatedResponse);
-            let textType = this.typeText(
-                responseChat,
-                formatedResponse,
-                copyButton,
-                this.chatSection,
-                this.searchEntry,
-            );
-            const typing = () => {
-                if (textType === undefined) {
-                    return '<b>Gemini:</b> ';
-                }
-                return '<b>Gemini:</b> ' + textType;
-            };
+        }
 
-            responseChat.label.clutter_text.set_markup(typing());
+        getAireponse(
+            responseChat,
+            question,
+            copyButton = null,
+            newKey = undefined,
+            destroyLoop = false,
+        ) {
+            if (destroyLoop) {
+                this.destroyLoop();
+            }
+
+            // Create http session
+            let _httpSession = new Soup.Session();
+            let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${GEMINIAPIKEY}`;
+
+            // Get gemini api key
+            if (newKey !== undefined) {
+                this.extension.settings.set_string('gemini-api-key', newKey);
+                GEMINIAPIKEY = newKey;
+            }
+
+            // Scroll down
+            this.scrollToBottom(responseChat);
+
+            // Send async request
+            var body = this.buildBody(question);
+            let message = Soup.Message.new('POST', url);
+            let bytes = GLib.Bytes.new(body);
+            message.set_request_body_from_bytes('application/json', bytes);
+            _httpSession.send_and_read_async(
+                message,
+                GLib.PRIORITY_DEFAULT,
+                null,
+                (_httpSession, result) => {
+                    let bytes = _httpSession.send_and_read_finish(result);
+                    let decoder = new TextDecoder('utf-8');
+
+                    // Get response
+                    let response = decoder.decode(bytes.get_data());
+                    let res = JSON.parse(response);
+                    if (res.error?.code !== 401 && res.error !== undefined) {
+                        responseChat?.label.clutter_text.set_markup(response);
+                        return;
+                    }
+                    let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
+                    // log('[ AI-RES ] ' + aiResponse);
+
+                    if (
+                        aiResponse !== null &&
+                        aiResponse !== undefined &&
+                        responseChat !== undefined
+                    ) {
+                        let formatedResponse = convertMD(aiResponse);
+                        formatedResponse = format.chat(formatedResponse);
+                        let textType = this.typeText(
+                            responseChat,
+                            formatedResponse,
+                            copyButton,
+                            this.chatSection,
+                            this.searchEntry,
+                        );
+                        const typing = () => {
+                            if (textType === undefined) {
+                                return '';
+                            }
+                            return textType;
+                        };
+
+                        // Set ai response to chat
+                        responseChat.label.clutter_text.set_markup(
+                            '<b>Gemini: </b> ' + typing(),
+                        );
+
+                        // Scroll down
+                        this.scrollToBottom(responseChat);
+
+                        // Extract code and tts from response
+                        let answer = this.extractCodeAndTTS(aiResponse);
+
+                        // Speech response
+                        if (answer.tts !== null) {
+                            this.textToSpeech(answer.tts);
+                        }
+
+                        // If answer.code is not null, copy to clipboard
+                        if (answer.code !== null) {
+                            this.gnomeNotify(
+                                _('Code example copied to clipboard'),
+                            );
+                            this.extension.clipboard.set_text(
+                                St.ClipboardType.CLIPBOARD,
+                                answer.code,
+                            );
+                        }
+
+                        // Add to history
+                        if (RECURSIVETALK) {
+                            this.chatHistory.push({
+                                role: 'user',
+                                parts: [{text: question}],
+                            });
+                            this.chatHistory.push({
+                                role: 'model',
+                                parts: [{text: aiResponse}],
+                            });
+                            // Save history.json
+                            this.saveHistory();
+                        }
+                        // Scroll down
+                        this.scrollToBottom(responseChat);
+                    }
+                },
+            );
         }
 
         typeText(
@@ -384,107 +484,6 @@ const Gemini = GObject.registerClass(
                 GLib.PRIORITY_DEFAULT,
                 getRandomInterval(),
                 addCharacter,
-            );
-        }
-
-        getAireponse(
-            responseChat,
-            question,
-            newKey = undefined,
-            destroyLoop = false,
-        ) {
-            if (destroyLoop) {
-                this.destroyLoop();
-            }
-
-            // Create http session
-            let _httpSession = new Soup.Session();
-            let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${GEMINIAPIKEY}`;
-
-            // Get gemini api key
-            if (newKey !== undefined) {
-                this.extension.settings.set_string('gemini-api-key', newKey);
-                GEMINIAPIKEY = newKey;
-            }
-
-            // Scroll down
-            this.scrollToBottom(responseChat);
-
-            // Send async request
-            var body = this.buildBody(question);
-            let message = Soup.Message.new('POST', url);
-            let bytes = GLib.Bytes.new(body);
-            message.set_request_body_from_bytes('application/json', bytes);
-            _httpSession.send_and_read_async(
-                message,
-                GLib.PRIORITY_DEFAULT,
-                null,
-                (_httpSession, result) => {
-                    let bytes = _httpSession.send_and_read_finish(result);
-                    let decoder = new TextDecoder('utf-8');
-
-                    // Get response
-                    let response = decoder.decode(bytes.get_data());
-                    let res = JSON.parse(response);
-                    if (res.error?.code !== 401 && res.error !== undefined) {
-                        responseChat?.label.clutter_text.set_markup(response);
-                        return;
-                    }
-                    let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
-                    // log('[ AI-RES ] ' + aiResponse);
-
-                    if (
-                        aiResponse !== null &&
-                        aiResponse !== undefined &&
-                        responseChat !== undefined
-                    ) {
-                        log('[ AI ]' + aiResponse);
-                        let formatedResponse = convertMD(aiResponse);
-                        formatedResponse = format.chat(formatedResponse);
-                        // Set ai response to chat
-                        responseChat.label.clutter_text.set_markup(
-                            '<b>Gemini: </b> ' + formatedResponse,
-                        );
-
-                        // Scroll down
-                        this.scrollToBottom(responseChat);
-
-                        // Extract code and tts from response
-                        let answer = this.extractCodeAndTTS(aiResponse);
-
-                        // Speech response
-                        if (answer.tts !== null) {
-                            this.textToSpeech(answer.tts);
-                        }
-
-                        // If answer.code is not null, copy to clipboard
-                        if (answer.code !== null) {
-                            this.gnomeNotify(
-                                _('Code example copied to clipboard'),
-                            );
-                            this.extension.clipboard.set_text(
-                                St.ClipboardType.CLIPBOARD,
-                                answer.code,
-                            );
-                        }
-
-                        // Add to history
-                        if (RECURSIVETALK) {
-                            this.chatHistory.push({
-                                role: 'user',
-                                parts: [{text: question}],
-                            });
-                            this.chatHistory.push({
-                                role: 'model',
-                                parts: [{text: aiResponse}],
-                            });
-                            // Save history.json
-                            this.saveHistory();
-                        }
-                        // Scroll down
-                        this.scrollToBottom(responseChat);
-                    }
-                },
             );
         }
 
