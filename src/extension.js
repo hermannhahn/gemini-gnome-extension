@@ -32,8 +32,14 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
-import {convertMD} from './md2pango.js';
-import {Formatter} from './text_format.js';
+import {convertMD} from './utils/md2pango.js';
+import {Utils} from './utils/utils.js';
+
+// Utils
+const utils = new Utils();
+const log = utils.log;
+const logError = utils.logError;
+const format = utils.format;
 
 // Global variables
 let GEMINIAPIKEY = '';
@@ -57,19 +63,6 @@ let extensionDir = GLib.build_filenamev([
     'gnome-extension@gemini-assist.vercel.app',
 ]);
 let historyFilePath = GLib.build_filenamev([extensionDir, 'history.json']);
-let format = new Formatter();
-
-// Log function
-
-/**
- *
- * @param {*} message
- */
-function log(message) {
-    if (message) {
-        console.log(`[ DEBUG ] ${message}`);
-    }
-}
 
 const Gemini = GObject.registerClass(
     class Gemini extends PanelMenu.Button {
