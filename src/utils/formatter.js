@@ -123,7 +123,7 @@ export class Formatter {
     }
 
     // Função que insere as quebras de linha
-    insertLineBreaks(text) {
+    format(text) {
         let result = '';
         let lines = text.split(this.newlineChar); // Preserva as quebras de linha existentes
 
