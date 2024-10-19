@@ -295,6 +295,7 @@ const Gemini = GObject.registerClass(
         getAireponse(
             responseChat,
             question,
+            copyButton = null,
             newKey = undefined,
             destroyLoop = false,
         ) {
@@ -350,6 +351,11 @@ const Gemini = GObject.registerClass(
                         responseChat.label.clutter_text.set_markup(
                             '<b>Gemini: </b> ' + formatedResponse,
                         );
+
+                        // Add copy button to chat
+                        if (copyButton) {
+                            this.chatSection.addMenuItem(copyButton);
+                        }
 
                         // Scroll down
                         this.scrollToBottom(responseChat);
