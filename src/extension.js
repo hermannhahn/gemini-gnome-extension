@@ -124,7 +124,7 @@ const Gemini = GObject.registerClass(
             });
 
             // Create search entry
-            let searchEntry = new St.Entry({
+            this.searchEntry = new St.Entry({
                 name: 'aiEntry',
                 style_class: 'ai-entry',
                 can_focus: true,
@@ -172,15 +172,16 @@ const Gemini = GObject.registerClass(
             // Add scroll to chat section
             this.scrollView.add_child(this.chatSection.actor);
 
-            searchEntry.clutter_text.connect('activate', (actor) => {
+            this.searchEntry.clutter_text.connect('activate', (actor) => {
                 this.aiResponse(actor.text);
-                searchEntry.clutter_text.set_text('');
+                this.searchEntry.clutter_text.set_text('');
+                this.searchEntry.clutter_text.reactive = false;
             });
             micButton.connect('clicked', (_self) => {
                 this.startRecording();
             });
             clearButton.connect('clicked', (_self) => {
-                searchEntry.clutter_text.set_text('');
+                this.searchEntry.clutter_text.set_text('');
                 this.chatHistory = [];
                 this.menu.box.remove_child(this.scrollView);
                 this.chatSection = new PopupMenu.PopupMenuSection();
@@ -194,7 +195,7 @@ const Gemini = GObject.registerClass(
             });
 
             // Add search entry, mic button, clear button and settings button to menu
-            item.add_child(searchEntry);
+            item.add_child(this.searchEntry);
             item.add_child(micButton);
             item.add_child(clearButton);
             item.add_child(settingsButton);
@@ -279,6 +280,9 @@ const Gemini = GObject.registerClass(
             inputChat.label.clutter_text.set_markup(
                 `<b>${USERNAME}: </b>${formatedQuestion}`,
             );
+
+            // Disable searchEntry
+            this.searchEntry.clutter_text.reactive = false;
 
             // Get ai response for user question
             // this.getAireponse(responseChat, userQuestion);
