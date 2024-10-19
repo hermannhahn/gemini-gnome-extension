@@ -30,7 +30,7 @@ export default class Utils {
      *
      * @description // Format input chat
      */
-    inputChat(text) {
+    inputformat(text) {
         text = text
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
