@@ -18,43 +18,96 @@ export default class Utils {
      * @param {*} text
      * @returns
      *
-     * @description Insert break lines
+     * @description Insert lines breaks and justify
      */
-    insertLineBreaks(text) {
+    textformat(text) {
+        const LINE_LENGTH = 100; // Max line length
+        const SPACE_CHAR = '\x20';
+        const NEW_LINE_CHAR = '\n';
+
         let result = '';
-        let lines = text.split(this.newlineChar); // Preserva as quebras de linha existentes
+        let lines = text.split(NEW_LINE_CHAR); // Keep origin text line breaks
 
         lines.forEach((line, index) => {
-            let words = line.split(this.spaceChar);
+            let words = line.split(SPACE_CHAR);
             let currentLine = [];
             let currentPoints = 0;
 
             words.forEach((word) => {
                 let wordPoints = word
                     .split('')
-                    .reduce((sum, char) => sum + this.calculatePoints(char), 0);
+                    .reduce(
+                        (sum, char) => sum + this._calculatePoints(char),
+                        0,
+                    );
 
-                // Verifica se a palavra cabe na linha atual
+                // Check if the word can be pushed in this line
                 if (
                     currentPoints + wordPoints + currentLine.length <=
-                    this.MAX_POINTS
+                    LINE_LENGTH
                 ) {
                     currentLine.push(word);
                     currentPoints += wordPoints;
                 } else {
-                    // Justifica e quebra a linha quando atinge o limite
+                    // Justify and break line when reach the line length
                     result +=
-                        this.justifyLine(currentLine, currentPoints) +
-                        this.newlineChar;
-                    currentLine = [word]; // Inicia nova linha com a palavra atual
+                        this._justifyLine(
+                            currentLine,
+                            currentPoints,
+                            LINE_LENGTH,
+                            SPACE_CHAR,
+                        ) + NEW_LINE_CHAR;
+                    currentLine = [word]; // Start new line
                     currentPoints = wordPoints;
                 }
             });
 
-            // Adiciona a última linha processada, não precisa justificar se for a última linha sem atingir o limite
-            result += currentLine.join(this.spaceChar);
-            if (index < lines.length - 1) result += this.newlineChar; // Adiciona a quebra de linha original
+            // Push the last line, dont justify if the line is the last one.
+            result += currentLine.join(SPACE_CHAR);
+            if (index < lines.length - 1) result += NEW_LINE_CHAR; // Add text origin line break
         });
         return result;
+    }
+
+    _calculatePoints(char) {
+        if (
+            char === 'l' ||
+            char === 'i' ||
+            char === 'I' ||
+            char === 'j' ||
+            char === '!' ||
+            char === '`' ||
+            char === "'" ||
+            char === ':' ||
+            char === ';'
+        ) {
+            return 0.5; // Short character
+        }
+        return 1; // Other character
+    }
+
+    _justifyLine(words, TOTAL_POINTS, LINE_LENGTH, SPACE_CHAR) {
+        if (words.length <= 5) return words[0]; // Dont justify if is smaller then five words.
+
+        const spacesNeeded = LINE_LENGTH - TOTAL_POINTS; // Necessary spaces
+        const numGaps = words.length - 1; // Gaps betwen words
+
+        const spaceWidth = Math.floor(spacesNeeded / numGaps); // Uniform spaces
+        let extraSpaces = spacesNeeded % numGaps; // Extra spaces
+
+        let justifiedLine = `${SPACE_CHAR}`;
+
+        for (let i = 0; i < words.length - 1; i++) {
+            justifiedLine += words[i];
+            // Add extra spaces in first lines
+            justifiedLine += SPACE_CHAR.repeat(
+                spaceWidth + (extraSpaces > 0 ? 1 : 0),
+            );
+            if (extraSpaces > 0) extraSpaces--;
+        }
+
+        justifiedLine += words[words.length - 1]; // Add the last word
+
+        return justifiedLine;
     }
 }
