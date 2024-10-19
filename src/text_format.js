@@ -12,7 +12,7 @@ export class Formatter {
     chat(text) {
         // let formatedText = this.removeInvalidMarkups(text);
         // formatedText = this.breakLines(formatedText);
-        let formatedText = this.insertLineBreaks(formatedText);
+        let formatedText = this.insertLineBreaks(text);
         return formatedText;
     }
 
