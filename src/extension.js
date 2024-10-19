@@ -295,7 +295,6 @@ const Gemini = GObject.registerClass(
         getAireponse(
             responseChat,
             question,
-            copyButton = null,
             newKey = undefined,
             destroyLoop = false,
         ) {
@@ -346,24 +345,11 @@ const Gemini = GObject.registerClass(
                     ) {
                         let formatedResponse = convertMD(aiResponse);
                         formatedResponse = format.chat(formatedResponse);
-                        responseChat.label.clutter_text.set_markup(
-                            '<b>Gemini: </b> ',
-                        );
-
-                        let textType = this.typeText(
-                            responseChat,
-                            formatedResponse,
-                            copyButton,
-                            this.chatSection,
-                            this.searchEntry,
-                        );
 
                         // Set ai response to chat
-                        if (textType !== undefined) {
-                            responseChat.label.clutter_text.set_markup(
-                                '<b>Gemini: </b> ' + textType,
-                            );
-                        }
+                        responseChat.label.clutter_text.set_markup(
+                            '<b>Gemini: </b> ' + formatedResponse,
+                        );
 
                         // Scroll down
                         this.scrollToBottom(responseChat);
