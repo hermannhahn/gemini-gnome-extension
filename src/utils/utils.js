@@ -28,6 +28,26 @@ export default class Utils {
      * @param {*} text
      * @returns
      *
+     * @description // Format input chat
+     */
+    inputChat(text) {
+        text = text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&apos;')
+            .replace(/`/g, '&#96;')
+            .replace(/:/g, '&#58;')
+            .replace(/;/g, '&#59;');
+        return text;
+    }
+
+    /**
+     *
+     * @param {*} text
+     * @returns
+     *
      * @description Insert lines breaks and justify
      */
     textformat(text) {
