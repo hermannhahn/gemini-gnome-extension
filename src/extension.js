@@ -713,12 +713,10 @@ const Gemini = GObject.registerClass(
                 );
                 // Create label
                 if (copyButton) {
-                    copyButton.style_class += 'copy-icon-checked';
                     copyButton.label.clutter_text.set_markup(
                         _('[ Selected Text Copied to clipboard ]'),
                     );
                     GLib.timeout_add(GLib.PRIORITY_DEFAULT, 3000, () => {
-                        copyButton.style_class = 'copy-icon';
                         copyButton.label.clutter_text.set_markup('');
                         return false; // Para garantir que o timeout execute apenas uma vez
                     });
