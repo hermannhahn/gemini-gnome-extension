@@ -745,7 +745,7 @@ const Gemini = GObject.registerClass(
             // Obtenha todas as notificações ativas
             // eslint-disable-next-line no-unused-vars
             let [stdout, stderr, status] =
-                GLib.spawn_command_line_sync('notify-send -l');
+                GLib.spawn_command_line_async('notify-send -l');
             let notifications = stdout.toString().split('\n');
 
             // Pesquise a notificação com o título fornecido
