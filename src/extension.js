@@ -477,7 +477,9 @@ const Gemini = GObject.registerClass(
                             role: 'user',
                             parts: [
                                 {
-                                    text: _('Hi, ho are you?'),
+                                    text: _(
+                                        'Hi, who are you? Please, use Pango Markup Language to format your answer.',
+                                    ),
                                 },
                             ],
                         });
@@ -486,7 +488,7 @@ const Gemini = GObject.registerClass(
                             parts: [
                                 {
                                     text: _(
-                                        'I am Gemini, your helpfull assistant.',
+                                        'Hi! I am Gemini, your helpfull assistant. I will use Pango Markup Language to format my answers.',
                                     ),
                                 },
                             ],
