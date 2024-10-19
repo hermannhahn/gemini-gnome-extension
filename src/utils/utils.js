@@ -15,6 +15,16 @@ export default class Utils {
 
     /**
      *
+     * @param {*} message
+     */
+    logError(message) {
+        if (message) {
+            console.log(`[ ERROR ] ${message}`);
+        }
+    }
+
+    /**
+     *
      * @param {*} text
      * @returns
      *
