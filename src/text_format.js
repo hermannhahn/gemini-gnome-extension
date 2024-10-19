@@ -31,14 +31,6 @@ export class Formatter {
     // Replace or remove bad markups
     removeInvalidMarkups(text) {
         let formatedText = text
-            .replace(/&lt;u&gt;/g, '<u>')
-            .replace(/&lt;\/u&gt;/g, '</u>')
-            .replace(/&lt;b&gt;/g, '<b>')
-            .replace(/&lt;\/b&gt;/g, '</b>')
-            .replace(/&lt;i&gt;/g, '<i>')
-            .replace(/&lt;\/i&gt;/g, '</i>')
-            .replace(/&lt;s&gt;/g, '<s>')
-            .replace(/&lt;\/s&gt;/g, '</s>')
             .replace(/&/g, '&amp;')
             .replace(/<code>/g, '') // Remove tags de abertura <code>
             .replace(/<\/code>/g, '') // Remove tags de fechamento <code>
