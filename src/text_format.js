@@ -42,26 +42,7 @@ export class Formatter {
             .replace(/<img[^>]*>/g, '') // Remove tags <img>
             .replace(/<\/img>/g, '') // Remove tags </img>
             .replace(/<span[^>]*>/g, '') // Remove tags <span>
-            .replace(/<\/span>/g, '') // Remove tags </span>
-            .replace(/<\/?[^>]+(>|$)/g, '') // Remove tags HTML
-            .replace(/\[b\](.*?)\[\/b\]/g, '\x1b[1m$1\x1b[0m')
-            .replace(/\[i\](.*?)\[\/i\]/g, '\x1b[3m$1\x1b[0m')
-            .replace(/\[u\](.*?)\[\/u\]/g, '\x1b[4m$1\x1b[0m')
-            .replace(/\[s\](.*?)\[\/s\]/g, '\x1b[9m$1\x1b[0m')
-            .replace(/\[code\](.*?)\[\/code\]/g, '\x1b[4m$1\x1b[0m')
-            .replace(/\[quote\](.*?)\[\/quote\]/g, '\x1b[1m$1\x1b[0m')
-            .replace(/\[list\](.*?)\[\/list\]/g, '\x1b[1m$1\x1b[0m')
-            .replace(/\[url\](.*?)\[\/url\]/g, '\x1b[4m$1\x1b[0m')
-            .replace(/\[red\](.*?)\[\/red\]/g, '\x1b[31m$1\x1b[0m')
-            .replace(/\[green\](.*?)\[\/green\]/g, '\x1b[32m$1\x1b[0m')
-            .replace(/\[yellow\](.*?)\[\/yellow\]/g, '\x1b[33m$1\x1b[0m')
-            .replace(/\[cyan\](.*?)\[\/cyan\]/g, '\x1b[36m$1\x1b[0m')
-            .replace(/\[white\](.*?)\[\/white\]/g, '\x1b[37m$1\x1b[0m')
-            .replace(/\[black\](.*?)\[\/black\]/g, '\x1b[30m$1\x1b[0m')
-            .replace(/\[gray\](.*?)\[\/gray\]/g, '\x1b[90m$1\x1b[0m')
-            .replace(/\[brown\](.*?)\[\/brown\]/g, '\x1b[33m$1\x1b[0m')
-            .replace(/\[blue\](.*?)\[\/blue\]/g, '\x1b[34m$1\x1b[0m')
-            .replace(/\[url=(.*?)\](.*?)\[\/url\]/g, '$1: $2');
+            .replace(/<\/span>/g, ''); // Remove tags </span>
 
         return formatedText;
     }
