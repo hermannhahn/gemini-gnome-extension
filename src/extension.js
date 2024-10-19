@@ -337,8 +337,76 @@ const Gemini = GObject.registerClass(
                     let res = JSON.parse(response);
                     if (res.error?.code !== 401 && res.error !== undefined) {
                         responseChat?.label.clutter_text.set_markup(response);
+                        // Scroll down
+                        this.scrollToBottom(responseChat);
+                        // Enable searchEntry
+                        this.searchEntry.clutter_text.reactive = true;
                         return;
                     }
+                    // SAFETY warning
+                    if (res.candidates[0].finishReason === 'SAFETY') {
+                        // get safety reason
+                        for (
+                            let i = 0;
+                            i < res.candidates[0].safetyRatings.length;
+                            i++
+                        ) {
+                            let safetyRating =
+                                res.candidates[0].safetyRatings[i];
+                            if (safetyRating.probability !== 'NEGLIGIBLE') {
+                                if (
+                                    safetyRating.category ===
+                                    'HARM_CATEGORY_SEXUALLY_EXPLICIT'
+                                ) {
+                                    responseChat?.label.clutter_text.set_markup(
+                                        '<b>Gemini: </b> ' +
+                                            _(
+                                                "Sorry, I can't answer this question. Possible sexually explicit content in the question or answer.",
+                                            ),
+                                    );
+                                }
+                                if (
+                                    safetyRating.category ===
+                                    'HARM_CATEGORY_HATE_SPEECH'
+                                ) {
+                                    responseChat?.label.clutter_text.set_markup(
+                                        '<b>Gemini: </b> ' +
+                                            _(
+                                                "Sorry, I can't answer this question. Possible hate speech in the question or answer.",
+                                            ),
+                                    );
+                                }
+                                if (
+                                    safetyRating.category ===
+                                    'HARM_CATEGORY_HARASSMENT'
+                                ) {
+                                    responseChat?.label.clutter_text.set_markup(
+                                        '<b>Gemini: </b> ' +
+                                            _(
+                                                "Sorry, I can't answer this question. Possible harassment in the question or answer.",
+                                            ),
+                                    );
+                                }
+                                if (
+                                    safetyRating.category ===
+                                    'HARM_CATEGORY_DANGEROUS_CONTENT'
+                                ) {
+                                    responseChat?.label.clutter_text.set_markup(
+                                        '<b>Gemini: </b> ' +
+                                            _(
+                                                "Sorry, I can't answer this question. Possible dangerous content in the question or answer.",
+                                            ),
+                                    );
+                                }
+                                // Scroll down
+                                this.scrollToBottom(responseChat);
+                                // Enable searchEntry
+                                this.searchEntry.clutter_text.reactive = true;
+                                return;
+                            }
+                        }
+                    }
+
                     let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
 
                     if (
