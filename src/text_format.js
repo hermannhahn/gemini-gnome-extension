@@ -18,14 +18,22 @@ export class Formatter {
 
     // Format input chat
     inputChat(text) {
-        let formatedText = text
+        text = text
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;')
-            .replace(/'/g, '&apos;');
-        formatedText = this.chat(formatedText);
-        return formatedText;
+            .replace(/'/g, '&apos;')
+            .replace(/`/g, '&#96;')
+            .replace(/:/g, '&#58;')
+            .replace(/;/g, '&#59;');
+        return text;
+    }
+
+    // Format output chat
+    outputChat(text) {
+        text = this.chat(text);
+        return text;
     }
 
     // Replace or remove bad markups
