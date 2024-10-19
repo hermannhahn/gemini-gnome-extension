@@ -346,7 +346,9 @@ const Gemini = GObject.registerClass(
                     ) {
                         let formatedResponse = convertMD(aiResponse);
                         formatedResponse = format.chat(formatedResponse);
-                        log(formatedResponse);
+                        responseChat.label.clutter_text.set_markup(
+                            '<b>Gemini: </b> ',
+                        );
 
                         let textType = this.typeText(
                             responseChat,
