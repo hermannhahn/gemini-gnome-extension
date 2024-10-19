@@ -43,7 +43,7 @@ export class Formatter {
             .replace(/\[gray\](.*?)\[\/gray\]/g, '\x1b[90m$1\x1b[0m')
             .replace(/\[brown\](.*?)\[\/brown\]/g, '\x1b[33m$1\x1b[0m')
             .replace(/\[blue\](.*?)\[\/blue\]/g, '\x1b[34m$1\x1b[0m')
-            .replace(/\[url=(.*?)\](.*?)\[\/url\]/g, '<a href="$1">$2</a>');
+            .replace(/\[url=(.*?)\](.*?)\[\/url\]/g, '$1: $2');
 
         return formatedText;
     }
