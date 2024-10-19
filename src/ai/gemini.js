@@ -1,4 +1,4 @@
-export default class GeminiVoiceAssistant {
+export default class GoogleGemini {
     constructor() {
         console.log('Gemini Voice Assistant loaded');
     }
