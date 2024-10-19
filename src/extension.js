@@ -360,6 +360,9 @@ const Gemini = GObject.registerClass(
                         // Scroll down
                         this.scrollToBottom(responseChat);
 
+                        // Enable searchEntry
+                        this.searchEntry.clutter_text.reactive = true;
+
                         // Extract code and tts from response
                         let answer = this.extractCodeAndTTS(aiResponse);
 
