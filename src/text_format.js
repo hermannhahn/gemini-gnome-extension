@@ -34,6 +34,24 @@ export class Formatter {
             .replace(/&/g, '&amp;')
             .replace(/<code>/g, '') // Remove tags de abertura <code>
             .replace(/<\/code>/g, '') // Remove tags de fechamento <code>
+            .replace(/<br>/g, '\n') // Substitui <br> por quebra de linha
+            .replace(/<font[^>]*>/g, '') // Remove tags <font>
+            .replace(/<\/font>/g, '') // Remove tags </font>
+            .replace(/<a[^>]*>/g, '') // Remove tags <a>
+            .replace(/<\/a>/g, '') // Remove tags </a>
+            .replace(/<img[^>]*>/g, '') // Remove tags <img>
+            .replace(/<\/img>/g, '') // Remove tags </img>
+            .replace(/<span[^>]*>/g, '') // Remove tags <span>
+            .replace(/<\/span>/g, '') // Remove tags </span>
+            .replace(/<\/?[^>]+(>|$)/g, '') // Remove tags HTML
+            .replace(/\[b\](.*?)\[\/b\]/g, '\x1b[1m$1\x1b[0m')
+            .replace(/\[i\](.*?)\[\/i\]/g, '\x1b[3m$1\x1b[0m')
+            .replace(/\[u\](.*?)\[\/u\]/g, '\x1b[4m$1\x1b[0m')
+            .replace(/\[s\](.*?)\[\/s\]/g, '\x1b[9m$1\x1b[0m')
+            .replace(/\[code\](.*?)\[\/code\]/g, '\x1b[4m$1\x1b[0m')
+            .replace(/\[quote\](.*?)\[\/quote\]/g, '\x1b[1m$1\x1b[0m')
+            .replace(/\[list\](.*?)\[\/list\]/g, '\x1b[1m$1\x1b[0m')
+            .replace(/\[url\](.*?)\[\/url\]/g, '\x1b[4m$1\x1b[0m')
             .replace(/\[red\](.*?)\[\/red\]/g, '\x1b[31m$1\x1b[0m')
             .replace(/\[green\](.*?)\[\/green\]/g, '\x1b[32m$1\x1b[0m')
             .replace(/\[yellow\](.*?)\[\/yellow\]/g, '\x1b[33m$1\x1b[0m')
