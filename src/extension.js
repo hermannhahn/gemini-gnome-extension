@@ -333,8 +333,8 @@ const Gemini = GObject.registerClass(
 
                     // Get response
                     let response = decoder.decode(bytes.get_data());
+                    log('[ AI-RES ] ' + response);
                     let res = JSON.parse(response);
-                    log('[ AI-RES ] ' + res);
                     if (res.error?.code !== 401 && res.error !== undefined) {
                         responseChat?.label.clutter_text.set_markup(response);
                         return;
