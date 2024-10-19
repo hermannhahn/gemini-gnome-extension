@@ -413,6 +413,7 @@ const Gemini = GObject.registerClass(
             searchEntry = null,
         ) {
             let index = 0;
+            let words = text.split(' '); // Dividir o texto em palavras
             let timeToScroll = false;
             const scrollDown = () => {
                 // Scroll down
@@ -420,53 +421,53 @@ const Gemini = GObject.registerClass(
             };
 
             // Função para gerar um intervalo aleatório de tempo
-            function getRandomInterval(char = '') {
-                if (char === '') {
+            function getRandomInterval(word = '') {
+                if (word === '') {
                     return 2000;
                 }
                 if (
-                    char === '.' ||
-                    char === '!' ||
-                    char === '?' ||
-                    char === ','
+                    word.includes('.') ||
+                    word.includes('!') ||
+                    word.includes('?') ||
+                    word.includes(',')
                 ) {
                     return Math.floor(Math.random() * (300 - 10 + 1) + 100);
                 }
                 if (
-                    char === 'a' ||
-                    char === 'e' ||
-                    char === 'i' ||
-                    char === 'o' ||
-                    char === 'u'
+                    word.includes('a') ||
+                    word.includes('e') ||
+                    word.includes('i') ||
+                    word.includes('o') ||
+                    word.includes('u')
                 ) {
-                    return Math.floor(Math.random() * (10 - 1 + 1) + 1);
+                    return Math.floor(Math.random() * (100 - 10 + 1) + 10);
                 }
-                if (char === '\n') {
+                if (word.includes('\n')) {
                     // Scroll down
                     timeToScroll = true;
                     return 5;
                 }
-                return Math.floor(Math.random() * (100 - 10 + 1) + 10);
+                return Math.floor(Math.random() * (500 - 10 + 1) + 10);
             }
 
             // Função que será chamada repetidamente para adicionar caracteres
-            function addCharacter() {
+            function addWord() {
                 if (timeToScroll) {
                     scrollDown();
                     timeToScroll = false;
                 }
 
-                if (index < text.length) {
+                if (index < words.length) {
                     // Adiciona o próximo caractere ao texto atual
                     target.label.clutter_text.set_markup(
-                        target.label.text + text[index],
+                        target.label.text + words[index] + ' ',
                     );
 
                     // Agendar o próximo caractere com um intervalo aleatório
                     GLib.timeout_add(
                         GLib.PRIORITY_DEFAULT,
                         getRandomInterval(text[index]),
-                        addCharacter,
+                        addWord,
                     );
                     index++;
 
@@ -481,7 +482,7 @@ const Gemini = GObject.registerClass(
             GLib.timeout_add(
                 GLib.PRIORITY_DEFAULT,
                 getRandomInterval(),
-                addCharacter,
+                addWord,
             );
         }
 
