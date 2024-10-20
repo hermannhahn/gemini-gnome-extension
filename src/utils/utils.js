@@ -238,11 +238,11 @@ export class Utils {
     }
 
     // Save to history file
-    saveHistory() {
+    saveHistory(newMessages) {
         try {
             GLib.file_set_contents(
                 this.historyFilePath,
-                JSON.stringify(this.chatHistory, null, 2),
+                JSON.stringify(newMessages, null, 2),
             );
             log(`History saved in: ${this.historyFilePath}`);
         } catch (e) {
