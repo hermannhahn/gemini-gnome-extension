@@ -4,6 +4,7 @@ import {Utils} from './utils/utils.js';
 
 // Utils
 const utils = new Utils();
+const log = utils.log;
 const logError = utils.logError;
 
 export default class GoogleGemini {
