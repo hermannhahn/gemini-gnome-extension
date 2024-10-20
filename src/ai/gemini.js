@@ -125,7 +125,7 @@ export default class GoogleGemini {
             },
             (error, debug) => {
                 logError(error);
-                logError(debug);
+                log(debug);
                 return 'Sorry, error getting response.';
             },
         );
