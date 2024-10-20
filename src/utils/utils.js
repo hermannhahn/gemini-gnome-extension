@@ -5,7 +5,7 @@ import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js'
 
 import {convertMD} from './md2pango.js';
 
-export default class Utils {
+export class Utils {
     constructor() {
         console.log('Utils loaded');
         this.extensionDir = GLib.build_filenamev([
