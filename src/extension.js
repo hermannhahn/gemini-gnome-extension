@@ -50,10 +50,10 @@ let RECURSIVETALK = true;
 
 const Gemini = GObject.registerClass(
     class Gemini extends PanelMenu.Button {
-        constructor(props) {
-            super(props);
-            this._init(props);
-        }
+        // constructor(props) {
+        //     super(props);
+        //     this._init(props);
+        // }
 
         /**
          * @description Load settings
