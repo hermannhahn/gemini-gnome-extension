@@ -24,7 +24,6 @@ export default class GoogleGemini {
         AZURE_SPEECH_LANGUAGE,
         AZURE_SPEECH_VOICE,
     ) {
-        console.log('Gemini Voice Assistant loaded');
         this.USERNAME = GLib.get_real_name();
         this.LOCATION = '';
         this.GEMINIAPIKEY = GEMINIAPIKEY;
@@ -32,6 +31,7 @@ export default class GoogleGemini {
         this.AZURE_SPEECH_REGION = AZURE_SPEECH_REGION;
         this.AZURE_SPEECH_LANGUAGE = AZURE_SPEECH_LANGUAGE;
         this.AZURE_SPEECH_VOICE = AZURE_SPEECH_VOICE;
+        console.log('Gemini Voice Assistant loaded');
     }
 
     /**
