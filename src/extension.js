@@ -334,20 +334,19 @@ const Gemini = GObject.registerClass(
                 );
             }
 
-            // Add to history
+            // Add to chat
+            this.chatHistory.push({
+                role: 'user',
+                parts: [{text: userQuestion}],
+            });
+            this.chatHistory.push({
+                role: 'model',
+                parts: [{text: aiResponse}],
+            });
+
+            // Save history.json
             if (RECURSIVETALK) {
-                this.chatHistory.push({
-                    role: 'user',
-                    parts: [{text: userQuestion}],
-                });
-                this.chatHistory.push({
-                    role: 'model',
-                    parts: [{text: aiResponse}],
-                });
-                if (this.RECURSIVETALK) {
-                    // Save history.json
-                    this.saveHistory(this.chatHistory);
-                }
+                this.saveHistory(this.chatHistory);
             }
         }
 
