@@ -91,8 +91,10 @@ Other files may be included but they aren't directly related to extension develo
 -   [x] Go to end of chat after send new question and after receive response
 -   [x] Formatting chat messages
 -   [x] Increase chat width size
+-   [x] Fix chat form
+-   [ ] Add function to clear history when disable history.
+-   [ ] Fix clear chat button to clear just the chat, not the history file.
 -   [ ] Fix gnome notify function
--   [ ] Fix chat form, after create scroll, only click if scroll to begin
 
 ## License
 
