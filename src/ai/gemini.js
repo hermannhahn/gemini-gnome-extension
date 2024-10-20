@@ -139,7 +139,7 @@ export class GoogleGemini {
      */
     _buildBody(input) {
         const stringfiedHistory = JSON.stringify([
-            ...this.chatHistory,
+            ...utils.loadHistoryFile(),
             {
                 role: 'user',
                 parts: [{text: input}],
