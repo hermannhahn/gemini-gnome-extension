@@ -427,4 +427,53 @@ export default class Utils {
             phrases[Math.floor(Math.random() * phrases.length)];
         return randomPhrase;
     }
+
+    extractCodeAndTTS(text, lang = 'en-US') {
+        // Expressão regular para capturar o código entre triplo acento grave
+        const regex = /`{3}([\s\S]*?)`{3}/;
+        const match = text.match(regex);
+        let tts = text;
+        // tts = text.replace(regex, '').trim();
+        // Replace * char with space
+        // tts = tts.split('*').join(' ');
+        tts = tts
+            .replace(/&/g, '')
+            .replace(/</g, '')
+            .replace(/>/g, '')
+            .replace(/\*/g, '')
+            .replace(/`{3}/g, '')
+            .replace(/<code>/g, '') // Remove tags de abertura <code>
+            .replace(/<\/code>/g, '') // Remove tags de fechamento <code>
+            .replace(/\[red\](.*?)\[\/red\]/g, '')
+            .replace(/\[green\](.*?)\[\/green\]/g, '')
+            .replace(/\[yellow\](.*?)\[\/yellow\]/g, '')
+            .replace(/\[cyan\](.*?)\[\/cyan\]/g, '')
+            .replace(/\[white\](.*?)\[\/white\]/g, '')
+            .replace(/\[black\](.*?)\[\/black\]/g, '')
+            .replace(/\[gray\](.*?)\[\/gray\]/g, '')
+            .replace(/\[brown\](.*?)\[\/brown\]/g, '')
+            .replace(/\[blue\](.*?)\[\/blue\]/g, '');
+
+        // If tts is more then 100 characters, change tts text
+        if (tts.length > 1000) {
+            tts = this.randomPhraseToShowOnScreen(lang);
+        }
+
+        if (match) {
+            // const code = match[1]; // Captura o conteúdo entre os acentos graves
+            // If found more match, add to code result
+            let code = match[1];
+            let nextMatch = text.match(regex);
+            while (nextMatch) {
+                code += nextMatch[1];
+                text = text.replace(nextMatch[0], '');
+                nextMatch = text.match(regex);
+            }
+            // Remove o bloco de código do texto original para formar o TTS
+            return {code, tts};
+        } else {
+            // Se não encontrar código, retorna apenas o texto original no campo tts
+            return {code: null, tts};
+        }
+    }
 }
