@@ -9,7 +9,7 @@ import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js'
 const utils = new Utils();
 const log = utils.log;
 
-export default class MicrosoftAzure {
+export class MicrosoftAzure {
     constructor(
         AZURE_SPEECH_KEY,
         AZURE_SPEECH_REGION,
