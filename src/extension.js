@@ -107,11 +107,7 @@ const Gemini = GObject.registerClass(
                 AZURE_SPEECH_LANGUAGE,
                 AZURE_SPEECH_VOICE,
             );
-
-            // Load history
-            if (RECURSIVETALK) {
-                utils.loadHistoryFile();
-            }
+            this.chatHistory = [];
 
             // Create Tray
             let tray = new St.BoxLayout({
