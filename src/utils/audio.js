@@ -40,29 +40,29 @@ export default class Audio {
             }
         } else {
             log('Audio already playing.');
-            // Kill player pid
-            GLib.spawn_command_line_async('kill ' + this.playingPid);
-            this.isPlaying = false;
+            this.stop();
             this.play(audiofile);
         }
     }
 
     // Stop audio
     stop() {
+        if (!this.isPlaying) {
+            return;
+        }
         // Kill player pid
         GLib.spawn_command_line_async('kill ' + this.playingPid);
         this.isPlaying = false;
+        log('Stopping audio.');
     }
 
-    // Função para iniciar a gravação
+    // Start record
     record() {
         if (this.isRecording) {
             // Stop recording
-            this.stop();
+            this.stopRecord();
             return;
         }
-        // Notify listening...
-        utils.gnomeNotify('Listening...', 'critical');
 
         // Definir o arquivo de saída no diretório da extensão
         this.outputPath = 'gva_temp_audio_XXXXXX.wav';
@@ -89,6 +89,7 @@ export default class Audio {
         this.isRecording = true;
     }
 
+    // Stop record
     stopRecord() {
         if (!this.isRecording) {
             return;
@@ -96,14 +97,6 @@ export default class Audio {
 
         // Stop recording
         this.pipeline.force_exit();
-
-        // Remove notification
-        utils.removeNotificationByTitle('Listening...');
-
-        // Transcribe audio
-        transcribe(this.outputPath);
-
-        //
         this.isRecording = false;
     }
 
