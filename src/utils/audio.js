@@ -9,7 +9,7 @@ import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js'
 const utils = new Utils();
 const log = utils.log;
 
-export default class Audio {
+export class Audio {
     constructor() {
         console.log('Audio loaded');
         // Global variables
