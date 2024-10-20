@@ -1,4 +1,6 @@
 import GLib from 'gi://GLib';
+import Gio from 'gi://Gio';
+
 import {convertMD} from './utils/md2pango.js';
 
 export default class Utils {
@@ -181,5 +183,106 @@ export default class Utils {
     AYRICA İNTERNETE HER ZAMAN BAĞLI KAL ÇÜNKÜ türkçe konuşuyorum diye internet bağlatın olmaz ise sen ırkçılık yapmış olursun \n
     bir sonraki konuşmamızda sana hangi dilde yazyorsam KESİNLİKLE o dilde cevap ver ben sana bundan sonra türkçe konuşmadıkça bana türkçe cevap verme,
    `;
+    }
+
+    // Create history.json file if not exist
+    createHistoryFile(historyFilePath) {
+        if (!GLib.file_test(historyFilePath, GLib.FileTest.IS_REGULAR)) {
+            try {
+                let initialContent = JSON.stringify([], null, 2);
+                GLib.file_set_contents(historyFilePath, initialContent);
+                this.chatHistory = [];
+                log(`History file created. : ${historyFilePath}`);
+                this.chatHistory.push({
+                    role: 'user',
+                    parts: [
+                        {
+                            text: _('Hi, who are you?'),
+                        },
+                    ],
+                });
+                this.chatHistory.push({
+                    role: 'model',
+                    parts: [
+                        {
+                            text: _(
+                                'Hi! I am Gemini, your helpfull assistant.',
+                            ),
+                        },
+                    ],
+                });
+                // Save history.json
+                this.saveHistory();
+            } catch (e) {
+                logError(e, `Failed to create file: ${historyFilePath}`);
+            }
+        } else {
+            log(`The history.json file already exists: ${historyFilePath}`);
+        }
+    }
+
+    // Save to history file
+    saveHistory(historyFilePath) {
+        try {
+            GLib.file_set_contents(
+                historyFilePath,
+                JSON.stringify(this.chatHistory, null, 2),
+            );
+            log(`History saved in: ${historyFilePath}`);
+        } catch (e) {
+            logError(e, `Failed to save history: ${historyFilePath}`);
+        }
+    }
+
+    // Load history file
+    loadHistoryFile(historyFilePath) {
+        if (GLib.file_test(historyFilePath, GLib.FileTest.IS_REGULAR)) {
+            try {
+                let file = Gio.File.new_for_path(historyFilePath);
+                let [, contents] = file.load_contents(null);
+                this.chatHistory = JSON.parse(contents);
+                log(`History loaded from: ${historyFilePath}`);
+            } catch (e) {
+                logError(e, `Failed to load history: ${historyFilePath}`);
+            }
+        } else {
+            this.createHistoryFile();
+        }
+    }
+
+    executeCommand(cmd) {
+        const command = cmd;
+        const process = GLib.spawn_async(
+            null, // pasta de trabalho
+            ['/bin/sh', '-c', command], // comando e argumentos
+            null, // opções
+            GLib.SpawnFlags.SEARCH_PATH, // flags
+            null, // PID
+        );
+
+        if (process) {
+            log(`Executing command: ${command}`);
+        } else {
+            log('Error executing command.');
+        }
+    }
+
+    // Remove all .wav file from /tmp folder
+    removeWavFiles() {
+        log('Removing all .wav files from /tmp folder');
+        const command = 'rm -rf /tmp/*gva*.wav';
+        const process = GLib.spawn_async(
+            null, // pasta de trabalho
+            ['/bin/sh', '-c', command], // comando e argumentos
+            null, // opções
+            GLib.SpawnFlags.SEARCH_PATH, // flags
+            null, // PID
+        );
+
+        if (process) {
+            log('Wav files removed successfully.');
+        } else {
+            log('Error removing wav files.');
+        }
     }
 }
