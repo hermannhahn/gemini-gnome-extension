@@ -109,7 +109,6 @@ const Gemini = GObject.registerClass(
             );
 
             // Load history
-            this.chatHistory = [];
             if (RECURSIVETALK) {
                 utils.loadHistoryFile();
             }
