@@ -36,19 +36,22 @@ export default class GoogleGemini {
     /**
      *
      * @param {*} question
+     * @returns
      *
-     * @description Send question and show response and response options
+     * @description Send question and return response
      */
     aiResponse(question) {
         // Create http session
         let _httpSession = new Soup.Session();
         let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${this.GEMINIAPIKEY}`;
 
-        // Send async request
+        // Compose request
         var body = this._buildBody(question);
         let message = Soup.Message.new('POST', url);
         let bytes = GLib.Bytes.new(body);
         message.set_request_body_from_bytes('application/json', bytes);
+
+        // Send async request
         _httpSession.send_and_read_async(
             message,
             GLib.PRIORITY_DEFAULT,
@@ -120,9 +123,21 @@ export default class GoogleGemini {
                 }
                 return 'Sorry, error getting response.';
             },
+            (error, debug) => {
+                logError(error);
+                logError(debug);
+                return 'Sorry, error getting response.';
+            },
         );
     }
 
+    /**
+     *
+     * @param {*} input
+     * @returns
+     *
+     * @description Build body for AI request
+     */
     _buildBody(input) {
         const stringfiedHistory = JSON.stringify([
             ...this.chatHistory,
