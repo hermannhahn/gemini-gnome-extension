@@ -41,7 +41,7 @@ export default class GoogleGemini {
      *
      * @description Send question and return response
      */
-    aiResponse(question) {
+    response(question) {
         // Create http session
         let _httpSession = new Soup.Session();
         let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${this.GEMINIAPIKEY}`;
