@@ -8,6 +8,18 @@ import {convertMD} from './utils/md2pango.js';
 export default class Utils {
     constructor() {
         console.log('Utils loaded');
+        this.extensionDir = GLib.build_filenamev([
+            GLib.get_home_dir(),
+            '.local',
+            'share',
+            'gnome-shell',
+            'extensions',
+            'gnome-extension@gemini-assist.vercel.app',
+        ]);
+        this.historyFilePath = GLib.build_filenamev([
+            this.extensionDir,
+            'history.json',
+        ]);
     }
 
     /**
@@ -188,13 +200,13 @@ export default class Utils {
     }
 
     // Create history.json file if not exist
-    createHistoryFile(historyFilePath) {
-        if (!GLib.file_test(historyFilePath, GLib.FileTest.IS_REGULAR)) {
+    createHistoryFile() {
+        if (!GLib.file_test(this.historyFilePath, GLib.FileTest.IS_REGULAR)) {
             try {
                 let initialContent = JSON.stringify([], null, 2);
-                GLib.file_set_contents(historyFilePath, initialContent);
+                GLib.file_set_contents(this.historyFilePath, initialContent);
                 this.chatHistory = [];
-                log(`History file created. : ${historyFilePath}`);
+                log(`History file created. : ${this.historyFilePath}`);
                 this.chatHistory.push({
                     role: 'user',
                     parts: [
@@ -216,36 +228,38 @@ export default class Utils {
                 // Save history.json
                 this.saveHistory();
             } catch (e) {
-                logError(e, `Failed to create file: ${historyFilePath}`);
+                logError(e, `Failed to create file: ${this.historyFilePath}`);
             }
         } else {
-            log(`The history.json file already exists: ${historyFilePath}`);
+            log(
+                `The history.json file already exists: ${this.historyFilePath}`,
+            );
         }
     }
 
     // Save to history file
-    saveHistory(historyFilePath) {
+    saveHistory() {
         try {
             GLib.file_set_contents(
-                historyFilePath,
+                this.historyFilePath,
                 JSON.stringify(this.chatHistory, null, 2),
             );
-            log(`History saved in: ${historyFilePath}`);
+            log(`History saved in: ${this.historyFilePath}`);
         } catch (e) {
-            logError(e, `Failed to save history: ${historyFilePath}`);
+            logError(e, `Failed to save history: ${this.historyFilePath}`);
         }
     }
 
     // Load history file
-    loadHistoryFile(historyFilePath) {
-        if (GLib.file_test(historyFilePath, GLib.FileTest.IS_REGULAR)) {
+    loadHistoryFile() {
+        if (GLib.file_test(this.historyFilePath, GLib.FileTest.IS_REGULAR)) {
             try {
-                let file = Gio.File.new_for_path(historyFilePath);
+                let file = Gio.File.new_for_path(this.historyFilePath);
                 let [, contents] = file.load_contents(null);
                 this.chatHistory = JSON.parse(contents);
-                log(`History loaded from: ${historyFilePath}`);
+                log(`History loaded from: ${this.historyFilePath}`);
             } catch (e) {
-                logError(e, `Failed to load history: ${historyFilePath}`);
+                logError(e, `Failed to load history: ${this.historyFilePath}`);
             }
         } else {
             this.createHistoryFile();
