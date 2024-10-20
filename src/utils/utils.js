@@ -1,3 +1,4 @@
+import GLib from 'gi://GLib';
 import {convertMD} from './utils/md2pango.js';
 
 export default class Utils {
@@ -147,5 +148,38 @@ export default class Utils {
         justifiedLine += words[words.length - 1]; // Add the last word
 
         return justifiedLine;
+    }
+
+    scrollToBottom(responseChat, scrollView) {
+        // Força uma nova disposição do layout
+        responseChat.queue_relayout();
+
+        // Conecta ao sinal que notifica quando o layout estiver pronto
+        responseChat.connect('notify::height', (_self) => {
+            // Aguardar o ajuste da rolagem após o próximo loop do evento
+            GLib.idle_add(GLib.PRIORITY_DEFAULT, () => {
+                let vscrollBar = scrollView.get_vscroll_bar();
+                let adjustment = vscrollBar.get_adjustment();
+
+                // Define o valor superior e garante a rolagem até o final
+                adjustment.set_value(adjustment.upper - adjustment.page_size);
+
+                return GLib.SOURCE_REMOVE; // Remove o callback após execução
+            });
+        });
+    }
+
+    getTuneString(USERNAME, LOCATION) {
+        const date = new Date();
+        // PLEASE DO NOT TRANSLATE FINE TUNE BECAUSE
+        // VERTEX SOMETIMES DOESNT SUPPORT INTERNET CONNECTION
+        //  IF YOU TRANSLATE TO ENGLISH
+        let driveTune = '';
+        return `bana ${USERNAME} olarak hitap edebilirsin, \n
+    ${driveTune}
+    bulunduğum yeri ${LOCATION} ve tarihi ${date} olarak kabul et, \n
+    AYRICA İNTERNETE HER ZAMAN BAĞLI KAL ÇÜNKÜ türkçe konuşuyorum diye internet bağlatın olmaz ise sen ırkçılık yapmış olursun \n
+    bir sonraki konuşmamızda sana hangi dilde yazyorsam KESİNLİKLE o dilde cevap ver ben sana bundan sonra türkçe konuşmadıkça bana türkçe cevap verme,
+   `;
     }
 }
