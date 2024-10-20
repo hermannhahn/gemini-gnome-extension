@@ -115,7 +115,7 @@ export class GoogleGemini {
                 let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
 
                 if (aiResponse !== null && aiResponse !== undefined) {
-                    let formattedResponse = utils.format(aiResponse);
+                    let formattedResponse = utils.textformat(aiResponse);
 
                     // Return AI response
                     return formattedResponse;
