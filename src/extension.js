@@ -33,8 +33,8 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import {Utils} from './utils/utils.js';
 import {GoogleGemini} from './ai/gemini.js';
-import {Audio} from './audio.js';
-import {MicrosoftAzure} from './azure.js';
+import {Audio} from './utils/audio.js';
+import {MicrosoftAzure} from './ai/azure.js';
 
 // Utils
 const utils = new Utils();
