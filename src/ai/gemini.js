@@ -7,7 +7,7 @@ const utils = new Utils();
 const log = utils.log;
 const logError = utils.logError;
 
-export default class GoogleGemini {
+export class GoogleGemini {
     static GEMINIAPIKEY;
     static AZURE_SPEECH_KEY;
     static AZURE_SPEECH_REGION;
