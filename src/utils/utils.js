@@ -258,11 +258,14 @@ export class Utils {
                 let [, contents] = file.load_contents(null);
                 this.chatHistory = JSON.parse(contents);
                 log(`History loaded from: ${this.historyFilePath}`);
+                return this.chatHistory;
             } catch (e) {
                 logError(e, `Failed to load history: ${this.historyFilePath}`);
+                return [];
             }
         } else {
             this.createHistoryFile();
+            return [];
         }
     }
 
