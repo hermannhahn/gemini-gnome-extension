@@ -16,7 +16,7 @@ export default class GoogleGemini {
     static USERNAME;
     static LOCATION;
     static RECURSIVETALK;
-    3;
+
     constructor(
         GEMINIAPIKEY,
         AZURE_SPEECH_KEY,
