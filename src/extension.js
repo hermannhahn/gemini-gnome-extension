@@ -111,7 +111,7 @@ const Gemini = GObject.registerClass(
             // Load history
             this.chatHistory = [];
             if (RECURSIVETALK) {
-                this.loadHistoryFile();
+                utils.loadHistoryFile();
             }
 
             // Create Tray
