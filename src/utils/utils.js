@@ -1,3 +1,5 @@
+import {convertMD} from './utils/md2pango.js';
+
 export default class Utils {
     constructor() {
         console.log('Utils loaded');
@@ -55,6 +57,7 @@ export default class Utils {
         const SPACE_CHAR = '\x20';
         const NEW_LINE_CHAR = '\n';
 
+        text = this._converttext(text);
         let result = '';
         let lines = text.split(NEW_LINE_CHAR); // Keep origin text line breaks
 
@@ -97,6 +100,11 @@ export default class Utils {
             if (index < lines.length - 1) result += NEW_LINE_CHAR; // Add text origin line break
         });
         return result;
+    }
+
+    _converttext(text) {
+        let convertedText = convertMD(text);
+        return convertedText;
     }
 
     _calculatePoints(char) {
