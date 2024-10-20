@@ -20,7 +20,7 @@ export default class Audio {
     }
 
     // Play audio
-    playAudio(audiofile) {
+    play(audiofile) {
         if (!this.isPlaying) {
             log('Playing audio: ' + audiofile);
             // Process sync, not async
@@ -43,19 +43,26 @@ export default class Audio {
             // Kill player pid
             GLib.spawn_command_line_async('kill ' + this.playingPid);
             this.isPlaying = false;
-            this.playAudio(audiofile);
+            this.play(audiofile);
         }
     }
 
+    // Stop audio
+    stop() {
+        // Kill player pid
+        GLib.spawn_command_line_async('kill ' + this.playingPid);
+        this.isPlaying = false;
+    }
+
     // Função para iniciar a gravação
-    startRecording() {
+    record() {
         if (this.isRecording) {
             // Stop recording
-            this.stopRecording();
+            this.stop();
             return;
         }
         // Notify listening...
-        this.gnomeNotify('Listening...', 'critical');
+        utils.gnomeNotify('Listening...', 'critical');
 
         // Definir o arquivo de saída no diretório da extensão
         this.outputPath = 'gva_temp_audio_XXXXXX.wav';
@@ -82,7 +89,7 @@ export default class Audio {
         this.isRecording = true;
     }
 
-    stopRecording() {
+    stopRecord() {
         if (!this.isRecording) {
             return;
         }
@@ -91,10 +98,10 @@ export default class Audio {
         this.pipeline.force_exit();
 
         // Remove notification
-        this.removeNotificationByTitle('Listening...');
+        utils.removeNotificationByTitle('Listening...');
 
         // Transcribe audio
-        this.transcribeAudio(this.outputPath);
+        transcribe(this.outputPath);
 
         //
         this.isRecording = false;
