@@ -1,5 +1,7 @@
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
+import St from 'gi://St';
+import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
 import {convertMD} from './utils/md2pango.js';
 
@@ -283,6 +285,89 @@ export default class Utils {
             log('Wav files removed successfully.');
         } else {
             log('Error removing wav files.');
+        }
+    }
+
+    gnomeNotify(text, type = 'normal') {
+        const command =
+            'notify-send -u ' +
+            type +
+            "-a 'Gemini Voice Assist' '" +
+            text +
+            "'";
+        const process = GLib.spawn_async(
+            null, // pasta de trabalho
+            ['/bin/sh', '-c', command], // comando e argumentos
+            null, // opções
+            GLib.SpawnFlags.SEARCH_PATH, // flags
+            null, // PID
+        );
+
+        if (process) {
+            log('Notification sent successfully.');
+        } else {
+            log('Error sending notification.');
+        }
+    }
+
+    _copySelectedText(responseChat, copyButton = null) {
+        let selectedText = responseChat.label.clutter_text.get_selection();
+        if (selectedText) {
+            this.extension.clipboard.set_text(
+                St.ClipboardType.CLIPBOARD,
+                // Get text selection
+                selectedText,
+            );
+            // Create label
+            if (copyButton) {
+                copyButton.label.clutter_text.set_markup(
+                    _('[ Selected Text Copied to clipboard ]'),
+                );
+                GLib.timeout_add(GLib.PRIORITY_DEFAULT, 3000, () => {
+                    copyButton.label.clutter_text.set_markup('');
+                    return false; // Para garantir que o timeout execute apenas uma vez
+                });
+            }
+            log(`Texto copiado: ${selectedText}`);
+        } else {
+            this.extension.clipboard.set_text(
+                St.ClipboardType.CLIPBOARD,
+                // Get text selection
+                responseChat.label.text,
+            );
+            if (copyButton) {
+                copyButton.label.clutter_text.set_markup(
+                    _('[ Copied to clipboard ]'),
+                );
+                GLib.timeout_add(GLib.PRIORITY_DEFAULT, 3000, () => {
+                    copyButton.label.clutter_text.set_markup('');
+                    return false; // Para garantir que o timeout execute apenas uma vez
+                });
+            }
+            log(`Texto copiado: ${responseChat.label.text}`);
+        }
+    }
+
+    removeNotificationByTitle(title) {
+        // Obtenha todas as notificações ativas
+        // eslint-disable-next-line no-unused-vars
+        let [stdout, stderr, status] =
+            GLib.spawn_command_line_async('notify-send -l');
+        let notifications = stdout.toString().split('\n');
+
+        // Pesquise a notificação com o título fornecido
+        for (let i = 0; i < notifications.length; i++) {
+            let notification = notifications[i];
+            if (notification.includes(title)) {
+                // Obtenha o ID da notificação
+                let notificationId = notification.split('\t')[0];
+
+                // Remova a notificação
+                GLib.spawn_command_line_async(
+                    'notify-send -c ' + notificationId,
+                );
+                break;
+            }
         }
     }
 }
