@@ -35,13 +35,17 @@ export default class GoogleGemini {
     }
 
     /**
-     *
      * @param {*} question
-     * @returns
+     * @param {boolean} [destroyLoop=false]
      *
      * @description Send question and return response
      */
-    response(question) {
+    response(question, destroyLoop = false) {
+        // Destroy loop
+        if (destroyLoop) {
+            this._destroyLoop();
+        }
+
         // Create http session
         let _httpSession = new Soup.Session();
         let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${this.GEMINIAPIKEY}`;
@@ -148,5 +152,12 @@ export default class GoogleGemini {
             },
         ]);
         return `{"contents":${stringfiedHistory}}`;
+    }
+
+    _destroyLoop() {
+        if (this.afterTune) {
+            clearTimeout(this.afterTune);
+            this.afterTune = null;
+        }
     }
 }
