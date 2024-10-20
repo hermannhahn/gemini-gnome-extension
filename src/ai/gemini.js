@@ -1,6 +1,5 @@
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
-import {convertMD} from './utils/md2pango.js';
 import {Utils} from './utils/utils.js';
 
 // Utils
@@ -114,8 +113,7 @@ export default class GoogleGemini {
                 let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
 
                 if (aiResponse !== null && aiResponse !== undefined) {
-                    let convertedResponse = convertMD(aiResponse);
-                    let formatedResponse = utils.format(convertedResponse);
+                    let formatedResponse = utils.format(aiResponse);
 
                     // Return AI response
                     return formatedResponse;
