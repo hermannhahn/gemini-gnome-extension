@@ -117,10 +117,10 @@ export default class GoogleGemini {
                 let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
 
                 if (aiResponse !== null && aiResponse !== undefined) {
-                    let formatedResponse = utils.format(aiResponse);
+                    let formattedResponse = utils.format(aiResponse);
 
                     // Return AI response
-                    return formatedResponse;
+                    return formattedResponse;
                 }
                 return 'Sorry, error getting response.';
             },
