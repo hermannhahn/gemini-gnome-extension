@@ -297,7 +297,7 @@ const Gemini = GObject.registerClass(
             // this.typeText(responseChat, formattedResponse);
 
             // Scroll down
-            this.scrollToBottom(responseChat, this.scrollView);
+            utils.scrollToBottom(responseChat, this.scrollView);
 
             // Set ai response to chat
             responseChat.label.clutter_text.set_markup(
