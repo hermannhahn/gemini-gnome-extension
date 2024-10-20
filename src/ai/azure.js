@@ -25,7 +25,7 @@ export default class MicrosoftAzure {
     }
 
     // Função para converter texto em áudio usando Microsoft Text-to-Speech API
-    textToSpeech(text) {
+    tts(text) {
         const apiUrl = `https://${this.AZURE_SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/v1`;
 
         // Headers para a requisição
@@ -107,7 +107,7 @@ export default class MicrosoftAzure {
     }
 
     // Função para transcrever o áudio gravado usando Microsoft Speech-to-Text API
-    transcribeAudio(audioPath) {
+    transcribe(audioPath) {
         // Carregar o arquivo de áudio em formato binário
         let file = Gio.File.new_for_path(audioPath);
         let [, audioBinary] = file.load_contents(null);
