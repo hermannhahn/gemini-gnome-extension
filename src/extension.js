@@ -186,7 +186,10 @@ const Gemini = GObject.registerClass(
                 this.searchEntry.clutter_text.reactive = false;
             });
             micButton.connect('clicked', (_self) => {
-                this.audio.record();
+                let question = this.audio.record();
+                if (question !== 'recording') {
+                    this.chat(question);
+                }
             });
             clearButton.connect('clicked', (_self) => {
                 this.searchEntry.clutter_text.set_text('');
