@@ -33,6 +33,8 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import {Utils} from './utils/utils.js';
 import {GoogleGemini} from './ai/gemini.js';
+import {Audio} from './audio.js';
+import {MicrosoftAzure} from './azure.js';
 
 // Utils
 const utils = new Utils();
@@ -96,6 +98,12 @@ const Gemini = GObject.registerClass(
                 GEMINIAPIKEY,
                 AZURE_SPEECH_KEY,
                 AZURE_SPEECH_REGION,
+                AZURE_SPEECH_LANGUAGE,
+                AZURE_SPEECH_VOICE,
+            );
+            this.audio = new Audio();
+            this.azure = new MicrosoftAzure(
+                AZURE_SPEECH_KEY,
                 AZURE_SPEECH_LANGUAGE,
                 AZURE_SPEECH_VOICE,
             );
