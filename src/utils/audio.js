@@ -61,7 +61,7 @@ export default class Audio {
         if (this.isRecording) {
             // Stop recording
             this.stopRecord();
-            return;
+            return this.outputPath;
         }
 
         // Definir o arquivo de saída no diretório da extensão
@@ -87,6 +87,8 @@ export default class Audio {
 
         this.pipeline.init(null);
         this.isRecording = true;
+
+        return 'recording';
     }
 
     // Stop record
