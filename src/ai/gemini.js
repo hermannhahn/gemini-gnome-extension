@@ -5,7 +5,6 @@ import {Utils} from './utils/utils.js';
 
 // Utils
 const utils = new Utils();
-const log = utils.log;
 const logError = utils.logError;
 
 export default class GoogleGemini {
@@ -61,7 +60,6 @@ export default class GoogleGemini {
 
                 // Get response
                 let response = decoder.decode(bytes.get_data());
-                log('[ AI-RES ] ' + response);
                 let res = JSON.parse(response);
                 if (res.error?.code !== 401 && res.error !== undefined) {
                     logError(res.error);
