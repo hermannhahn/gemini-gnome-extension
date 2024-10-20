@@ -1,6 +1,6 @@
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
-import {Utils} from './utils/utils.js';
+import {Utils} from '../utils/utils.js';
 
 // Utils
 const utils = new Utils();
