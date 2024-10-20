@@ -318,16 +318,18 @@ const Gemini = GObject.registerClass(
             this.searchEntry.clutter_text.reactive = true;
 
             // Extract code and tts from response
-            let answer = this.extractCodeAndTTS(aiResponse);
+            let answer = utils.extractCodeAndTTS(
+                aiResponse,
+                AZURE_SPEECH_LANGUAGE,
+            );
 
             // Speech response
             if (answer.tts !== null) {
-                this.textToSpeech(answer.tts);
+                this.azure.tts(answer.tts);
             }
 
             // If answer.code is not null, copy to clipboard
             if (answer.code !== null) {
-                this.gnomeNotify(_('Code example copied to clipboard'));
                 this.extension.clipboard.set_text(
                     St.ClipboardType.CLIPBOARD,
                     answer.code,
