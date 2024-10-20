@@ -3,7 +3,7 @@ import Gio from 'gi://Gio';
 import St from 'gi://St';
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
-import {convertMD} from './utils/md2pango.js';
+import {convertMD} from './md2pango.js';
 
 export default class Utils {
     constructor() {
