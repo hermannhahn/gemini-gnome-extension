@@ -1,23 +1,3 @@
-/* extension.js
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * SPDX-License-Identifier: GPL-2.0-or-later
- */
-
-/* exported init */
-
 import St from 'gi://St';
 import GObject from 'gi://GObject';
 import Soup from 'gi://Soup';
@@ -39,21 +19,19 @@ import {MicrosoftAzure} from './ai/azure.js';
 // Utils
 const utils = new Utils();
 
-// API Settings
-let GEMINIAPIKEY = '';
-let AZURE_SPEECH_KEY = '';
-let AZURE_SPEECH_REGION = ''; // Ex: "eastus"
-let AZURE_SPEECH_LANGUAGE = ''; // Ex: "en-US"
-let AZURE_SPEECH_VOICE = ''; // Ex: "en-US-JennyNeural"
-let USERNAME = '';
-let RECURSIVETALK = true;
-
 const Gemini = GObject.registerClass(
     class Gemini extends PanelMenu.Button {
-        // constructor(props) {
-        //     super(props);
-        //     this._init(props);
-        // }
+        constructor(props) {
+            super(props);
+            // API Settings
+            this.GEMINIAPIKEY = '';
+            this.AZURE_SPEECH_KEY = '';
+            this.AZURE_SPEECH_REGION = ''; // Ex: "eastus"
+            this.AZURE_SPEECH_LANGUAGE = ''; // Ex: "en-US"
+            this.AZURE_SPEECH_VOICE = ''; // Ex: "en-US-JennyNeural"
+            this.USERNAME = '';
+            this.RECURSIVETALK = true;
+        }
 
         /**
          * @description Load settings
@@ -73,15 +51,17 @@ const Gemini = GObject.registerClass(
          */
         _fetchSettings() {
             const {settings} = this.extension;
-            GEMINIAPIKEY = settings.get_string('gemini-api-key');
-            AZURE_SPEECH_KEY = settings.get_string('azure-speech-key');
-            AZURE_SPEECH_REGION = settings.get_string('azure-speech-region');
-            AZURE_SPEECH_LANGUAGE = settings.get_string(
+            this.GEMINIAPIKEY = settings.get_string('gemini-api-key');
+            this.AZURE_SPEECH_KEY = settings.get_string('azure-speech-key');
+            this.AZURE_SPEECH_REGION = settings.get_string(
+                'azure-speech-region',
+            );
+            this.AZURE_SPEECH_LANGUAGE = settings.get_string(
                 'azure-speech-language',
             );
-            AZURE_SPEECH_VOICE = settings.get_string('azure-speech-voice');
-            RECURSIVETALK = settings.get_boolean('log-history');
-            USERNAME = GLib.get_real_name();
+            this.AZURE_SPEECH_VOICE = settings.get_string('azure-speech-voice');
+            this.RECURSIVETALK = settings.get_boolean('log-history');
+            this.USERNAME = GLib.get_real_name();
         }
 
         /**
@@ -95,17 +75,17 @@ const Gemini = GObject.registerClass(
             super._init(0.0, _('Gemini Voice Assistant for Ubuntu'));
             this._loadSettings();
             this.gemini = new GoogleGemini(
-                GEMINIAPIKEY,
-                AZURE_SPEECH_KEY,
-                AZURE_SPEECH_REGION,
-                AZURE_SPEECH_LANGUAGE,
-                AZURE_SPEECH_VOICE,
+                this.GEMINIAPIKEY,
+                this.AZURE_SPEECH_KEY,
+                this.AZURE_SPEECH_REGION,
+                this.AZURE_SPEECH_LANGUAGE,
+                this.AZURE_SPEECH_VOICE,
             );
             this.audio = new Audio();
             this.azure = new MicrosoftAzure(
-                AZURE_SPEECH_KEY,
-                AZURE_SPEECH_LANGUAGE,
-                AZURE_SPEECH_VOICE,
+                this.AZURE_SPEECH_KEY,
+                this.AZURE_SPEECH_LANGUAGE,
+                this.AZURE_SPEECH_VOICE,
             );
             this.chatHistory = [];
 
@@ -213,7 +193,7 @@ const Gemini = GObject.registerClass(
             this.menu.box.add_child(this.scrollView);
 
             // Open settings if gemini api key is not configured
-            if (GEMINIAPIKEY === '') {
+            if (this.GEMINIAPIKEY === '') {
                 this.openSettings();
             }
         }
@@ -283,7 +263,7 @@ const Gemini = GObject.registerClass(
             // Add user question to chat
             userQuestion = utils.inputformat(userQuestion);
             inputChat.label.clutter_text.set_markup(
-                `<b>${USERNAME}: </b>${userQuestion}`,
+                `<b>${this.USERNAME}: </b>${userQuestion}`,
             );
 
             // Get ai response for user question
@@ -318,7 +298,7 @@ const Gemini = GObject.registerClass(
             // Extract code and tts from response
             let answer = utils.extractCodeAndTTS(
                 aiResponse,
-                AZURE_SPEECH_LANGUAGE,
+                this.AZURE_SPEECH_LANGUAGE,
             );
 
             // Speech response
@@ -345,7 +325,7 @@ const Gemini = GObject.registerClass(
             });
 
             // Save history.json
-            if (RECURSIVETALK) {
+            if (this.RECURSIVETALK) {
                 this.saveHistory(this.chatHistory);
             }
         }
@@ -391,7 +371,9 @@ export default class GeminiExtension extends Extension {
                 const res = JSON.parse(response);
                 let LOCATION = `${res.countryName}/${res.cityName}`;
                 log(LOCATION);
-                this.app.gemini.tune(utils.getTuneString(USERNAME, LOCATION));
+                this.app.gemini.tune(
+                    utils.getTuneString(this.USERNAME, LOCATION),
+                );
             },
         );
     }
