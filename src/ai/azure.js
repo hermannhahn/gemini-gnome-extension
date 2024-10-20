@@ -1,23 +1,44 @@
+import GLib from 'gi://GLib';
+import Gio from 'gi://Gio';
+
+import {Utils} from './utils/utils.js';
+
+import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
+
+// Utils
+const utils = new Utils();
+const log = utils.log;
+
 export default class MicrosoftAzure {
-    constructor() {
+    constructor(
+        AZURE_SPEECH_KEY,
+        AZURE_SPEECH_REGION,
+        AZURE_SPEECH_LANGUAGE,
+        AZURE_SPEECH_VOICE,
+    ) {
+        this.AZURE_SPEECH_KEY = AZURE_SPEECH_KEY;
+        this.AZURE_SPEECH_REGION = AZURE_SPEECH_REGION;
+        this.AZURE_SPEECH_LANGUAGE = AZURE_SPEECH_LANGUAGE;
+        this.AZURE_SPEECH_VOICE = AZURE_SPEECH_VOICE;
+
         console.log('MicrosoftAzure loaded');
     }
 
     // Função para converter texto em áudio usando Microsoft Text-to-Speech API
     textToSpeech(text) {
-        const apiUrl = `https://${AZURE_SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/v1`;
+        const apiUrl = `https://${this.AZURE_SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/v1`;
 
         // Headers para a requisição
         const headers = [
             'Content-Type: application/ssml+xml', // O conteúdo será enviado em formato SSML
             'X-Microsoft-OutputFormat: riff-24khz-16bit-mono-pcm', // Especifica o formato do áudio
-            'Ocp-Apim-Subscription-Key: ' + AZURE_SPEECH_KEY, // Chave da API da Azure
+            'Ocp-Apim-Subscription-Key: ' + this.AZURE_SPEECH_KEY, // Chave da API da Azure
         ];
 
         // Estrutura SSML (Speech Synthesis Markup Language) para definir o texto e a voz
         const ssml = `
-        <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${AZURE_SPEECH_LANGUAGE}'>
-            <voice name='${AZURE_SPEECH_VOICE}'>${text}</voice>
+        <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${this.AZURE_SPEECH_LANGUAGE}'>
+            <voice name='${this.AZURE_SPEECH_VOICE}'>${text}</voice>
         </speak>
     `;
 
@@ -97,12 +118,12 @@ export default class MicrosoftAzure {
         }
 
         // Requisição à API do Microsoft Speech-to-Text
-        const apiUrl = `https://${AZURE_SPEECH_REGION}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${AZURE_SPEECH_LANGUAGE}`;
+        const apiUrl = `https://${this.AZURE_SPEECH_REGION}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${this.AZURE_SPEECH_LANGUAGE}`;
 
         // Headers necessários para a requisição
         const headers = [
             'Content-Type: audio/wav', // O arquivo será enviado em formato .wav
-            'Ocp-Apim-Subscription-Key: ' + AZURE_SPEECH_KEY, // Chave de autenticação
+            'Ocp-Apim-Subscription-Key: ' + this.AZURE_SPEECH_KEY, // Chave de autenticação
             'Accept: application/json', // A resposta será em JSON
         ];
 
