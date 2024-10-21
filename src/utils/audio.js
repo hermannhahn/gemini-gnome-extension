@@ -2,6 +2,7 @@ import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
 
 import {Utils} from './utils.js';
+import {MicrosoftAzure} from './azure.js';
 
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
@@ -10,12 +11,32 @@ const utils = new Utils();
 const log = utils.log;
 
 export class Audio {
-    constructor() {
+    static AZURE_SPEECH_KEY;
+    static AZURE_SPEECH_REGION;
+    static AZURE_SPEECH_LANGUAGE;
+    static AZURE_SPEECH_VOICE;
+
+    constructor(
+        AZURE_SPEECH_KEY,
+        AZURE_SPEECH_REGION,
+        AZURE_SPEECH_LANGUAGE,
+        AZURE_SPEECH_VOICE,
+    ) {
         // Global variables
         this.pipeline = null;
         this.isRecording = false;
         this.isPlaying = false;
         this.playingPid = null;
+        this.AZURE_SPEECH_KEY = AZURE_SPEECH_KEY;
+        this.AZURE_SPEECH_REGION = AZURE_SPEECH_REGION;
+        this.AZURE_SPEECH_LANGUAGE = AZURE_SPEECH_LANGUAGE;
+        this.AZURE_SPEECH_VOICE = AZURE_SPEECH_VOICE;
+        this.azure = new MicrosoftAzure(
+            this.AZURE_SPEECH_KEY,
+            this.AZURE_SPEECH_REGION,
+            this.AZURE_SPEECH_LANGUAGE,
+            this.AZURE_SPEECH_VOICE,
+        );
         console.log('Audio loaded');
     }
 
