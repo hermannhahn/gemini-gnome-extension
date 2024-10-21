@@ -162,12 +162,13 @@ const Aiva = GObject.registerClass(
                 this.searchEntry.clutter_text.reactive = false;
             });
             micButton.connect('clicked', (_self) => {
-                let audio = {success = false, path: null}
+                let questionAudio = {success: false, path: null};
                 if (this.ISRECORDING) {
-                    audio = this.audio.record();
+                    questionAudio = this.audio.record();
                 } else {
-                    if (audio.success) {
-                        this.azure.transcribe(audio.path);
+                    this.audio.stopRecord();
+                    if (questionAudio.success) {
+                        this.azure.transcribe(questionAudio.path);
                     }
                 }
             });
@@ -267,7 +268,7 @@ const Aiva = GObject.registerClass(
 
             // Add user question to chat
             userQuestion = utils.inputformat(userQuestion);
-            log('Question: ' + userQuestion)
+            log('Question: ' + userQuestion);
             inputChat.label.clutter_text.set_markup(
                 `<b>${_('Me')}: </b>${userQuestion}`,
             );
