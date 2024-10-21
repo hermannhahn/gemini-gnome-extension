@@ -31,18 +31,15 @@ export class GoogleGemini {
     ) {
         this.USERNAME = GLib.get_real_name();
         this.LOCATION = '';
-        this.GEMINIAPIKEY = GEMINIAPIKEY;
-        this.AZURE_SPEECH_KEY = AZURE_SPEECH_KEY;
-        this.AZURE_SPEECH_REGION = AZURE_SPEECH_REGION;
-        this.AZURE_SPEECH_LANGUAGE = AZURE_SPEECH_LANGUAGE;
-        this.AZURE_SPEECH_VOICE = AZURE_SPEECH_VOICE;
         this.azure = new MicrosoftAzure(
+            GEMINIAPIKEY,
             AZURE_SPEECH_KEY,
             AZURE_SPEECH_REGION,
             AZURE_SPEECH_LANGUAGE,
             AZURE_SPEECH_VOICE,
         );
         this.audio = new Audio(
+            GEMINIAPIKEY,
             AZURE_SPEECH_KEY,
             AZURE_SPEECH_REGION,
             AZURE_SPEECH_LANGUAGE,
