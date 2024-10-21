@@ -163,12 +163,17 @@ const Aiva = GObject.registerClass(
             });
             micButton.connect('clicked', (_self) => {
                 let questionAudio = {success: false, path: null};
-                if (this.ISRECORDING) {
+                if (!this.ISRECORDING) {
                     questionAudio = this.audio.record();
                 } else {
                     this.audio.stopRecord();
                     if (questionAudio.success) {
-                        this.azure.transcribe(questionAudio.path);
+                        let question = this.azure.transcribe(
+                            questionAudio.path,
+                        );
+                        if (question.success) {
+                            this.chat(question.transcription);
+                        }
                     }
                 }
             });
@@ -205,9 +210,6 @@ const Aiva = GObject.registerClass(
         }
 
         chat(userQuestion) {
-            // Set temporary message
-            let aiResponse = _('<b>Gemini: </b> ...');
-
             // Create input and response chat items
             const inputChat = new PopupMenu.PopupMenuItem('', {
                 style_class: 'input-chat',
@@ -241,6 +243,7 @@ const Aiva = GObject.registerClass(
             inputChat.label.clutter_text.hover = false;
 
             // Add ai temporary response to chat
+            let aiResponse = _('<b>Gemini: </b> ...');
             responseChat.label.clutter_text.set_markup(aiResponse);
 
             // Enable text selection
@@ -274,22 +277,14 @@ const Aiva = GObject.registerClass(
             );
 
             // Get ai response for user question
-            aiResponse = this.gemini.response(userQuestion);
+            aiResponse = this.gemini.response(responseChat, userQuestion);
 
             // DEBUG
-            // let debugPhrase =
+            // let aiResponse =
             //     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius la';
-            // let formattedResponse = convertMD(debugPhrase);
-            // formattedResponse = format.chat(formattedResponse);
-            // this.typeText(responseChat, formattedResponse);
 
             // Scroll down
             utils.scrollToBottom(responseChat, this.scrollView);
-
-            // Set ai response to chat
-            responseChat.label.clutter_text.set_markup(
-                '<b>Gemini: </b> ' + aiResponse,
-            );
 
             // Add copy button to chat
             if (copyButton) {
@@ -310,7 +305,10 @@ const Aiva = GObject.registerClass(
 
             // Speech response
             if (answer.tts !== null) {
-                this.azure.tts(answer.tts);
+                let responseAudio = this.azure.tts(answer.tts);
+                if (responseAudio.success) {
+                    this.audio.play(responseAudio.path);
+                }
             }
 
             // If answer.code is not null, copy to clipboard
