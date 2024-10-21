@@ -290,7 +290,7 @@ const Gemini = GObject.registerClass(
             }
 
             // Scroll down
-            this.scrollToBottom(responseChat, this.scrollView);
+            utils.scrollToBottom(responseChat, this.scrollView);
 
             // Enable searchEntry
             this.searchEntry.clutter_text.reactive = true;
