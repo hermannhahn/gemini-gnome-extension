@@ -82,11 +82,14 @@ const Aiva = GObject.registerClass(
                 this.AZURE_SPEECH_VOICE,
             );
             this.azure = new MicrosoftAzure(
+                this.GEMINIAPIKEY,
                 this.AZURE_SPEECH_KEY,
+                this.AZURE_SPEECH_REGION,
                 this.AZURE_SPEECH_LANGUAGE,
                 this.AZURE_SPEECH_VOICE,
             );
             this.audio = new Audio(
+                this.GEMINIAPIKEY,
                 this.AZURE_SPEECH_KEY,
                 this.AZURE_SPEECH_REGION,
                 this.AZURE_SPEECH_LANGUAGE,
