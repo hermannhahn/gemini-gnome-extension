@@ -67,7 +67,7 @@ export class Audio {
         this.isRecording = true;
 
         // Definir o arquivo de saída no diretório da extensão
-        this.outputPath = 'gva_temp_audio_XXXXXX.wav';
+        this.questionPath = 'gva_temp_audio_XXXXXX.wav';
 
         // Pipeline GStreamer para capturar áudio do microfone e salvar como .wav
         this.pipeline = new Gio.Subprocess({
@@ -80,7 +80,7 @@ export class Audio {
                 'wavenc',
                 '!',
                 'filesink',
-                `location=${this.outputPath}`,
+                `location=${this.questionPath}`,
             ],
             flags:
                 Gio.SubprocessFlags.STDOUT_PIPE |
@@ -92,7 +92,7 @@ export class Audio {
 
     // Get recorded audio path
     path() {
-        return this.outputPath;
+        return this.questionPath;
     }
 
     // Stop record
