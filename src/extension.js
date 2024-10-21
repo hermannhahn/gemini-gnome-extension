@@ -162,20 +162,7 @@ const Aiva = GObject.registerClass(
                 this.searchEntry.clutter_text.reactive = false;
             });
             micButton.connect('clicked', (_self) => {
-                let questionAudio = {success: false, path: null};
-                if (!this.ISRECORDING) {
-                    questionAudio = this.audio.record();
-                } else {
-                    this.audio.stopRecord();
-                    if (questionAudio.success) {
-                        let question = this.azure.transcribe(
-                            questionAudio.path,
-                        );
-                        if (question.success) {
-                            this.chat(question.transcription);
-                        }
-                    }
-                }
+                this.audio.record();
             });
             clearButton.connect('clicked', (_self) => {
                 this.searchEntry.clutter_text.set_text('');
