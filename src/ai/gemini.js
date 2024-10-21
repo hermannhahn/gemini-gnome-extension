@@ -1,3 +1,4 @@
+import St from 'gi://St';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import {Utils} from '../utils/utils.js';
@@ -133,6 +134,28 @@ export class GoogleGemini {
         responseChat.label.clutter_text.set_markup(
             '<b>Gemini: </b> ' + aiResponse,
         );
+
+        // Extract code and tts from response
+        let answer = utils.extractCodeAndTTS(
+            aiResponse,
+            this.AZURE_SPEECH_LANGUAGE,
+        );
+
+        // Speech response
+        if (answer.tts !== null) {
+            let responseAudio = this.azure.tts(answer.tts);
+            if (responseAudio.success) {
+                this.audio.play(responseAudio.path);
+            }
+        }
+
+        // If answer.code is not null, copy to clipboard
+        if (answer.code !== null) {
+            this.extension.clipboard.set_text(
+                St.ClipboardType.CLIPBOARD,
+                answer.code,
+            );
+        }
     }
 
     /**
