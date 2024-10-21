@@ -2,6 +2,10 @@ import St from 'gi://St';
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import {Utils} from '../utils/utils.js';
+import {MicrosoftAzure} from '../ai/azure.js';
+import {Audio} from '../utils/audio.js';
+
+import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
 // Utils
 const utils = new Utils();
@@ -32,6 +36,13 @@ export class GoogleGemini {
         this.AZURE_SPEECH_REGION = AZURE_SPEECH_REGION;
         this.AZURE_SPEECH_LANGUAGE = AZURE_SPEECH_LANGUAGE;
         this.AZURE_SPEECH_VOICE = AZURE_SPEECH_VOICE;
+        this.azure = new MicrosoftAzure(
+            this.AZURE_SPEECH_KEY,
+            this.AZURE_SPEECH_REGION,
+            this.AZURE_SPEECH_LANGUAGE,
+            this.AZURE_SPEECH_VOICE,
+        );
+        this.audio = new Audio();
         console.log('Gemini Voice Assistant loaded');
     }
 
