@@ -11,12 +11,14 @@ const utils = new Utils();
 const log = utils.log;
 
 export class Audio {
+    static GEMINIAPIKEY;
     static AZURE_SPEECH_KEY;
     static AZURE_SPEECH_REGION;
     static AZURE_SPEECH_LANGUAGE;
     static AZURE_SPEECH_VOICE;
 
     constructor(
+        GEMINIAPIKEY,
         AZURE_SPEECH_KEY,
         AZURE_SPEECH_REGION,
         AZURE_SPEECH_LANGUAGE,
@@ -27,11 +29,14 @@ export class Audio {
         this.isRecording = false;
         this.isPlaying = false;
         this.playingPid = null;
+        this.questionPath = null;
+        this.GEMINIAPIKEY = GEMINIAPIKEY;
         this.AZURE_SPEECH_KEY = AZURE_SPEECH_KEY;
         this.AZURE_SPEECH_REGION = AZURE_SPEECH_REGION;
         this.AZURE_SPEECH_LANGUAGE = AZURE_SPEECH_LANGUAGE;
         this.AZURE_SPEECH_VOICE = AZURE_SPEECH_VOICE;
         this.azure = new MicrosoftAzure(
+            this.GEMINIAPIKEY,
             this.AZURE_SPEECH_KEY,
             this.AZURE_SPEECH_REGION,
             this.AZURE_SPEECH_LANGUAGE,
