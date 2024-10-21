@@ -39,7 +39,7 @@ export class GoogleGemini {
      *
      * @description Send question and return response
      */
-    response(question) {
+    async response(question) {
         // Create http session
         let _httpSession = new Soup.Session();
         let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${this.GEMINIAPIKEY}`;
@@ -49,85 +49,91 @@ export class GoogleGemini {
         let message = Soup.Message.new('POST', url);
         let bytes = GLib.Bytes.new(body);
         message.set_request_body_from_bytes('application/json', bytes);
+        let result = await this.send();
+    }
 
-        // Send async request
-        _httpSession.send_and_read_async(
-            message,
-            GLib.PRIORITY_DEFAULT,
-            null,
-            (_httpSession, result) => {
-                let bytes = _httpSession.send_and_read_finish(result);
-                let decoder = new TextDecoder('utf-8');
+    // Send async request
+    async send() {
+        return new Promise((resolve) => {
+            _httpSession.send_and_read_async(
+                message,
+                GLib.PRIORITY_DEFAULT,
+                null,
+                (_httpSession, result) => {
+                    let bytes = _httpSession.send_and_read_finish(result);
+                    let decoder = new TextDecoder('utf-8');
 
-                // Get response
-                let response = decoder.decode(bytes.get_data());
-                let res = JSON.parse(response);
-                if (res.error?.code !== 401 && res.error !== undefined) {
-                    logError(res.error);
-                    return 'Sorry, error getting response.';
-                }
-                // SAFETY warning
-                if (res.candidates[0].finishReason === 'SAFETY') {
-                    // get safety reason
-                    for (
-                        let i = 0;
-                        i < res.candidates[0].safetyRatings.length;
-                        i++
-                    ) {
-                        let safetyRating = res.candidates[0].safetyRatings[i];
-                        if (safetyRating.probability !== 'NEGLIGIBLE') {
-                            if (
-                                safetyRating.category ===
-                                'HARM_CATEGORY_SEXUALLY_EXPLICIT'
-                            ) {
-                                return _(
-                                    "Sorry, I can't answer this question. Possible sexually explicit content in the question or answer.",
-                                );
-                            }
-                            if (
-                                safetyRating.category ===
-                                'HARM_CATEGORY_HATE_SPEECH'
-                            ) {
-                                return _(
-                                    "Sorry, I can't answer this question. Possible hate speech in the question or answer.",
-                                );
-                            }
-                            if (
-                                safetyRating.category ===
-                                'HARM_CATEGORY_HARASSMENT'
-                            ) {
-                                return _(
-                                    "Sorry, I can't answer this question. Possible harassment in the question or answer.",
-                                );
-                            }
-                            if (
-                                safetyRating.category ===
-                                'HARM_CATEGORY_DANGEROUS_CONTENT'
-                            ) {
-                                return _(
-                                    "Sorry, I can't answer this question. Possible dangerous content in the question or answer.",
-                                );
+                    // Get response
+                    let response = decoder.decode(bytes.get_data());
+                    let res = JSON.parse(response);
+                    if (res.error?.code !== 401 && res.error !== undefined) {
+                        logError(res.error);
+                        return 'Sorry, error getting response.';
+                    }
+                    // SAFETY warning
+                    if (res.candidates[0].finishReason === 'SAFETY') {
+                        // get safety reason
+                        for (
+                            let i = 0;
+                            i < res.candidates[0].safetyRatings.length;
+                            i++
+                        ) {
+                            let safetyRating =
+                                res.candidates[0].safetyRatings[i];
+                            if (safetyRating.probability !== 'NEGLIGIBLE') {
+                                if (
+                                    safetyRating.category ===
+                                    'HARM_CATEGORY_SEXUALLY_EXPLICIT'
+                                ) {
+                                    return _(
+                                        "Sorry, I can't answer this question. Possible sexually explicit content in the question or answer.",
+                                    );
+                                }
+                                if (
+                                    safetyRating.category ===
+                                    'HARM_CATEGORY_HATE_SPEECH'
+                                ) {
+                                    return _(
+                                        "Sorry, I can't answer this question. Possible hate speech in the question or answer.",
+                                    );
+                                }
+                                if (
+                                    safetyRating.category ===
+                                    'HARM_CATEGORY_HARASSMENT'
+                                ) {
+                                    return _(
+                                        "Sorry, I can't answer this question. Possible harassment in the question or answer.",
+                                    );
+                                }
+                                if (
+                                    safetyRating.category ===
+                                    'HARM_CATEGORY_DANGEROUS_CONTENT'
+                                ) {
+                                    return _(
+                                        "Sorry, I can't answer this question. Possible dangerous content in the question or answer.",
+                                    );
+                                }
                             }
                         }
                     }
-                }
 
-                let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
+                    let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
 
-                if (aiResponse !== null && aiResponse !== undefined) {
-                    let formattedResponse = utils.textformat(aiResponse);
+                    if (aiResponse !== null && aiResponse !== undefined) {
+                        let formattedResponse = utils.textformat(aiResponse);
 
-                    // Return AI response
-                    return formattedResponse;
-                }
-                return 'Sorry, error getting response.';
-            },
-            (error, debug) => {
-                logError(error);
-                log(debug);
-                return 'Sorry, error getting response.';
-            },
-        );
+                        // Return AI response
+                        return formattedResponse;
+                    }
+                    return 'Sorry, error getting response.';
+                },
+                (error, debug) => {
+                    logError(error);
+                    log(debug);
+                    return 'Sorry, error getting response.';
+                },
+            );
+        });
     }
 
     /**
