@@ -297,28 +297,6 @@ const Aiva = GObject.registerClass(
             // Enable searchEntry
             this.searchEntry.clutter_text.reactive = true;
 
-            // Extract code and tts from response
-            let answer = utils.extractCodeAndTTS(
-                aiResponse,
-                this.AZURE_SPEECH_LANGUAGE,
-            );
-
-            // Speech response
-            if (answer.tts !== null) {
-                let responseAudio = this.azure.tts(answer.tts);
-                if (responseAudio.success) {
-                    this.audio.play(responseAudio.path);
-                }
-            }
-
-            // If answer.code is not null, copy to clipboard
-            if (answer.code !== null) {
-                this.extension.clipboard.set_text(
-                    St.ClipboardType.CLIPBOARD,
-                    answer.code,
-                );
-            }
-
             // Add to chat
             this.chatHistory.push({
                 role: 'user',
