@@ -86,19 +86,21 @@ export class MicrosoftAzure {
 
         // Captura o status da requisição
         subprocess.communicate_utf8_async(null, null, (proc, res) => {
+            // Processa a resposta (áudio)
             try {
                 // eslint-disable-next-line no-unused-vars
                 let [ok, stdout, stderr] = proc.communicate_utf8_finish(res);
                 if (ok) {
                     log('Audio file saved to: ' + tempFilePath);
-
                     // Tocar o áudio gerado
-                    this.playAudio(tempFilePath);
+                    return tempFilePath;
                 } else {
                     log('Requisition error: ' + stderr);
+                    return null;
                 }
             } catch (e) {
                 log('Error processing response: ' + e.message);
+                return null;
             } finally {
                 // Limpeza: pode optar por remover o arquivo temporário após tocar o áudio, se necessário
                 // GLib.unlink(tempFilePath);
