@@ -92,14 +92,12 @@ export class MicrosoftAzure {
                 if (ok) {
                     log('Audio file saved to: ' + tempFilePath);
                     // Tocar o áudio gerado
-                    return {success, tempFilePath};
+                    this.audio.play(tempFilePath);
                 } else {
                     log('Requisition error: ' + stderr);
-                    return {error: stderr};
                 }
             } catch (e) {
                 log('Error processing response: ' + e.message);
-                return {error: e};
             } finally {
                 // Limpeza: pode optar por remover o arquivo temporário após tocar o áudio, se necessário
                 // GLib.unlink(tempFilePath);
