@@ -2,6 +2,7 @@ import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
 
 import {Utils} from '../utils/utils.js';
+import {Audio} from '../utils/audio.js';
 
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
@@ -20,7 +21,6 @@ export class MicrosoftAzure {
         this.AZURE_SPEECH_REGION = AZURE_SPEECH_REGION;
         this.AZURE_SPEECH_LANGUAGE = AZURE_SPEECH_LANGUAGE;
         this.AZURE_SPEECH_VOICE = AZURE_SPEECH_VOICE;
-
         console.log('MicrosoftAzure loaded');
     }
 
@@ -93,7 +93,8 @@ export class MicrosoftAzure {
                 if (ok) {
                     log('Audio file saved to: ' + tempFilePath);
                     // Tocar o áudio gerado
-                    return tempFilePath;
+                    let audio = new Audio();
+                    audio.play(tempFilePath);
                 } else {
                     log('Requisition error: ' + stderr);
                     return null;
