@@ -90,11 +90,6 @@ export class Audio {
         this.pipeline.init(null);
     }
 
-    // Get recorded audio path
-    path() {
-        return this.questionPath;
-    }
-
     // Stop record
     stopRecord() {
         if (!this.isRecording) {
@@ -104,6 +99,9 @@ export class Audio {
         // Stop recording
         this.isRecording = false;
         this.pipeline.force_exit();
+
+        // Transcribe audio
+        this.azure.transcribe(this.questionPath);
     }
 
     // Função para converter arquivo de áudio em base64
