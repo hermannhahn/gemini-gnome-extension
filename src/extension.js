@@ -31,6 +31,7 @@ const Aiva = GObject.registerClass(
             this.AZURE_SPEECH_VOICE = ''; // Ex: "en-US-JennyNeural"
             this.USERNAME = '';
             this.RECURSIVETALK = true;
+            this.ISRECORDING = false;
         }
 
         /**
@@ -161,9 +162,13 @@ const Aiva = GObject.registerClass(
                 this.searchEntry.clutter_text.reactive = false;
             });
             micButton.connect('clicked', (_self) => {
-                let question = this.audio.record();
-                if (question !== 'recording') {
-                    this.chat(question);
+                let audio = {success = false, path: null}
+                if (this.ISRECORDING) {
+                    audio = this.audio.record();
+                } else {
+                    if (audio.success) {
+                        this.azure.transcribe(audio.path);
+                    }
                 }
             });
             clearButton.connect('clicked', (_self) => {
@@ -262,15 +267,13 @@ const Aiva = GObject.registerClass(
 
             // Add user question to chat
             userQuestion = utils.inputformat(userQuestion);
+            log('Question: ' + userQuestion)
             inputChat.label.clutter_text.set_markup(
                 `<b>${_('Me')}: </b>${userQuestion}`,
             );
 
             // Get ai response for user question
             aiResponse = this.gemini.response(userQuestion);
-            if (aiResponse === undefined) {
-                aiResponse = _('...');
-            }
 
             // DEBUG
             // let debugPhrase =
