@@ -11,12 +11,12 @@ const log = utils.log;
 
 export class Audio {
     constructor() {
-        console.log('Audio loaded');
         // Global variables
         this.pipeline = null;
         this.isRecording = false;
         this.isPlaying = false;
         this.playingPid = null;
+        console.log('Audio loaded');
     }
 
     // Play audio
@@ -61,8 +61,10 @@ export class Audio {
         if (this.isRecording) {
             // Stop recording
             this.stopRecord();
-            return this.outputPath;
+            return;
         }
+
+        this.isRecording = true;
 
         // Definir o arquivo de saída no diretório da extensão
         this.outputPath = 'gva_temp_audio_XXXXXX.wav';
@@ -86,9 +88,11 @@ export class Audio {
         });
 
         this.pipeline.init(null);
-        this.isRecording = true;
+    }
 
-        return 'recording';
+    // Get recorded audio path
+    path() {
+        return this.outputPath;
     }
 
     // Stop record
@@ -98,8 +102,8 @@ export class Audio {
         }
 
         // Stop recording
-        this.pipeline.force_exit();
         this.isRecording = false;
+        this.pipeline.force_exit();
     }
 
     // Função para converter arquivo de áudio em base64
