@@ -42,7 +42,12 @@ export class GoogleGemini {
             this.AZURE_SPEECH_LANGUAGE,
             this.AZURE_SPEECH_VOICE,
         );
-        this.audio = new Audio();
+        this.audio = new Audio(
+            AZURE_SPEECH_KEY,
+            AZURE_SPEECH_REGION,
+            AZURE_SPEECH_LANGUAGE,
+            AZURE_SPEECH_VOICE,
+        );
         console.log('Gemini Voice Assistant loaded');
     }
 
