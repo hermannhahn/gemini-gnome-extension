@@ -2,7 +2,6 @@ import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
 
 import {Utils} from '../utils/utils.js';
-import {Audio} from '../utils/audio.js';
 
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
@@ -93,15 +92,14 @@ export class MicrosoftAzure {
                 if (ok) {
                     log('Audio file saved to: ' + tempFilePath);
                     // Tocar o áudio gerado
-                    let audio = new Audio();
-                    audio.play(tempFilePath);
+                    return {success, tempFilePath};
                 } else {
                     log('Requisition error: ' + stderr);
-                    return null;
+                    return {error: stderr};
                 }
             } catch (e) {
                 log('Error processing response: ' + e.message);
-                return null;
+                return {error: e};
             } finally {
                 // Limpeza: pode optar por remover o arquivo temporário após tocar o áudio, se necessário
                 // GLib.unlink(tempFilePath);
@@ -181,20 +179,18 @@ export class MicrosoftAzure {
                     if (response && response.DisplayText) {
                         let transcription = response.DisplayText;
                         log('Transcrição: ' + transcription);
-                        this.aiResponse(transcription); // Função para processar a resposta da transcrição
+                        return {success, transcription};
                     } else {
                         log('Nenhuma transcrição encontrada.');
+                        return {error: 'Transcribe error.'};
                     }
                 } else {
                     log('Erro na requisição: ' + stderr);
+                    return {error: stderr};
                 }
             } catch (e) {
                 log('Erro ao processar resposta: ' + e.message);
-            } finally {
-                // Remove all temp files
-                GLib.unlink(audioPath);
-                GLib.unlink(tempFilePath);
-                this.removeWavFiles();
+                return {error: e.message};
             }
         });
     }
