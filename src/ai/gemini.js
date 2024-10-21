@@ -130,6 +130,30 @@ export class GoogleGemini {
 
                 if (aiResponse !== null && aiResponse !== undefined) {
                     aiResponse = utils.textformat(aiResponse);
+                    // Set ai response to chat
+                    responseChat.label.clutter_text.set_markup(
+                        '<b>Gemini: </b> ' + aiResponse,
+                    );
+                    log(aiResponse);
+
+                    // Extract code and tts from response
+                    let answer = utils.extractCodeAndTTS(
+                        aiResponse,
+                        this.AZURE_SPEECH_LANGUAGE,
+                    );
+
+                    // Speech response
+                    if (answer.tts !== null) {
+                        this.azure.tts(answer.tts);
+                    }
+
+                    // If answer.code is not null, copy to clipboard
+                    if (answer.code !== null) {
+                        this.extension.clipboard.set_text(
+                            St.ClipboardType.CLIPBOARD,
+                            answer.code,
+                        );
+                    }
                 }
             },
             (error, debug) => {
@@ -138,32 +162,6 @@ export class GoogleGemini {
                 aiResponse = 'Sorry, error getting response.';
             },
         );
-        if (aiResponse === null || aiResponse === undefined) {
-            aiResponse = 'Sorry, error getting response.';
-        }
-        // Set ai response to chat
-        responseChat.label.clutter_text.set_markup(
-            '<b>Gemini: </b> ' + aiResponse,
-        );
-
-        // Extract code and tts from response
-        let answer = utils.extractCodeAndTTS(
-            aiResponse,
-            this.AZURE_SPEECH_LANGUAGE,
-        );
-
-        // Speech response
-        if (answer.tts !== null) {
-            this.azure.tts(answer.tts);
-        }
-
-        // If answer.code is not null, copy to clipboard
-        if (answer.code !== null) {
-            this.extension.clipboard.set_text(
-                St.ClipboardType.CLIPBOARD,
-                answer.code,
-            );
-        }
     }
 
     /**
