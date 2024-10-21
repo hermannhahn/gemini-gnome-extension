@@ -268,6 +268,9 @@ const Gemini = GObject.registerClass(
 
             // Get ai response for user question
             aiResponse = this.gemini.response(userQuestion);
+            if (aiResponse === undefined) {
+                aiResponse = _('<b>Gemini: </b> ...');
+            }
 
             // DEBUG
             // let debugPhrase =
