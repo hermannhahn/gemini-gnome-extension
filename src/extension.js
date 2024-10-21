@@ -263,13 +263,13 @@ const Aiva = GObject.registerClass(
             // Add user question to chat
             userQuestion = utils.inputformat(userQuestion);
             inputChat.label.clutter_text.set_markup(
-                `<b>${this.USERNAME}: </b>${userQuestion}`,
+                `<b>Me: </b>${userQuestion}`,
             );
 
             // Get ai response for user question
             aiResponse = this.gemini.response(userQuestion);
             if (aiResponse === undefined) {
-                aiResponse = _('..');
+                aiResponse = _('...');
             }
 
             // DEBUG
@@ -307,7 +307,7 @@ const Aiva = GObject.registerClass(
             // Speech response
             if (answer.tts !== null) {
                 let audioPath = this.azure.tts(answer.tts);
-                if (audioPath !== null) {
+                if (audioPath !== undefined) {
                     this.audio.play(audioPath);
                 }
             }
