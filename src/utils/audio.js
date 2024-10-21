@@ -36,11 +36,11 @@ export class Audio {
         this.AZURE_SPEECH_LANGUAGE = AZURE_SPEECH_LANGUAGE;
         this.AZURE_SPEECH_VOICE = AZURE_SPEECH_VOICE;
         this.azure = new MicrosoftAzure(
-            this.GEMINIAPIKEY,
-            this.AZURE_SPEECH_KEY,
-            this.AZURE_SPEECH_REGION,
-            this.AZURE_SPEECH_LANGUAGE,
-            this.AZURE_SPEECH_VOICE,
+            GEMINIAPIKEY,
+            AZURE_SPEECH_KEY,
+            AZURE_SPEECH_REGION,
+            AZURE_SPEECH_LANGUAGE,
+            AZURE_SPEECH_VOICE,
         );
         console.log('Audio loaded');
     }
