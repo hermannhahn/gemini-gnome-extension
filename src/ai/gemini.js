@@ -155,8 +155,10 @@ export class GoogleGemini {
         // Speech response
         if (answer.tts !== null) {
             let responseAudio = this.azure.tts(answer.tts);
-            if (responseAudio.success) {
-                this.audio.play(responseAudio.path);
+            if (responseAudio !== undefined) {
+                if (responseAudio.success) {
+                    this.audio.play(responseAudio.path);
+                }
             }
         }
 
