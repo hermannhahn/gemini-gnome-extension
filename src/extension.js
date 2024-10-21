@@ -31,7 +31,6 @@ const Aiva = GObject.registerClass(
             this.AZURE_SPEECH_VOICE = ''; // Ex: "en-US-JennyNeural"
             this.USERNAME = '';
             this.RECURSIVETALK = true;
-            this.ISRECORDING = false;
         }
 
         /**
