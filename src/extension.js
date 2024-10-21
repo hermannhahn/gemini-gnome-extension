@@ -263,7 +263,7 @@ const Aiva = GObject.registerClass(
             // Add user question to chat
             userQuestion = utils.inputformat(userQuestion);
             inputChat.label.clutter_text.set_markup(
-                `<b>${_('Mes')}: </b>${userQuestion}`,
+                `<b>${_('Me')}: </b>${userQuestion}`,
             );
 
             // Get ai response for user question
