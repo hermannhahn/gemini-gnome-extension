@@ -306,7 +306,10 @@ const Aiva = GObject.registerClass(
 
             // Speech response
             if (answer.tts !== null) {
-                this.azure.tts(answer.tts);
+                let audioPath = this.azure.tts(answer.tts);
+                if (audioPath !== null) {
+                    this.audio.play(audioPath);
+                }
             }
 
             // If answer.code is not null, copy to clipboard
