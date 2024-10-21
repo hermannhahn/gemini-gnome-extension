@@ -19,8 +19,8 @@ import {MicrosoftAzure} from './ai/azure.js';
 // Utils
 const utils = new Utils();
 
-const Gemini = GObject.registerClass(
-    class Gemini extends PanelMenu.Button {
+const Aiva = GObject.registerClass(
+    class Aiva extends PanelMenu.Button {
         constructor(props) {
             super(props);
             // API Settings
@@ -269,7 +269,7 @@ const Gemini = GObject.registerClass(
             // Get ai response for user question
             aiResponse = this.gemini.response(userQuestion);
             if (aiResponse === undefined) {
-                aiResponse = _('<b>Gemini: </b> ...');
+                aiResponse = _('..');
             }
 
             // DEBUG
@@ -329,7 +329,7 @@ const Gemini = GObject.registerClass(
 
             // Save history.json
             if (this.RECURSIVETALK) {
-                this.saveHistory(this.chatHistory);
+                utils.saveHistory(this.chatHistory);
             }
         }
 
@@ -351,18 +351,18 @@ const Gemini = GObject.registerClass(
     },
 );
 
-export default class GeminiExtension extends Extension {
+export default class AivaExtension extends Extension {
     enable() {
         let url = 'https://thisipcan.cyou/json';
         let _httpSession = new Soup.Session();
         let message = Soup.Message.new('GET', url);
-        this.app = new Gemini({
+        this.app = new Aiva({
             clipboard: St.Clipboard.get_default(),
             settings: this.getSettings(),
             openSettings: this.openPreferences,
             uuid: this.uuid,
         });
-        Main.panel.addToStatusArea('gvaGnomeExtension', this.app, 1);
+        Main.panel.addToStatusArea('aiva-app', this.app, 1);
         _httpSession.send_and_read_async(
             message,
             GLib.PRIORITY_DEFAULT,
