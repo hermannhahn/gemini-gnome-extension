@@ -104,7 +104,6 @@ export class GoogleGemini {
                     question.responseChat.label.clutter_text.set_markup(
                         '<b>Gemini: </b> ' + aiResponse,
                     );
-                    log('AI Response: ' + aiResponse);
 
                     this.chatHistory.push({
                         role: 'user',
@@ -121,7 +120,6 @@ export class GoogleGemini {
                         utils.saveHistory(this.chatHistory);
                     }
                 }
-                log('AI response: ' + aiResponse);
                 log(this.scrollView);
             },
         );
