@@ -20,7 +20,7 @@ export class GoogleGemini {
     /**
      * @param {object} question
      *
-     * @description Return ai response
+     * @description Send question and add response to chat
      */
     response(question) {
         // Create http session
