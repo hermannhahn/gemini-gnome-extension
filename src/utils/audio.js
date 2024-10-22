@@ -87,7 +87,6 @@ export class Audio {
         if (this.isRecording) {
             // Stop recording
             this.stopRecord();
-            return;
         }
 
         this.isRecording = true;
