@@ -98,6 +98,7 @@ export class GoogleGemini {
                         }
                     }
                 }
+                log('AI response: ' + aiResponse);
                 return aiResponse;
             },
         );
