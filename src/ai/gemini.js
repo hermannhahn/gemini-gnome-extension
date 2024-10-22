@@ -18,7 +18,6 @@ export class GoogleGemini {
     }
 
     /**
-     * @param {*} responseChat
      * @param {*} question
      *
      * @description Send question and show response
