@@ -121,8 +121,8 @@ export class GoogleGemini {
                         utils.saveHistory(this.chatHistory);
                     }
                 }
-
                 log('AI response: ' + aiResponse);
+                log(this.scrollView);
             },
         );
     }
