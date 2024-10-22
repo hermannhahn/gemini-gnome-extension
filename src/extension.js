@@ -229,19 +229,20 @@ const Aiva = GObject.registerClass(
             responseChat.label.clutter_text.set_markup('<b>Gemini: </b> ...');
 
             // Get ai response for user question
-            let aiResponse = this.gemini.response(userQuestion);
-            aiResponse
+            let aiResponse = '';
+            this.gemini
+                .response(userQuestion)
                 .then(() => {
                     responseChat.label.clutter_text.set_markup(
                         '<b>Gemini: </b> ' + aiResponse,
                     );
+                    log('AI Response: ' + aiResponse);
                 })
                 .catch((error) => {
                     responseChat.label.clutter_text.set_markup(
                         '<b>Gemini: </b> ' + error,
                     );
                 });
-            log('AI Response: ' + aiResponse);
 
             // DEBUG
             // aiResponse =
