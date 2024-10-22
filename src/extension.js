@@ -119,7 +119,12 @@ const Aiva = GObject.registerClass(
             micButton.connect('clicked', (_self) => {
                 const rec = this.audio.record();
                 if (rec !== 'recording') {
-                    this.chat(this.audio.transcribe(rec));
+                    const azure = this.azure.transcribe(rec);
+                    if (azure.success) {
+                        this.chat(azure.transcription);
+                    } else {
+                        log(azure.error);
+                    }
                 }
             });
             item.add_child(micButton);
