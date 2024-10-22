@@ -327,10 +327,10 @@ export class Utils {
         }
     }
 
-    copySelectedText(responseChat, copyButton = null) {
+    copySelectedText(responseChat, copyButton, extension) {
         let selectedText = responseChat.label.clutter_text.get_selection();
         if (selectedText) {
-            this.extension.clipboard.set_text(
+            extension.clipboard.set_text(
                 St.ClipboardType.CLIPBOARD,
                 // Get text selection
                 selectedText,
@@ -347,7 +347,7 @@ export class Utils {
             }
             log(`Texto copiado: ${selectedText}`);
         } else {
-            this.extension.clipboard.set_text(
+            extension.clipboard.set_text(
                 St.ClipboardType.CLIPBOARD,
                 // Get text selection
                 responseChat.label.text,
