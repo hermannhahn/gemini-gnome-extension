@@ -25,7 +25,7 @@ export class GoogleGemini {
      *
      * @description Return ai response
      */
-    response(userQuestion, responseChat, RECURSIVETALK) {
+    response(userQuestion) {
         // Create http session
         let _httpSession = new Soup.Session();
         let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${this.GEMINIAPIKEY}`;
