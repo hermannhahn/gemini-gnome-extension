@@ -87,6 +87,7 @@ export class Audio {
         if (this.isRecording) {
             // Stop recording
             this.stopRecord();
+            return this.questionPath;
         }
 
         this.isRecording = true;
@@ -113,6 +114,7 @@ export class Audio {
         });
 
         this.pipeline.init(null);
+        return 'recording';
     }
 
     // Stop record
@@ -124,9 +126,6 @@ export class Audio {
         // Stop recording
         this.isRecording = false;
         this.pipeline.force_exit();
-
-        // Transcribe audio
-        this.azure.transcribe(this.questionPath);
     }
 
     // Função para converter arquivo de áudio em base64
