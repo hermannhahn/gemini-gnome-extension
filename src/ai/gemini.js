@@ -6,7 +6,6 @@ import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js'
 
 // Utils
 const utils = new Utils();
-const log = utils.log;
 const logError = utils.logError;
 
 export class GoogleGemini {
