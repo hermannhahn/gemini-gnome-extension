@@ -239,6 +239,7 @@ const Aiva = GObject.registerClass(
             let question = {
                 userQuestion,
                 responseChat,
+                searchEntry: this.searchEntry,
                 chatHistory: this.chatHistory,
                 recursiveTalk: this.config.RECURSIVETALK,
             };
@@ -250,16 +251,10 @@ const Aiva = GObject.registerClass(
             utils.scrollToBottom(responseChat, this.scrollView);
 
             // Add copy button to chat
-            if (copyButton) {
-                this.chatSection.addMenuItem(copyButton);
-            }
+            this.chatSection.addMenuItem(copyButton);
 
             // Scroll down
             utils.scrollToBottom(responseChat, this.scrollView);
-
-            // Enable searchEntry
-            log('Enable searchEntry');
-            this.searchEntry.clutter_text.reactive = true;
         }
 
         openSettings() {
