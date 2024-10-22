@@ -39,26 +39,24 @@ const Aiva = GObject.registerClass(
             const {settings} = this.extension;
 
             // Get settings
-            this.apisettings = {};
-            this.apisettings.GEMINIAPIKEY =
-                settings.get_string('gemini-api-key');
-            this.apisettings.AZURE_SPEECH_KEY =
+            this.config = {};
+            this.config.GEMINIAPIKEY = settings.get_string('gemini-api-key');
+            this.config.AZURE_SPEECH_KEY =
                 settings.get_string('azure-speech-key');
-            this.apisettings.AZURE_SPEECH_REGION = settings.get_string(
+            this.config.AZURE_SPEECH_REGION = settings.get_string(
                 'azure-speech-region',
             );
-            this.apisettings.AZURE_SPEECH_LANGUAGE = settings.get_string(
+            this.config.AZURE_SPEECH_LANGUAGE = settings.get_string(
                 'azure-speech-language',
             );
-            this.apisettings.AZURE_SPEECH_VOICE =
+            this.config.AZURE_SPEECH_VOICE =
                 settings.get_string('azure-speech-voice');
-            this.apisettings.RECURSIVETALK =
-                settings.get_boolean('log-history');
-            this.apisettings.USERNAME = GLib.get_real_name();
-            this.apisettings.LOCATION = '';
+            this.config.RECURSIVETALK = settings.get_boolean('log-history');
+            this.config.USERNAME = GLib.get_real_name();
+            this.config.LOCATION = '';
 
             // Create instances
-            this.gemini = new GoogleGemini(this.apisettings.GEMINIAPIKEY);
+            this.gemini = new GoogleGemini(this.config.GEMINIAPIKEY);
         }
 
         /**
@@ -114,7 +112,7 @@ const Aiva = GObject.registerClass(
                 style_class: 'mic-icon',
             });
             micButton.connect('clicked', (_self) => {
-                this.audio.record();
+                // this.audio.record();
             });
             item.add_child(micButton);
 
