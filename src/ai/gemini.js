@@ -36,7 +36,7 @@ export class GoogleGemini {
         message.set_request_body_from_bytes('application/json', bytes);
 
         // Send async request
-        _httpSession.send_and_read_sync(
+        _httpSession.send_and_read_async(
             message,
             GLib.PRIORITY_DEFAULT,
             null,
