@@ -20,7 +20,7 @@ export class GoogleGemini {
     /**
      * @param {*} question
      *
-     * @description Send question and show response
+     * @description Return ai response
      */
     response(question) {
         new Promise((resolve, reject) => {
