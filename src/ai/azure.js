@@ -31,13 +31,7 @@ export class MicrosoftAzure {
             AZURE_SPEECH_LANGUAGE,
             AZURE_SPEECH_VOICE,
         );
-        this.gemini = new GoogleGemini(
-            GEMINIAPIKEY,
-            AZURE_SPEECH_KEY,
-            AZURE_SPEECH_REGION,
-            AZURE_SPEECH_LANGUAGE,
-            AZURE_SPEECH_VOICE,
-        );
+        this.gemini = new GoogleGemini(GEMINIAPIKEY);
         console.log('MicrosoftAzure loaded');
     }
 
