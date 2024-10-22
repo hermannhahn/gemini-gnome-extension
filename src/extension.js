@@ -112,7 +112,7 @@ const Aiva = GObject.registerClass(
                 style_class: 'mic-icon',
             });
             micButton.connect('clicked', (_self) => {
-                // this.audio.record();
+                this.audio.record();
             });
             item.add_child(micButton);
 
