@@ -249,6 +249,9 @@ const Aiva = GObject.registerClass(
 
             // Scroll down
             utils.scrollToBottom(responseChat, this.scrollView);
+
+            // Enable searchEntry
+            this.searchEntry.clutter_text.reactive = true;
         }
 
         openSettings() {
