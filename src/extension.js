@@ -232,19 +232,22 @@ const Aiva = GObject.registerClass(
 
             // Get ai response for user question
             let aiResponse = this.gemini.response(userQuestion);
+            aiResponse
+                .then(() => {
+                    responseChat.label.clutter_text.set_markup(
+                        '<b>Gemini: </b> ' + aiResponse,
+                    );
+                })
+                .catch((error) => {
+                    responseChat.label.clutter_text.set_markup(
+                        '<b>Gemini: </b> ' + error,
+                    );
+                });
             log('AI Response: ' + aiResponse);
 
             // DEBUG
             // aiResponse =
             //     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius la';
-
-            // Add ai response to chat
-            if (aiResponse === null) {
-                aiResponse = 'Sorry, error getting response.';
-            }
-            responseChat.label.clutter_text.set_markup(
-                '<b>Gemini: </b> ' + aiResponse,
-            );
 
             // Scroll down
             utils.scrollToBottom(responseChat, this.scrollView);
