@@ -106,11 +106,6 @@ export class GoogleGemini {
                     }
                 }
             },
-            (error, debug) => {
-                logError(error);
-                log(debug);
-                return error;
-            },
         );
         aiResponse = utils.textformat(aiResponse);
         // DEBUG
