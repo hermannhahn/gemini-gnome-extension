@@ -24,13 +24,15 @@ const Aiva = GObject.registerClass(
         constructor(props) {
             super(props);
             // API Settings
-            this.GEMINIAPIKEY = '';
-            this.AZURE_SPEECH_KEY = '';
-            this.AZURE_SPEECH_REGION = ''; // Ex: "eastus"
-            this.AZURE_SPEECH_LANGUAGE = ''; // Ex: "en-US"
-            this.AZURE_SPEECH_VOICE = ''; // Ex: "en-US-JennyNeural"
-            this.USERNAME = '';
-            this.RECURSIVETALK = true;
+            this.config = {
+                GEMINIAPIKEY: '',
+                AZURE_SPEECH_KEY: '',
+                AZURE_SPEECH_REGION: '',
+                AZURE_SPEECH_LANGUAGE: '',
+                AZURE_SPEECH_VOICE: '',
+                USERNAME: '',
+                RECURSIVETALK: true,
+            };
         }
 
         /**
@@ -51,17 +53,28 @@ const Aiva = GObject.registerClass(
          */
         _fetchSettings() {
             const {settings} = this.extension;
-            this.GEMINIAPIKEY = settings.get_string('gemini-api-key');
-            this.AZURE_SPEECH_KEY = settings.get_string('azure-speech-key');
-            this.AZURE_SPEECH_REGION = settings.get_string(
-                'azure-speech-region',
-            );
-            this.AZURE_SPEECH_LANGUAGE = settings.get_string(
-                'azure-speech-language',
-            );
-            this.AZURE_SPEECH_VOICE = settings.get_string('azure-speech-voice');
-            this.RECURSIVETALK = settings.get_boolean('log-history');
-            this.USERNAME = GLib.get_real_name();
+            // API Settings
+            if (settings) {
+                this.config.GEMINIAPIKEY =
+                    settings.get_string('gemini-api-key');
+                this.config.AZURE_SPEECH_KEY =
+                    settings.get_string('azure-speech-key');
+                this.config.AZURE_SPEECH_REGION = settings.get_string(
+                    'azure-speech-region',
+                );
+                this.config.AZURE_SPEECH_LANGUAGE = settings.get_string(
+                    'azure-speech-language',
+                );
+                this.config.AZURE_SPEECH_VOICE =
+                    settings.get_string('azure-speech-voice');
+                this.config.RECURSIVETALK = settings.get_boolean('log-history');
+                this.config.USERNAME = GLib.get_real_name();
+            }
+
+            this.gemini = new GoogleGemini(this.config);
+            this.azure = new MicrosoftAzure(this.config);
+            this.audio = new Audio(this.config);
+            this.chatHistory = [];
         }
 
         /**
@@ -74,28 +87,6 @@ const Aiva = GObject.registerClass(
             this.extension = extension;
             super._init(0.0, _('Gemini Voice Assistant for Ubuntu'));
             this._loadSettings();
-            this.gemini = new GoogleGemini(
-                this.GEMINIAPIKEY,
-                this.AZURE_SPEECH_KEY,
-                this.AZURE_SPEECH_REGION,
-                this.AZURE_SPEECH_LANGUAGE,
-                this.AZURE_SPEECH_VOICE,
-            );
-            this.azure = new MicrosoftAzure(
-                this.GEMINIAPIKEY,
-                this.AZURE_SPEECH_KEY,
-                this.AZURE_SPEECH_REGION,
-                this.AZURE_SPEECH_LANGUAGE,
-                this.AZURE_SPEECH_VOICE,
-            );
-            this.audio = new Audio(
-                this.GEMINIAPIKEY,
-                this.AZURE_SPEECH_KEY,
-                this.AZURE_SPEECH_REGION,
-                this.AZURE_SPEECH_LANGUAGE,
-                this.AZURE_SPEECH_VOICE,
-            );
-            this.chatHistory = [];
 
             // Create Tray
             let tray = new St.BoxLayout({
