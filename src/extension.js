@@ -13,7 +13,7 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import {Utils} from './utils/utils.js';
 import {GoogleGemini} from './ai/gemini.js';
-import {Audio} from './ai/audio.js';
+import {Audio} from './utils/audio.js';
 
 // Utils
 const utils = new Utils();
