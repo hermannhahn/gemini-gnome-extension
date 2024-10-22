@@ -255,6 +255,7 @@ const Aiva = GObject.registerClass(
             utils.scrollToBottom(responseChat, this.scrollView);
 
             // Enable searchEntry
+            log('Enable searchEntry');
             this.searchEntry.clutter_text.reactive = true;
         }
 
