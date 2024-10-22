@@ -229,7 +229,11 @@ const Aiva = GObject.registerClass(
             responseChat.label.clutter_text.set_markup('<b>Gemini: </b> ...');
 
             // Get ai response for user question
-            this.gemini.response(userQuestion, responseChat);
+            this.gemini.response(
+                userQuestion,
+                responseChat,
+                this.config.RECURSIVETALK,
+            );
 
             // Scroll down
             utils.scrollToBottom(responseChat, this.scrollView);
