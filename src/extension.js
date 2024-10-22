@@ -207,7 +207,7 @@ const Aiva = GObject.registerClass(
                 hover: false,
             });
             copyButton.connect('activate', (_self) => {
-                this._copySelectedText(responseChat, copyButton);
+                utils.copySelectedText(responseChat, copyButton);
             });
 
             // Separator
