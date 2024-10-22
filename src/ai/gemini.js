@@ -20,8 +20,6 @@ export class GoogleGemini {
 
     /**
      * @param {string} userQuestion
-     * @param {object} responseChat
-     * @param {boolean} RECURSIVETALK
      *
      * @description Return ai response
      */
