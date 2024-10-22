@@ -27,7 +27,7 @@ export class GoogleGemini {
         // Create http session
         let _httpSession = new Soup.Session();
         let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${this.GEMINIAPIKEY}`;
-        let aiResponse = null;
+        let aiResponse = '...';
 
         // Compose request
         var body = this._buildBody(question);
