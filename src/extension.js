@@ -231,34 +231,37 @@ const Aiva = GObject.registerClass(
             // Get ai response for user question
             let aiResponse = this.gemini.response(userQuestion);
 
-            aiResponse = utils.textformat(aiResponse);
             // DEBUG
             // aiResponse =
             //     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius la';
             if (aiResponse !== undefined) {
+                aiResponse = utils.textformat(aiResponse);
                 responseChat.label.clutter_text.set_markup(
                     '<b>Gemini: </b> ' + aiResponse,
                 );
+                log('AI Response: ' + aiResponse);
+
+                this.chatHistory.push({
+                    role: 'user',
+                    parts: [{text: userQuestion}],
+                });
+
+                this.chatHistory.push({
+                    role: 'model',
+                    parts: [{text: aiResponse}],
+                });
+
+                // Save history.json
+                if (this.config.RECURSIVETALK) {
+                    utils.saveHistory(this.chatHistory);
+                }
+
+                // Scroll down
+                utils.scrollToBottom(responseChat, this.scrollView);
+
+                // Enable searchEntry
+                this.searchEntry.clutter_text.reactive = true;
             }
-            log('AI Response: ' + aiResponse);
-
-            this.chatHistory.push({
-                role: 'user',
-                parts: [{text: userQuestion}],
-            });
-
-            this.chatHistory.push({
-                role: 'model',
-                parts: [{text: aiResponse}],
-            });
-
-            // Save history.json
-            if (this.config.RECURSIVETALK) {
-                utils.saveHistory(this.chatHistory);
-            }
-
-            // Scroll down
-            utils.scrollToBottom(responseChat, this.scrollView);
 
             // Add copy button to chat
             if (copyButton) {
@@ -267,9 +270,6 @@ const Aiva = GObject.registerClass(
 
             // Scroll down
             utils.scrollToBottom(responseChat, this.scrollView);
-
-            // Enable searchEntry
-            this.searchEntry.clutter_text.reactive = true;
         }
 
         openSettings() {
