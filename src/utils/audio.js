@@ -127,7 +127,7 @@ export class Audio {
 
         // Transcribe audio
         let transcription = this.azure.transcribe(this.questionPath);
-        log('Transcription: ' + transcription);
+        log('Tra: ' + transcription);
     }
 
     // Função para converter arquivo de áudio em base64
