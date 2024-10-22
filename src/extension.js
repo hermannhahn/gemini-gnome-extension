@@ -256,12 +256,12 @@ const Aiva = GObject.registerClass(
                     utils.saveHistory(this.chatHistory);
                 }
 
-                // Scroll down
-                utils.scrollToBottom(responseChat, this.scrollView);
-
                 // Enable searchEntry
                 this.searchEntry.clutter_text.reactive = true;
             }
+
+            // Scroll down
+            utils.scrollToBottom(responseChat, this.scrollView);
 
             // Add copy button to chat
             if (copyButton) {
