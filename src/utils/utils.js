@@ -205,9 +205,9 @@ export class Utils {
             try {
                 let initialContent = JSON.stringify([], null, 2);
                 GLib.file_set_contents(this.historyFilePath, initialContent);
-                this.chatHistory = [];
+                let chatHistory = [];
                 log(`History file created. : ${this.historyFilePath}`);
-                this.chatHistory.push({
+                chatHistory.push({
                     role: 'user',
                     parts: [
                         {
@@ -215,7 +215,7 @@ export class Utils {
                         },
                     ],
                 });
-                this.chatHistory.push({
+                chatHistory.push({
                     role: 'model',
                     parts: [
                         {
@@ -226,7 +226,7 @@ export class Utils {
                     ],
                 });
                 // Save history.json
-                this.saveHistory(this.chatHistory);
+                this.saveHistory(chatHistory);
             } catch (e) {
                 logError(e, `Failed to create file: ${this.historyFilePath}`);
             }
@@ -238,11 +238,11 @@ export class Utils {
     }
 
     // Save to history file
-    saveHistory(newMessages) {
+    saveHistory(chatHistory) {
         try {
             GLib.file_set_contents(
                 this.historyFilePath,
-                JSON.stringify(newMessages, null, 2),
+                JSON.stringify(chatHistory, null, 2),
             );
             log(`History saved in: ${this.historyFilePath}`);
         } catch (e) {
@@ -256,9 +256,9 @@ export class Utils {
             try {
                 let file = Gio.File.new_for_path(this.historyFilePath);
                 let [, contents] = file.load_contents(null);
-                this.chatHistory = JSON.parse(contents);
+                let chatHistory = JSON.parse(contents);
                 log(`History loaded from: ${this.historyFilePath}`);
-                return this.chatHistory;
+                return chatHistory;
             } catch (e) {
                 logError(e, `Failed to load history: ${this.historyFilePath}`);
                 return [];
