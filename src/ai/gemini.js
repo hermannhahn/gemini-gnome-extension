@@ -14,6 +14,7 @@ export class GoogleGemini {
 
     constructor(GEMINIAPIKEY) {
         this.GEMINIAPIKEY = GEMINIAPIKEY;
+        this.chatHistory = utils.loadHistoryFile();
         console.log('Gemini Voice Assistant loaded');
     }
 
@@ -120,7 +121,7 @@ export class GoogleGemini {
      */
     _buildBody(input) {
         const stringfiedHistory = JSON.stringify([
-            ...utils.loadHistoryFile(),
+            ...this.chatHistory,
             {
                 role: 'user',
                 parts: [{text: input}],
