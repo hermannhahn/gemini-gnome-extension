@@ -21,20 +21,6 @@ const utils = new Utils();
 
 const Aiva = GObject.registerClass(
     class Aiva extends PanelMenu.Button {
-        constructor(props) {
-            super(props);
-            // API Settings
-            this.config = {
-                GEMINIAPIKEY: '',
-                AZURE_SPEECH_KEY: '',
-                AZURE_SPEECH_REGION: '',
-                AZURE_SPEECH_LANGUAGE: '',
-                AZURE_SPEECH_VOICE: '',
-                USERNAME: '',
-                RECURSIVETALK: true,
-            };
-        }
-
         /**
          * @description Load settings
          */
@@ -53,26 +39,34 @@ const Aiva = GObject.registerClass(
          */
         _fetchSettings() {
             const {settings} = this.extension;
+
             // API Settings
-            if (settings) {
-                this.config.GEMINIAPIKEY =
-                    settings.get_string('gemini-api-key');
-                this.config.AZURE_SPEECH_KEY =
-                    settings.get_string('azure-speech-key');
-                this.config.AZURE_SPEECH_REGION = settings.get_string(
-                    'azure-speech-region',
-                );
-                this.config.AZURE_SPEECH_LANGUAGE = settings.get_string(
-                    'azure-speech-language',
-                );
-                this.config.AZURE_SPEECH_VOICE =
-                    settings.get_string('azure-speech-voice');
-                this.config.RECURSIVETALK = settings.get_boolean('log-history');
-                this.config.USERNAME = GLib.get_real_name();
-            }
-            this.gemini = new GoogleGemini(this.config);
-            this.azure = new MicrosoftAzure(this.config);
-            this.audio = new Audio(this.config);
+            let apisettings = {
+                GEMINIAPIKEY: '',
+                AZURE_SPEECH_KEY: '',
+                AZURE_SPEECH_REGION: '',
+                AZURE_SPEECH_LANGUAGE: '',
+                AZURE_SPEECH_VOICE: '',
+                USERNAME: '',
+                RECURSIVETALK: true,
+            };
+            // Get settings
+            apisettings.GEMINIAPIKEY = settings.get_string('gemini-api-key');
+            apisettings.AZURE_SPEECH_KEY =
+                settings.get_string('azure-speech-key');
+            apisettings.AZURE_SPEECH_REGION = settings.get_string(
+                'azure-speech-region',
+            );
+            apisettings.AZURE_SPEECH_LANGUAGE = settings.get_string(
+                'azure-speech-language',
+            );
+            apisettings.AZURE_SPEECH_VOICE =
+                settings.get_string('azure-speech-voice');
+            apisettings.RECURSIVETALK = settings.get_boolean('log-history');
+            apisettings.USERNAME = GLib.get_real_name();
+            this.gemini = new GoogleGemini(apisettings);
+            this.azure = new MicrosoftAzure(apisettings);
+            this.audio = new Audio(apisettings);
             this.chatHistory = [];
         }
 
