@@ -19,18 +19,20 @@ export class GoogleGemini {
     }
 
     /**
-     * @param {*} question
+     * @param {string} userQuestion
+     * @param {object} responseChat
+     * @param {boolean} RECURSIVETALK
      *
      * @description Return ai response
      */
-    response(question) {
+    response(userQuestion, responseChat, RECURSIVETALK) {
         // Create http session
         let _httpSession = new Soup.Session();
         let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${this.GEMINIAPIKEY}`;
         let aiResponse = '...';
 
         // Compose request
-        var body = this._buildBody(question);
+        var body = this._buildBody(userQuestion);
         let message = Soup.Message.new('POST', url);
         let bytes = GLib.Bytes.new(body);
         message.set_request_body_from_bytes('application/json', bytes);
@@ -111,7 +113,30 @@ export class GoogleGemini {
             },
         );
         aiResponse = utils.textformat(aiResponse);
-        return aiResponse;
+        // DEBUG
+        // aiResponse =
+        //     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius la';
+        if (aiResponse !== undefined) {
+            responseChat.label.clutter_text.set_markup(
+                '<b>Gemini: </b> ' + aiResponse,
+            );
+        }
+        log('AI Response: ' + aiResponse);
+
+        this.chatHistory.push({
+            role: 'user',
+            parts: [{text: userQuestion}],
+        });
+
+        this.chatHistory.push({
+            role: 'model',
+            parts: [{text: aiResponse}],
+        });
+
+        // Save history.json
+        if (RECURSIVETALK) {
+            utils.saveHistory(this.chatHistory);
+        }
     }
 
     /**
