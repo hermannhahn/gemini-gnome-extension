@@ -40,34 +40,29 @@ const Aiva = GObject.registerClass(
         _fetchSettings() {
             const {settings} = this.extension;
 
-            // API Settings
-            let apisettings = {
-                GEMINIAPIKEY: '',
-                AZURE_SPEECH_KEY: '',
-                AZURE_SPEECH_REGION: '',
-                AZURE_SPEECH_LANGUAGE: '',
-                AZURE_SPEECH_VOICE: '',
-                USERNAME: '',
-                RECURSIVETALK: true,
-            };
             // Get settings
-            apisettings.GEMINIAPIKEY = settings.get_string('gemini-api-key');
-            apisettings.AZURE_SPEECH_KEY =
+            this.apisettings = {};
+            this.apisettings.GEMINIAPIKEY =
+                settings.get_string('gemini-api-key');
+            this.apisettings.AZURE_SPEECH_KEY =
                 settings.get_string('azure-speech-key');
-            apisettings.AZURE_SPEECH_REGION = settings.get_string(
+            this.apisettings.AZURE_SPEECH_REGION = settings.get_string(
                 'azure-speech-region',
             );
-            apisettings.AZURE_SPEECH_LANGUAGE = settings.get_string(
+            this.apisettings.AZURE_SPEECH_LANGUAGE = settings.get_string(
                 'azure-speech-language',
             );
-            apisettings.AZURE_SPEECH_VOICE =
+            this.apisettings.AZURE_SPEECH_VOICE =
                 settings.get_string('azure-speech-voice');
-            apisettings.RECURSIVETALK = settings.get_boolean('log-history');
-            apisettings.USERNAME = GLib.get_real_name();
-            this.gemini = new GoogleGemini(apisettings);
-            this.azure = new MicrosoftAzure(apisettings);
-            this.audio = new Audio(apisettings);
-            this.chatHistory = [];
+            this.apisettings.RECURSIVETALK =
+                settings.get_boolean('log-history');
+            this.apisettings.USERNAME = GLib.get_real_name();
+            this.apisettings.LOCATION = '';
+
+            // Create instances
+            this.gemini = new GoogleGemini(this.apisettings);
+            this.azure = new MicrosoftAzure(this.apisettings);
+            this.audio = new Audio(this.apisettings);
         }
 
         /**
@@ -78,8 +73,9 @@ const Aiva = GObject.registerClass(
         _init(extension) {
             this.keyLoopBind = 0;
             this.extension = extension;
-            super._init(0.0, _('Gemini Voice Assistant for Ubuntu'));
+            super._init(0.0, _('Artificial Intelligence Voice Assistant'));
             this._loadSettings();
+            this.chatHistory = [];
 
             // Create Tray
             let tray = new St.BoxLayout({
@@ -160,6 +156,7 @@ const Aiva = GObject.registerClass(
                 x_expand: true,
                 y_expand: true,
             });
+            this.chatSection.style_class += 'm-w-100';
 
             // Scrollbar
             this.scrollView = new St.ScrollView({
@@ -167,6 +164,8 @@ const Aiva = GObject.registerClass(
                 reactive: true,
                 overlay_scrollbars: false,
             });
+            this.scrollView.style_class += 'm-w-100';
+
             this.scrollView.add_child(this.chatSection.actor); // Add scroll to chat section
 
             // Add items to app
@@ -182,64 +181,48 @@ const Aiva = GObject.registerClass(
         }
 
         chat(userQuestion) {
-            // Create input and response chat items
+            // Question
             const inputChat = new PopupMenu.PopupMenuItem('', {
                 style_class: 'input-chat',
                 reactive: true,
                 can_focus: false,
                 hover: true,
             });
+            inputChat.label.clutter_text.reactive = true;
+            inputChat.label.clutter_text.selectable = true;
+            inputChat.label.clutter_text.hover = false;
+            inputChat.label.x_expand = true;
+
+            // Response
             const responseChat = new PopupMenu.PopupMenuItem('', {
                 style_class: 'response-chat',
                 reactive: true,
                 can_focus: false,
                 hover: true,
             });
+            responseChat.label.clutter_text.reactive = true;
+            responseChat.label.clutter_text.selectable = true;
+            responseChat.label.clutter_text.hover = false;
+            responseChat.label.x_expand = true;
 
-            // Create copy button
+            // Copy button
             const copyButton = new PopupMenu.PopupMenuItem('', {
                 style_class: 'copy-icon',
                 reactive: true,
                 can_focus: false,
                 hover: false,
             });
+            copyButton.connect('activate', (_self) => {
+                this._copySelectedText(responseChat, copyButton);
+            });
 
-            // Add Separator first
+            // Separator
             const newSeparator = new PopupMenu.PopupSeparatorMenuItem();
-
-            // Enable text selection
-            inputChat.label.clutter_text.reactive = true;
-            inputChat.label.clutter_text.selectable = true;
-
-            // Disable clutter_text hover
-            inputChat.label.clutter_text.hover = false;
-
-            // Add ai temporary response to chat
-            let aiResponse = _('<b>Gemini: </b> ...');
-            responseChat.label.clutter_text.set_markup(aiResponse);
-
-            // Enable text selection
-            responseChat.label.clutter_text.reactive = true;
-            responseChat.label.clutter_text.selectable = true;
-
-            // Disable clutter_text hover
-            responseChat.label.clutter_text.hover = false;
-
-            // Chat settings
-            inputChat.label.x_expand = true;
-            responseChat.label.x_expand = true;
-            this.chatSection.style_class += 'm-w-100';
-            this.scrollView.style_class += 'm-w-100';
 
             // Add user question and ai response to chat
             this.chatSection.addMenuItem(newSeparator);
             this.chatSection.addMenuItem(inputChat);
             this.chatSection.addMenuItem(responseChat);
-
-            // Set mouse click to copy response to clipboard
-            copyButton.connect('activate', (_self) => {
-                this._copySelectedText(responseChat, copyButton);
-            });
 
             // Add user question to chat
             userQuestion = utils.inputformat(userQuestion);
@@ -248,12 +231,24 @@ const Aiva = GObject.registerClass(
                 `<b>${_('Me')}: </b>${userQuestion}`,
             );
 
+            // Add ai temporary response to chat
+            responseChat.label.clutter_text.set_markup('<b>Gemini: </b> ...');
+
             // Get ai response for user question
-            aiResponse = this.gemini.response(responseChat, userQuestion);
+            let aiResponse = this.gemini.response(userQuestion);
+            log('AI Response: ' + aiResponse);
 
             // DEBUG
-            // let aiResponse =
+            // aiResponse =
             //     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius la';
+
+            // Add ai response to chat
+            if (aiResponse === null) {
+                aiResponse = 'Sorry, error getting response.';
+            }
+            responseChat.label.clutter_text.set_markup(
+                '<b>Gemini: </b> ' + aiResponse,
+            );
 
             // Scroll down
             utils.scrollToBottom(responseChat, this.scrollView);
