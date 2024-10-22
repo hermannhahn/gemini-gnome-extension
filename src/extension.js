@@ -54,6 +54,9 @@ const Aiva = GObject.registerClass(
             this.config.RECURSIVETALK = settings.get_boolean('log-history');
             this.config.USERNAME = GLib.get_real_name();
             this.config.LOCATION = '';
+            this.searchEntry = '';
+            this.chatSection = '';
+            this.scrollView = '';
 
             // Create instances
             this.gemini = new GoogleGemini(this.config.GEMINIAPIKEY);
