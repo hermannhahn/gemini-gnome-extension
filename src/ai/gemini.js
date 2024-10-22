@@ -101,7 +101,6 @@ export class GoogleGemini {
             (error, debug) => {
                 logError(error);
                 log(debug);
-                aiResponse = 'Sorry, error getting response.';
                 return error;
             },
         );
