@@ -120,7 +120,7 @@ export class GoogleGemini {
                         utils.saveHistory(this.chatHistory);
                     }
                 }
-                log(this.scrollView);
+                log('SV: ' + this.scrollView);
             },
         );
     }
