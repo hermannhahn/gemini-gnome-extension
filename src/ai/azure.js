@@ -2,7 +2,6 @@ import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
 
 import {Utils} from '../utils/utils.js';
-import {Audio} from '../utils/audio.js';
 import {GoogleGemini} from './gemini.js';
 
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
@@ -24,13 +23,6 @@ export class MicrosoftAzure {
         this.AZURE_SPEECH_REGION = AZURE_SPEECH_REGION;
         this.AZURE_SPEECH_LANGUAGE = AZURE_SPEECH_LANGUAGE;
         this.AZURE_SPEECH_VOICE = AZURE_SPEECH_VOICE;
-        this.audio = new Audio(
-            GEMINIAPIKEY,
-            AZURE_SPEECH_KEY,
-            AZURE_SPEECH_REGION,
-            AZURE_SPEECH_LANGUAGE,
-            AZURE_SPEECH_VOICE,
-        );
         this.gemini = new GoogleGemini(GEMINIAPIKEY);
         console.log('MicrosoftAzure loaded');
     }
