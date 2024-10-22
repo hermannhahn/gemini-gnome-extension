@@ -70,7 +70,6 @@ const Aiva = GObject.registerClass(
                 this.config.RECURSIVETALK = settings.get_boolean('log-history');
                 this.config.USERNAME = GLib.get_real_name();
             }
-
             this.gemini = new GoogleGemini(this.config);
             this.azure = new MicrosoftAzure(this.config);
             this.audio = new Audio(this.config);
@@ -99,13 +98,13 @@ const Aiva = GObject.registerClass(
             tray.add_child(this.icon);
             this.add_child(tray);
 
-            // Create app item section
+            // Create app items
             let item = new PopupMenu.PopupBaseMenuItem({
                 reactive: false,
                 can_focus: false,
             });
 
-            // Create search entry
+            // Search entry
             this.searchEntry = new St.Entry({
                 name: 'aiEntry',
                 style_class: 'ai-entry',
@@ -115,52 +114,29 @@ const Aiva = GObject.registerClass(
                 x_expand: true,
                 y_expand: true,
             });
-
-            // Create voice activation button
-            let micButton = new St.Button({
-                can_focus: true,
-                toggle_mode: true,
-                style_class: 'mic-icon',
-            });
-
-            // Create clear history button
-            let clearButton = new St.Button({
-                can_focus: true,
-                toggle_mode: true,
-                style_class: 'trash-icon',
-            });
-
-            // Create settings button
-            let settingsButton = new St.Button({
-                can_focus: true,
-                toggle_mode: true,
-                style_class: 'settings-icon',
-            });
-
-            // Create chat section
-            this.chatSection = new PopupMenu.PopupMenuSection({
-                style_class: 'chat-section',
-                x_expand: true,
-                y_expand: true,
-            });
-
-            // Create scrollbar
-            this.scrollView = new St.ScrollView({
-                style_class: 'chat-scroll-section',
-                reactive: true,
-                overlay_scrollbars: false,
-            });
-
-            // Add scroll to chat section
-            this.scrollView.add_child(this.chatSection.actor);
-
             this.searchEntry.clutter_text.connect('activate', (actor) => {
                 this.chat(actor.text);
                 this.searchEntry.clutter_text.set_text('');
                 this.searchEntry.clutter_text.reactive = false;
             });
+            item.add_child(this.searchEntry);
+
+            // Mic button
+            let micButton = new St.Button({
+                can_focus: true,
+                toggle_mode: true,
+                style_class: 'mic-icon',
+            });
             micButton.connect('clicked', (_self) => {
                 this.audio.record();
+            });
+            item.add_child(micButton);
+
+            // Clear history button
+            let clearButton = new St.Button({
+                can_focus: true,
+                toggle_mode: true,
+                style_class: 'trash-icon',
             });
             clearButton.connect('clicked', (_self) => {
                 this.searchEntry.clutter_text.set_text('');
@@ -170,17 +146,34 @@ const Aiva = GObject.registerClass(
                 this.scrollView.add_child(this.chatSection.actor);
                 this.menu.box.add_child(this.scrollView);
             });
+            item.add_child(clearButton);
+
+            // Settings button
+            let settingsButton = new St.Button({
+                can_focus: true,
+                toggle_mode: true,
+                style_class: 'settings-icon',
+            });
             settingsButton.connect('clicked', (_self) => {
                 this.openSettings();
-                // Close App
                 this.menu.close();
             });
-
-            // Add search entry, mic button, clear button and settings button to menu
-            item.add_child(this.searchEntry);
-            item.add_child(micButton);
-            item.add_child(clearButton);
             item.add_child(settingsButton);
+
+            // Chat section
+            this.chatSection = new PopupMenu.PopupMenuSection({
+                style_class: 'chat-section',
+                x_expand: true,
+                y_expand: true,
+            });
+
+            // Scrollbar
+            this.scrollView = new St.ScrollView({
+                style_class: 'chat-scroll-section',
+                reactive: true,
+                overlay_scrollbars: false,
+            });
+            this.scrollView.add_child(this.chatSection.actor); // Add scroll to chat section
 
             // Add items to app
             this.menu.addMenuItem(item);
@@ -189,7 +182,7 @@ const Aiva = GObject.registerClass(
             this.menu.box.add_child(this.scrollView);
 
             // Open settings if gemini api key is not configured
-            if (this.GEMINIAPIKEY === '') {
+            if (this.config.GEMINIAPIKEY === '') {
                 this.openSettings();
             }
         }
@@ -217,7 +210,7 @@ const Aiva = GObject.registerClass(
                 hover: false,
             });
 
-            // Separator
+            // Add Separator first
             const newSeparator = new PopupMenu.PopupSeparatorMenuItem();
 
             // Enable text selection
