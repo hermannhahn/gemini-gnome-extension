@@ -112,7 +112,7 @@ const Aiva = GObject.registerClass(
                 style_class: 'mic-icon',
             });
             micButton.connect('clicked', (_self) => {
-                this.audio.record();
+                // this.audio.record();
             });
             item.add_child(micButton);
 
@@ -229,11 +229,33 @@ const Aiva = GObject.registerClass(
             responseChat.label.clutter_text.set_markup('<b>Gemini: </b> ...');
 
             // Get ai response for user question
-            this.gemini.response(
-                userQuestion,
-                responseChat,
-                this.config.RECURSIVETALK,
-            );
+            let aiResponse = this.gemini.response(userQuestion);
+
+            aiResponse = utils.textformat(aiResponse);
+            // DEBUG
+            // aiResponse =
+            //     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius la';
+            if (aiResponse !== undefined) {
+                responseChat.label.clutter_text.set_markup(
+                    '<b>Gemini: </b> ' + aiResponse,
+                );
+            }
+            log('AI Response: ' + aiResponse);
+
+            this.chatHistory.push({
+                role: 'user',
+                parts: [{text: userQuestion}],
+            });
+
+            this.chatHistory.push({
+                role: 'model',
+                parts: [{text: aiResponse}],
+            });
+
+            // Save history.json
+            if (this.config.RECURSIVETALK) {
+                utils.saveHistory(this.chatHistory);
+            }
 
             // Scroll down
             utils.scrollToBottom(responseChat, this.scrollView);
