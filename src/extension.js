@@ -244,16 +244,6 @@ const Aiva = GObject.registerClass(
 
             // Enable searchEntry
             this.searchEntry.clutter_text.reactive = true;
-
-            this.chatHistory.push({
-                role: 'user',
-                parts: [{text: userQuestion}],
-            });
-
-            // Save history.json
-            if (this.RECURSIVETALK) {
-                utils.saveHistory(this.chatHistory);
-            }
         }
 
         openSettings() {
