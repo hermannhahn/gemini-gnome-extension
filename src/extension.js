@@ -13,6 +13,7 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import {Utils} from './utils/utils.js';
 import {GoogleGemini} from './ai/gemini.js';
+import {Audio} from './ai/audio.js';
 
 // Utils
 const utils = new Utils();
@@ -54,12 +55,14 @@ const Aiva = GObject.registerClass(
             this.config.RECURSIVETALK = settings.get_boolean('log-history');
             this.config.USERNAME = GLib.get_real_name();
             this.config.LOCATION = '';
+            this.chatHistory = utils.loadHistoryFile() || [];
             this.searchEntry = '';
             this.chatSection = '';
             this.scrollView = '';
 
             // Create instances
             this.gemini = new GoogleGemini(this.config.GEMINIAPIKEY);
+            this.audio = new Audio(this.config);
         }
 
         /**
@@ -72,7 +75,6 @@ const Aiva = GObject.registerClass(
             this.extension = extension;
             super._init(0.0, _('Artificial Intelligence Voice Assistant'));
             this._loadSettings();
-            this.chatHistory = [];
 
             // Create Tray
             let tray = new St.BoxLayout({
@@ -115,7 +117,7 @@ const Aiva = GObject.registerClass(
                 style_class: 'mic-icon',
             });
             micButton.connect('clicked', (_self) => {
-                // this.audio.record();
+                this.audio.record();
             });
             item.add_child(micButton);
 
