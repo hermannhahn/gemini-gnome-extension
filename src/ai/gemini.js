@@ -51,7 +51,13 @@ export class GoogleGemini {
                     logError(res.error);
                     aiResponse = 'Sorry, error getting response.';
                 }
-                aiResponse = res.candidates[0]?.content?.parts[0]?.text;
+                if (res.candidates[0] === undefined) {
+                    logError(res.candidates);
+                    aiResponse = 'Sorry, error getting response.';
+                }
+                if (res.candidates[0] !== undefined) {
+                    aiResponse = res.candidates[0]?.content?.parts[0]?.text;
+                }
 
                 // SAFETY warning
                 if (res.candidates[0].finishReason === 'SAFETY') {
