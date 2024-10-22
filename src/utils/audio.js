@@ -2,7 +2,7 @@ import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
 
 import {Utils} from './utils.js';
-import {MicrosoftAzure} from './azure.js';
+import {MicrosoftAzure} from '../ai/azure.js';
 
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
