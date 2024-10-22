@@ -117,7 +117,10 @@ const Aiva = GObject.registerClass(
                 style_class: 'mic-icon',
             });
             micButton.connect('clicked', (_self) => {
-                this.audio.record();
+                const rec = this.audio.record();
+                if (rec !== 'recording') {
+                    this.chat(this.audio.transcribe(rec));
+                }
             });
             item.add_child(micButton);
 
