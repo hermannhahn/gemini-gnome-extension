@@ -84,9 +84,16 @@ const Aiva = GObject.registerClass(
             super._init(0.0, _('AIVA'));
             this._loadSettings();
 
+            // UI
+            let tray = ui.tray;
+            let icon = ui.icon;
+            let item = ui.item;
+            let micButton = ui.micButton;
+            let clearButton = ui.clearButton;
+            let settingsButton = ui.settingsButton;
             // App Tray
-            ui.tray.add_child(ui.icon);
-            this.add_child(ui.tray);
+            tray.add_child(icon);
+            this.add_child(tray);
 
             // Search Entry
             // when in focus and enter is pressed
@@ -95,18 +102,18 @@ const Aiva = GObject.registerClass(
                 this.searchEntry.clutter_text.set_text('');
                 this.searchEntry.clutter_text.reactive = false;
             });
-            ui.item.add_child(this.searchEntry);
+            item.add_child(this.searchEntry);
 
             // Mic Button
             // when clicked start or stop record
-            ui.micButton.connect('clicked', (_self) => {
+            micButton.connect('clicked', (_self) => {
                 this.audio.record();
             });
-            ui.item.add_child(ui.micButton);
+            item.add_child(micButton);
 
             // Clear History Button
             // when clicked clear history
-            ui.clearButton.connect('clicked', (_self) => {
+            clearButton.connect('clicked', (_self) => {
                 this.searchEntry.clutter_text.set_text('');
                 this.chatHistory = [];
                 this.menu.box.remove_child(this.scrollView);
@@ -114,15 +121,15 @@ const Aiva = GObject.registerClass(
                 this.scrollView.add_child(this.chatSection.actor);
                 this.menu.box.add_child(this.scrollView);
             });
-            ui.item.add_child(ui.clearButton);
+            item.add_child(clearButton);
 
             // Settings Button
             // when clicked open settings
-            ui.settingsButton.connect('clicked', (_self) => {
+            settingsButton.connect('clicked', (_self) => {
                 this._openSettings();
                 this.menu.close();
             });
-            ui.item.add_child(ui.settingsButton);
+            item.add_child(settingsButton);
 
             // Scrollbar
             // add scroll bar to chat if needed
@@ -131,7 +138,7 @@ const Aiva = GObject.registerClass(
             log(this.menu); // Remove
             log(this.menu.box); // Remove
             // Add items to app
-            this.menu.addMenuItem(ui.item);
+            this.menu.addMenuItem(item);
 
             // Add chat section to app
             this.menu.box.add_child(this.scrollView);
