@@ -60,4 +60,27 @@ export class ui {
         reactive: true,
         overlay_scrollbars: false,
     });
+
+    inputChat = new PopupMenu.PopupMenuItem('', {
+        style_class: 'input-chat',
+        reactive: true,
+        can_focus: false,
+        hover: true,
+    });
+
+    responseChat = new PopupMenu.PopupMenuItem('', {
+        style_class: 'response-chat',
+        reactive: true,
+        can_focus: false,
+        hover: true,
+    });
+
+    copyButton = new PopupMenu.PopupMenuItem('', {
+        style_class: 'copy-icon',
+        reactive: true,
+        can_focus: false,
+        hover: false,
+    });
+
+    newSeparator = new PopupMenu.PopupSeparatorMenuItem();
 }
