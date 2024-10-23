@@ -101,9 +101,6 @@ export class Audio {
         // Stop recording
         this.isRecording = false;
         this.pipeline.force_exit();
-
-        // Send to transcribe
-        this.azure.transcribe(this.questionPath);
     }
 
     // Função para converter arquivo de áudio em base64
