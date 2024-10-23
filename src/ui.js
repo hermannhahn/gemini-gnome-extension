@@ -1,7 +1,7 @@
 import St from 'gi://St';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
-export class ui {
+export class AppLayout {
     constructor() {
         console.log('ui loaded');
     }
