@@ -14,6 +14,7 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import {Utils} from './utils/utils.js';
 import {GoogleGemini} from './ai/gemini.js';
 import {Audio} from './utils/audio.js';
+import {ui} from './ui.js';
 
 // Utils
 const utils = new Utils();
@@ -77,32 +78,16 @@ const Aiva = GObject.registerClass(
             this._loadSettings();
 
             // Create Tray
-            let tray = new St.BoxLayout({
-                style_class: 'panel-status-menu-box',
-            });
-            this.tray = tray;
-            this.icon = new St.Icon({
-                style_class: 'google-gemini-icon',
-            });
-            tray.add_child(this.icon);
+            let tray = ui.tray;
+            let icon = ui.icon;
+            tray.add_child(icon);
             this.add_child(tray);
 
             // Create app items
-            let item = new PopupMenu.PopupBaseMenuItem({
-                reactive: false,
-                can_focus: false,
-            });
+            let item = ui.item;
 
             // Search entry
-            this.searchEntry = new St.Entry({
-                name: 'aiEntry',
-                style_class: 'ai-entry',
-                can_focus: true,
-                hint_text: _('Ask me anything...'),
-                track_hover: true,
-                x_expand: true,
-                y_expand: true,
-            });
+            this.searchEntry = ui.searchEntry;
             this.searchEntry.clutter_text.connect('activate', (actor) => {
                 this.chat(actor.text);
                 this.searchEntry.clutter_text.set_text('');
@@ -111,22 +96,14 @@ const Aiva = GObject.registerClass(
             item.add_child(this.searchEntry);
 
             // Mic button
-            let micButton = new St.Button({
-                can_focus: true,
-                toggle_mode: true,
-                style_class: 'mic-icon',
-            });
+            let micButton = ui.micButton;
             micButton.connect('clicked', (_self) => {
                 this.audio.record();
             });
             item.add_child(micButton);
 
             // Clear history button
-            let clearButton = new St.Button({
-                can_focus: true,
-                toggle_mode: true,
-                style_class: 'trash-icon',
-            });
+            let clearButton = ui.clearButton;
             clearButton.connect('clicked', (_self) => {
                 this.searchEntry.clutter_text.set_text('');
                 this.chatHistory = [];
@@ -138,11 +115,7 @@ const Aiva = GObject.registerClass(
             item.add_child(clearButton);
 
             // Settings button
-            let settingsButton = new St.Button({
-                can_focus: true,
-                toggle_mode: true,
-                style_class: 'settings-icon',
-            });
+            let settingsButton = ui.settingsButton;
             settingsButton.connect('clicked', (_self) => {
                 this.openSettings();
                 this.menu.close();
@@ -150,19 +123,11 @@ const Aiva = GObject.registerClass(
             item.add_child(settingsButton);
 
             // Chat section
-            this.chatSection = new PopupMenu.PopupMenuSection({
-                style_class: 'chat-section',
-                x_expand: true,
-                y_expand: true,
-            });
+            this.chatSection = ui.chatSection;
             this.chatSection.style_class += 'm-w-100';
 
             // Scrollbar
-            this.scrollView = new St.ScrollView({
-                style_class: 'chat-scroll-section',
-                reactive: true,
-                overlay_scrollbars: false,
-            });
+            this.scrollView = ui.scrollView;
             this.scrollView.style_class += 'm-w-100';
 
             this.scrollView.add_child(this.chatSection.actor); // Add scroll to chat section
@@ -219,7 +184,6 @@ export default class AivaExtension extends Extension {
                 let response = decoder.decode(bytes.get_data());
                 const res = JSON.parse(response);
                 let LOCATION = `${res.countryName}/${res.cityName}`;
-                log(LOCATION);
                 this.app.gemini.tune(
                     utils.getTuneString(this.USERNAME, LOCATION),
                 );
