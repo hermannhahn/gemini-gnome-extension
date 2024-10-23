@@ -1,7 +1,6 @@
 import Soup from 'gi://Soup';
 import GLib from 'gi://GLib';
 import {Utils} from '../utils/utils.js';
-import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
@@ -10,10 +9,13 @@ const utils = new Utils();
 const logError = utils.logError;
 
 export class GoogleGemini {
-    static GEMINIAPIKEY;
+    static aiva;
 
-    constructor(GEMINIAPIKEY) {
-        this.GEMINIAPIKEY = GEMINIAPIKEY;
+    constructor(aiva) {
+        this.aiva = aiva;
+        this.USERNAME = aiva.config.USERNAME;
+        this.LOCATION = aiva.config.LOCATION;
+        this.GEMINIAPIKEY = aiva.config.GEMINIAPIKEY;
         console.log('Gemini Voice Assistant loaded');
     }
 
@@ -22,79 +24,28 @@ export class GoogleGemini {
      * @param {*} userQuestion
      */
     chat(userQuestion) {
-        // Question
-        const inputChat = new PopupMenu.PopupMenuItem('', {
-            style_class: 'input-chat',
-            reactive: true,
-            can_focus: false,
-            hover: true,
-        });
-        inputChat.label.clutter_text.reactive = true;
-        inputChat.label.clutter_text.selectable = true;
-        inputChat.label.clutter_text.hover = false;
-        inputChat.label.x_expand = true;
-
-        // Response
-        const responseChat = new PopupMenu.PopupMenuItem('', {
-            style_class: 'response-chat',
-            reactive: true,
-            can_focus: false,
-            hover: true,
-        });
-        responseChat.label.clutter_text.reactive = true;
-        responseChat.label.clutter_text.selectable = true;
-        responseChat.label.clutter_text.hover = false;
-        responseChat.label.x_expand = true;
-
-        // Copy button
-        const copyButton = new PopupMenu.PopupMenuItem('', {
-            style_class: 'copy-icon',
-            reactive: true,
-            can_focus: false,
-            hover: false,
-        });
-        copyButton.connect('activate', (_self) => {
-            utils.copySelectedText(responseChat, copyButton, this.extension);
-        });
-
-        // Separator
-        const newSeparator = new PopupMenu.PopupSeparatorMenuItem();
-
-        // Add user question and ai response to chat
-        this.chatSection.addMenuItem(newSeparator);
-        this.chatSection.addMenuItem(inputChat);
-        this.chatSection.addMenuItem(responseChat);
-
-        // Add user question to chat
-        userQuestion = utils.inputformat(userQuestion);
-        log('Question: ' + userQuestion);
-        inputChat.label.clutter_text.set_markup(
-            `<b>${_('Me')}: </b>${userQuestion}`,
+        // Add ai temporary response to chat
+        this.aiva.responseChat.label.clutter_text.set_markup(
+            '<b>Gemini: </b> ...',
         );
 
-        // Add ai temporary response to chat
-        responseChat.label.clutter_text.set_markup('<b>Gemini: </b> ...');
-
-        // Build question
-        let question = {
-            userQuestion,
-            responseChat,
-            searchEntry: this.searchEntry,
-            chatHistory: this.chatHistory,
-            recursiveTalk: this.config.RECURSIVETALK,
-        };
-
         // Get ai response for user question
-        this.gemini.response(question);
+        this.response(userQuestion);
+
+        // Response
+        this.aiva.responseChat.label.clutter_text.reactive = true;
+        this.aiva.responseChat.label.clutter_text.selectable = true;
+        this.aiva.responseChat.label.clutter_text.hover = false;
+        this.aiva.responseChat.label.x_expand = true;
 
         // Scroll down
-        utils.scrollToBottom(responseChat, this.scrollView);
+        utils.scrollToBottom(this.aiva.responseChat, this.aiva.scrollView);
 
         // Add copy button to chat
-        this.chatSection.addMenuItem(copyButton);
+        this.chatSection.addMenuItem(this.aiva.copyButton);
 
         // Scroll down
-        utils.scrollToBottom(responseChat, this.scrollView);
+        utils.scrollToBottom(this.aiva.responseChat, this.aiva.scrollView);
     }
 
     /**
