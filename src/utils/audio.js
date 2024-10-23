@@ -2,7 +2,6 @@ import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
 
 import {Utils} from './utils.js';
-import {MicrosoftAzure} from '../ai/azure.js';
 
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
@@ -11,14 +10,13 @@ const utils = new Utils();
 const log = utils.log;
 
 export class Audio {
-    constructor(config) {
+    constructor() {
         // Global variables
         this.pipeline = null;
         this.isRecording = false;
         this.isPlaying = false;
         this.playingPid = null;
         this.questionPath = null;
-        this.azure = new MicrosoftAzure(config);
         console.log('Audio loaded');
     }
 
