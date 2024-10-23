@@ -89,7 +89,7 @@ const Aiva = GObject.registerClass(
 
             // Search Entry
             // when in focus and enter is pressed
-            this.searchEntry.clutter_text.connect('activate', (actor) => {
+            this.ui.searchEntry.clutter_text.connect('activate', (actor) => {
                 this.chat(actor.text);
                 this.ui.searchEntry.clutter_text.set_text('');
                 this.ui.searchEntry.clutter_text.reactive = false;
