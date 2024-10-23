@@ -57,8 +57,7 @@ const Aiva = GObject.registerClass(
             this.chatHistory = utils.loadHistoryFile() || [];
 
             // UI
-            let layout = new AppLayout();
-            this.ui = layout.get();
+            this.ui = new AppLayout();
 
             // Load Plugins
             this.gemini = new GoogleGemini(this);
