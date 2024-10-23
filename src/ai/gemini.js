@@ -13,9 +13,9 @@ export class GoogleGemini {
 
     constructor(aiva) {
         this.aiva = aiva;
-        this.USERNAME = aiva.config.USERNAME;
-        this.LOCATION = aiva.config.LOCATION;
-        this.GEMINIAPIKEY = aiva.config.GEMINIAPIKEY;
+        this.USERNAME = aiva.USERNAME;
+        this.LOCATION = aiva.LOCATION;
+        this.GEMINIAPIKEY = aiva.GEMINIAPIKEY;
         console.log('Gemini Voice Assistant loaded');
     }
 
