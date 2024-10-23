@@ -11,37 +11,19 @@ const utils = new Utils();
 const log = utils.log;
 
 export class Audio {
-    static GEMINIAPIKEY;
-    static AZURE_SPEECH_KEY;
-    static AZURE_SPEECH_REGION;
-    static AZURE_SPEECH_LANGUAGE;
-    static AZURE_SPEECH_VOICE;
-
-    constructor(
-        GEMINIAPIKEY,
-        AZURE_SPEECH_KEY,
-        AZURE_SPEECH_REGION,
-        AZURE_SPEECH_LANGUAGE,
-        AZURE_SPEECH_VOICE,
-    ) {
+    constructor(config) {
         // Global variables
         this.pipeline = null;
         this.isRecording = false;
         this.isPlaying = false;
         this.playingPid = null;
         this.questionPath = null;
-        this.GEMINIAPIKEY = GEMINIAPIKEY;
-        this.AZURE_SPEECH_KEY = AZURE_SPEECH_KEY;
-        this.AZURE_SPEECH_REGION = AZURE_SPEECH_REGION;
-        this.AZURE_SPEECH_LANGUAGE = AZURE_SPEECH_LANGUAGE;
-        this.AZURE_SPEECH_VOICE = AZURE_SPEECH_VOICE;
-        this.azure = new MicrosoftAzure(
-            GEMINIAPIKEY,
-            AZURE_SPEECH_KEY,
-            AZURE_SPEECH_REGION,
-            AZURE_SPEECH_LANGUAGE,
-            AZURE_SPEECH_VOICE,
-        );
+        this.GEMINIAPIKEY = config.GEMINIAPIKEY;
+        this.AZURE_SPEECH_KEY = config.AZURE_SPEECH_KEY;
+        this.AZURE_SPEECH_REGION = config.AZURE_SPEECH_REGION;
+        this.AZURE_SPEECH_LANGUAGE = config.AZURE_SPEECH_LANGUAGE;
+        this.AZURE_SPEECH_VOICE = config.AZURE_SPEECH_VOICE;
+        this.azure = new MicrosoftAzure(config);
         console.log('Audio loaded');
     }
 
@@ -87,7 +69,6 @@ export class Audio {
         if (this.isRecording) {
             // Stop recording
             this.stopRecord();
-            return this.questionPath;
         }
 
         this.isRecording = true;
@@ -114,7 +95,6 @@ export class Audio {
         });
 
         this.pipeline.init(null);
-        return 'recording';
     }
 
     // Stop record
