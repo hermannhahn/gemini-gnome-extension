@@ -67,7 +67,6 @@ const Aiva = GObject.registerClass(
             this.inputChat = ui.inputChat;
             this.responseChat = ui.responseChat;
             this.copyButton = ui.copyButton;
-            this.newSeparator = ui.newSeparator;
 
             // Create instances
             this.gemini = new GoogleGemini(this);
@@ -161,13 +160,12 @@ const Aiva = GObject.registerClass(
                 utils.copySelectedText(this);
             });
 
-            // Separator
-
             // Add user question and ai response to chat
-            this.chatSection.addMenuItem(this.newSeparator);
+            this.chatSection.addMenuItem(ui.newSeparator);
             this.chatSection.addMenuItem(this.inputChat);
             this.chatSection.addMenuItem(this.responseChat);
 
+            // Send question to AI
             this.gemini.chat(userQuestion);
         }
 
