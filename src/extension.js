@@ -59,6 +59,7 @@ const Aiva = GObject.registerClass(
             // UI
             let layout = new AppLayout();
             this.ui = layout.get();
+
             // Create instances
             this.gemini = new GoogleGemini(this);
             this.audio = new Audio(this);
