@@ -56,14 +56,19 @@ const Aiva = GObject.registerClass(
             this.config.RECURSIVETALK = settings.get_boolean('log-history');
             this.config.USERNAME = GLib.get_real_name();
             this.config.LOCATION = '';
+
+            // Global variables
             this.chatHistory = utils.loadHistoryFile() || [];
-            this.searchEntry = '';
-            this.chatSection = '';
-            this.scrollView = '';
+            this.searchEntry = ui.searchEntry;
+            this.micButton = ui.micButton;
+            this.clearButton = ui.clearButton;
+            this.settingsButton = ui.settingsButton;
+            this.chatSection = ui.chatSection;
+            this.scrollView = ui.scrollView;
 
             // Create instances
-            this.gemini = new GoogleGemini(this.config.GEMINIAPIKEY);
-            this.audio = new Audio(this.config);
+            this.gemini = new GoogleGemini(this);
+            this.audio = new Audio(this);
         }
 
         /**
@@ -74,37 +79,32 @@ const Aiva = GObject.registerClass(
         _init(extension) {
             this.keyLoopBind = 0;
             this.extension = extension;
-            super._init(0.0, _('Artificial Intelligence Voice Assistant'));
+            super._init(0.0, _('AIVA'));
             this._loadSettings();
 
-            // Create Tray
-            let tray = ui.tray;
-            let icon = ui.icon;
-            tray.add_child(icon);
-            this.add_child(tray);
+            // App Tray
+            ui.tray.add_child(ui.icon);
+            this.add_child(ui.tray);
 
-            // Create app items
-            let item = ui.item;
-
-            // Search entry
-            this.searchEntry = ui.searchEntry;
+            // Search Entry
+            // when in focus and enter is pressed
             this.searchEntry.clutter_text.connect('activate', (actor) => {
                 this.chat(actor.text);
                 this.searchEntry.clutter_text.set_text('');
                 this.searchEntry.clutter_text.reactive = false;
             });
-            item.add_child(this.searchEntry);
+            ui.item.add_child(this.searchEntry);
 
-            // Mic button
-            let micButton = ui.micButton;
-            micButton.connect('clicked', (_self) => {
+            // Mic Button
+            // when clicked start or stop record
+            ui.micButton.connect('clicked', (_self) => {
                 this.audio.record();
             });
-            item.add_child(micButton);
+            ui.item.add_child(ui.micButton);
 
-            // Clear history button
-            let clearButton = ui.clearButton;
-            clearButton.connect('clicked', (_self) => {
+            // Clear History Button
+            // when clicked clear history
+            ui.clearButton.connect('clicked', (_self) => {
                 this.searchEntry.clutter_text.set_text('');
                 this.chatHistory = [];
                 this.menu.box.remove_child(this.scrollView);
@@ -112,28 +112,24 @@ const Aiva = GObject.registerClass(
                 this.scrollView.add_child(this.chatSection.actor);
                 this.menu.box.add_child(this.scrollView);
             });
-            item.add_child(clearButton);
+            ui.item.add_child(ui.clearButton);
 
-            // Settings button
-            let settingsButton = ui.settingsButton;
-            settingsButton.connect('clicked', (_self) => {
+            // Settings Button
+            // when clicked open settings
+            ui.settingsButton.connect('clicked', (_self) => {
                 this.openSettings();
                 this.menu.close();
             });
-            item.add_child(settingsButton);
-
-            // Chat section
-            this.chatSection = ui.chatSection;
-            this.chatSection.style_class += 'm-w-100';
+            ui.item.add_child(ui.settingsButton);
 
             // Scrollbar
-            this.scrollView = ui.scrollView;
-            this.scrollView.style_class += 'm-w-100';
-
+            // add scroll bar to chat if needed
             this.scrollView.add_child(this.chatSection.actor); // Add scroll to chat section
 
+            log(this.menu); // Remove
+            log(this.menu.box); // Remove
             // Add items to app
-            this.menu.addMenuItem(item);
+            this.menu.addMenuItem(ui.item);
 
             // Add chat section to app
             this.menu.box.add_child(this.scrollView);
