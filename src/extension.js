@@ -91,6 +91,7 @@ const Aiva = GObject.registerClass(
             let micButton = ui.micButton;
             let clearButton = ui.clearButton;
             let settingsButton = ui.settingsButton;
+
             // App Tray
             tray.add_child(icon);
             this.add_child(tray);
