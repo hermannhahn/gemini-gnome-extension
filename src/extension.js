@@ -14,7 +14,7 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import {Utils} from './utils/utils.js';
 import {GoogleGemini} from './ai/gemini.js';
 import {Audio} from './utils/audio.js';
-import {ui} from './ui.js';
+import {AppLayout} from './ui.js';
 
 // Utils
 const utils = new Utils();
@@ -57,16 +57,8 @@ const Aiva = GObject.registerClass(
             // Get history
             this.chatHistory = utils.loadHistoryFile() || [];
 
-            // Global variables
-            this.searchEntry = ui.searchEntry;
-            this.micButton = ui.micButton;
-            this.clearButton = ui.clearButton;
-            this.settingsButton = ui.settingsButton;
-            this.chatSection = ui.chatSection;
-            this.scrollView = ui.scrollView;
-            this.inputChat = ui.inputChat;
-            this.responseChat = ui.responseChat;
-            this.copyButton = ui.copyButton;
+            // UI
+            this.ui = new AppLayout();
 
             // Create instances
             this.gemini = new GoogleGemini(this);
@@ -85,12 +77,12 @@ const Aiva = GObject.registerClass(
             this._loadSettings();
 
             // UI
-            let tray = ui.tray;
-            let icon = ui.icon;
-            let item = ui.item;
-            let micButton = ui.micButton;
-            let clearButton = ui.clearButton;
-            let settingsButton = ui.settingsButton;
+            let tray = this.ui.tray;
+            let icon = this.ui.icon;
+            let item = this.ui.item;
+            let micButton = this.ui.micButton;
+            let clearButton = this.ui.clearButton;
+            let settingsButton = this.ui.settingsButton;
 
             // App Tray
             tray.add_child(icon);
@@ -100,10 +92,10 @@ const Aiva = GObject.registerClass(
             // when in focus and enter is pressed
             this.searchEntry.clutter_text.connect('activate', (actor) => {
                 this.chat(actor.text);
-                this.searchEntry.clutter_text.set_text('');
-                this.searchEntry.clutter_text.reactive = false;
+                this.ui.searchEntry.clutter_text.set_text('');
+                this.ui.searchEntry.clutter_text.reactive = false;
             });
-            item.add_child(this.searchEntry);
+            item.add_child(this.ui.searchEntry);
 
             // Mic Button
             // when clicked start or stop record
@@ -115,12 +107,11 @@ const Aiva = GObject.registerClass(
             // Clear History Button
             // when clicked clear history
             clearButton.connect('clicked', (_self) => {
-                this.searchEntry.clutter_text.set_text('');
+                this.ui.searchEntry.clutter_text.set_text('');
                 this.chatHistory = [];
-                this.menu.box.remove_child(this.scrollView);
-                this.chatSection = new PopupMenu.PopupMenuSection();
-                this.scrollView.add_child(this.chatSection.actor);
-                this.menu.box.add_child(this.scrollView);
+                this.menu.box.remove_child(this.ui.scrollView);
+                this.ui.scrollView.add_child(this.ui.chatSection.actor);
+                this.menu.box.add_child(this.ui.scrollView);
             });
             item.add_child(clearButton);
 
@@ -134,7 +125,7 @@ const Aiva = GObject.registerClass(
 
             // Scrollbar
             // add scroll bar to chat if needed
-            this.scrollView.add_child(this.chatSection.actor); // Add scroll to chat section
+            this.ui.scrollView.add_child(this.ui.chatSection.actor); // Add scroll to chat section
 
             log(this.menu); // Remove
             log(this.menu.box); // Remove
@@ -142,7 +133,7 @@ const Aiva = GObject.registerClass(
             this.menu.addMenuItem(item);
 
             // Add chat section to app
-            this.menu.box.add_child(this.scrollView);
+            this.menu.box.add_child(this.ui.scrollView);
 
             // Open settings if gemini api key is not configured
             if (this.GEMINIAPIKEY === '') {
@@ -154,26 +145,26 @@ const Aiva = GObject.registerClass(
             // Add user question to chat
             userQuestion = utils.inputformat(userQuestion);
             log('Question: ' + userQuestion);
-            this.inputChat.label.clutter_text.set_markup(
+            this.ui.inputChat.label.clutter_text.set_markup(
                 `<b>${_('Me')}: </b>${userQuestion}`,
             );
 
             // Question
-            this.inputChat.label.clutter_text.reactive = true;
-            this.inputChat.label.clutter_text.selectable = true;
-            this.inputChat.label.clutter_text.hover = false;
-            this.inputChat.label.x_expand = true;
+            this.ui.inputChat.label.clutter_text.reactive = true;
+            this.ui.inputChat.label.clutter_text.selectable = true;
+            this.ui.inputChat.label.clutter_text.hover = false;
+            this.ui.inputChat.label.x_expand = true;
 
             // Add user question and ai response to chat
-            this.chatSection.addMenuItem(ui.newSeparator);
-            this.chatSection.addMenuItem(this.inputChat);
-            this.chatSection.addMenuItem(this.responseChat);
+            this.ui.chatSection.addMenuItem(this.ui.newSeparator);
+            this.ui.chatSection.addMenuItem(this.ui.inputChat);
+            this.ui.chatSection.addMenuItem(this.ui.responseChat);
 
             // Send question to AI
             this.gemini.chat(userQuestion);
 
             // Copy button
-            this.copyButton.connect('activate', (_self) => {
+            this.ui.copyButton.connect('activate', (_self) => {
                 utils.copySelectedText(this);
             });
         }
