@@ -18,11 +18,6 @@ export class Audio {
         this.isPlaying = false;
         this.playingPid = null;
         this.questionPath = null;
-        this.GEMINIAPIKEY = config.GEMINIAPIKEY;
-        this.AZURE_SPEECH_KEY = config.AZURE_SPEECH_KEY;
-        this.AZURE_SPEECH_REGION = config.AZURE_SPEECH_REGION;
-        this.AZURE_SPEECH_LANGUAGE = config.AZURE_SPEECH_LANGUAGE;
-        this.AZURE_SPEECH_VOICE = config.AZURE_SPEECH_VOICE;
         this.azure = new MicrosoftAzure(config);
         console.log('Audio loaded');
     }
@@ -106,6 +101,9 @@ export class Audio {
         // Stop recording
         this.isRecording = false;
         this.pipeline.force_exit();
+
+        // Send to transcribe
+        this.azure.transcribe(this.questionPath);
     }
 
     // Função para converter arquivo de áudio em base64
