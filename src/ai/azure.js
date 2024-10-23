@@ -2,7 +2,7 @@ import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
 
 import {Utils} from '../utils/utils.js';
-import {GoogleGemini} from './gemini.js';
+import {Audio} from '../utils/audio.js';
 
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
@@ -11,19 +11,12 @@ const utils = new Utils();
 const log = utils.log;
 
 export class MicrosoftAzure {
-    constructor(
-        GEMINIAPIKEY,
-        AZURE_SPEECH_KEY,
-        AZURE_SPEECH_REGION,
-        AZURE_SPEECH_LANGUAGE,
-        AZURE_SPEECH_VOICE,
-    ) {
-        this.GEMINIAPIKEY = GEMINIAPIKEY;
-        this.AZURE_SPEECH_KEY = AZURE_SPEECH_KEY;
-        this.AZURE_SPEECH_REGION = AZURE_SPEECH_REGION;
-        this.AZURE_SPEECH_LANGUAGE = AZURE_SPEECH_LANGUAGE;
-        this.AZURE_SPEECH_VOICE = AZURE_SPEECH_VOICE;
-        this.gemini = new GoogleGemini(GEMINIAPIKEY);
+    constructor(config) {
+        this.AZURE_SPEECH_KEY = config.AZURE_SPEECH_KEY;
+        this.AZURE_SPEECH_REGION = config.AZURE_SPEECH_REGION;
+        this.AZURE_SPEECH_LANGUAGE = config.AZURE_SPEECH_LANGUAGE;
+        this.AZURE_SPEECH_VOICE = config.AZURE_SPEECH_VOICE;
+        this.audio = new Audio(config);
         console.log('MicrosoftAzure loaded');
     }
 
