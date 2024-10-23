@@ -120,7 +120,7 @@ const Aiva = GObject.registerClass(
             // Settings Button
             // when clicked open settings
             ui.settingsButton.connect('clicked', (_self) => {
-                this.openSettings();
+                this._openSettings();
                 this.menu.close();
             });
             ui.item.add_child(ui.settingsButton);
@@ -139,7 +139,7 @@ const Aiva = GObject.registerClass(
 
             // Open settings if gemini api key is not configured
             if (this.GEMINIAPIKEY === '') {
-                this.openSettings();
+                this._openSettings();
             }
         }
 
@@ -171,20 +171,20 @@ const Aiva = GObject.registerClass(
             this.gemini.chat(userQuestion);
         }
 
-        openSettings() {
+        _openSettings() {
             this.extension.openSettings();
         }
 
-        destroyLoop() {
+        _destroyLoop() {
             if (this.afterTune) {
                 clearTimeout(this.afterTune);
                 this.afterTune = null;
             }
         }
 
-        destroy() {
-            this.destroyLoop();
-            super.destroy();
+        _destroy() {
+            this._destroyLoop();
+            super._destroy();
         }
     },
 );
@@ -211,15 +211,16 @@ export default class AivaExtension extends Extension {
                 let response = decoder.decode(bytes.get_data());
                 const res = JSON.parse(response);
                 let LOCATION = `${res.countryName}/${res.cityName}`;
-                this.app.gemini.tune(
-                    utils.getTuneString(this.USERNAME, LOCATION),
-                );
+                log(LOCATION);
+                // this.app.gemini.tune(
+                //     utils.getTuneString(this.USERNAME, LOCATION),
+                // );
             },
         );
     }
 
     disable() {
-        this.app.destroy();
+        this.app._destroy();
         this.app = null;
     }
 }
