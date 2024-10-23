@@ -14,7 +14,6 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import {Utils} from './utils/utils.js';
 import {GoogleGemini} from './ai/gemini.js';
 import {Audio} from './utils/audio.js';
-import {MicrosoftAzure} from './ai/azure.js';
 
 // Utils
 const utils = new Utils();
@@ -64,7 +63,6 @@ const Aiva = GObject.registerClass(
             // Create instances
             this.gemini = new GoogleGemini(this.config.GEMINIAPIKEY);
             this.audio = new Audio(this.config);
-            this.azure = new MicrosoftAzure(this.config);
         }
 
         /**
@@ -119,15 +117,7 @@ const Aiva = GObject.registerClass(
                 style_class: 'mic-icon',
             });
             micButton.connect('clicked', (_self) => {
-                const rec = this.audio.record();
-                if (rec !== 'recording') {
-                    const azure = this.azure.transcribe(rec);
-                    if (azure.success) {
-                        this.chat(azure.transcription);
-                    } else {
-                        log(azure.error);
-                    }
-                }
+                this.audio.record();
             });
             item.add_child(micButton);
 
