@@ -41,30 +41,33 @@ const Aiva = GObject.registerClass(
             const {settings} = this.extension;
 
             // Get settings
-            this.config = {};
-            this.config.GEMINIAPIKEY = settings.get_string('gemini-api-key');
-            this.config.AZURE_SPEECH_KEY =
-                settings.get_string('azure-speech-key');
-            this.config.AZURE_SPEECH_REGION = settings.get_string(
+            this.GEMINIAPIKEY = settings.get_string('gemini-api-key');
+            this.AZURE_SPEECH_KEY = settings.get_string('azure-speech-key');
+            this.AZURE_SPEECH_REGION = settings.get_string(
                 'azure-speech-region',
             );
-            this.config.AZURE_SPEECH_LANGUAGE = settings.get_string(
+            this.AZURE_SPEECH_LANGUAGE = settings.get_string(
                 'azure-speech-language',
             );
-            this.config.AZURE_SPEECH_VOICE =
-                settings.get_string('azure-speech-voice');
-            this.config.RECURSIVETALK = settings.get_boolean('log-history');
-            this.config.USERNAME = GLib.get_real_name();
-            this.config.LOCATION = '';
+            this.AZURE_SPEECH_VOICE = settings.get_string('azure-speech-voice');
+            this.RECURSIVETALK = settings.get_boolean('log-history');
+            this.USERNAME = GLib.get_real_name();
+            this.LOCATION = '';
+
+            // Get history
+            this.chatHistory = utils.loadHistoryFile() || [];
 
             // Global variables
-            this.chatHistory = utils.loadHistoryFile() || [];
             this.searchEntry = ui.searchEntry;
             this.micButton = ui.micButton;
             this.clearButton = ui.clearButton;
             this.settingsButton = ui.settingsButton;
             this.chatSection = ui.chatSection;
             this.scrollView = ui.scrollView;
+            this.inputChat = ui.inputChat;
+            this.responseChat = ui.responseChat;
+            this.copyButton = ui.copyButton;
+            this.newSeparator = ui.newSeparator;
 
             // Create instances
             this.gemini = new GoogleGemini(this);
@@ -135,9 +138,37 @@ const Aiva = GObject.registerClass(
             this.menu.box.add_child(this.scrollView);
 
             // Open settings if gemini api key is not configured
-            if (this.config.GEMINIAPIKEY === '') {
+            if (this.GEMINIAPIKEY === '') {
                 this.openSettings();
             }
+        }
+
+        chat(userQuestion) {
+            // Question
+            this.inputChat.label.clutter_text.reactive = true;
+            this.inputChat.label.clutter_text.selectable = true;
+            this.inputChat.label.clutter_text.hover = false;
+            this.inputChat.label.x_expand = true;
+
+            // Response
+            this.responseChat.label.clutter_text.reactive = true;
+            this.responseChat.label.clutter_text.selectable = true;
+            this.responseChat.label.clutter_text.hover = false;
+            this.responseChat.label.x_expand = true;
+
+            // Copy button
+            this.copyButton.connect('activate', (_self) => {
+                utils.copySelectedText(this);
+            });
+
+            // Separator
+
+            // Add user question and ai response to chat
+            this.chatSection.addMenuItem(this.newSeparator);
+            this.chatSection.addMenuItem(this.inputChat);
+            this.chatSection.addMenuItem(this.responseChat);
+
+            this.gemini.chat(userQuestion);
         }
 
         openSettings() {
