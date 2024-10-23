@@ -143,22 +143,18 @@ const Aiva = GObject.registerClass(
         }
 
         chat(userQuestion) {
+            // Add user question to chat
+            userQuestion = utils.inputformat(userQuestion);
+            log('Question: ' + userQuestion);
+            this.inputChat.label.clutter_text.set_markup(
+                `<b>${_('Me')}: </b>${userQuestion}`,
+            );
+
             // Question
             this.inputChat.label.clutter_text.reactive = true;
             this.inputChat.label.clutter_text.selectable = true;
             this.inputChat.label.clutter_text.hover = false;
             this.inputChat.label.x_expand = true;
-
-            // Response
-            this.responseChat.label.clutter_text.reactive = true;
-            this.responseChat.label.clutter_text.selectable = true;
-            this.responseChat.label.clutter_text.hover = false;
-            this.responseChat.label.x_expand = true;
-
-            // Copy button
-            this.copyButton.connect('activate', (_self) => {
-                utils.copySelectedText(this);
-            });
 
             // Add user question and ai response to chat
             this.chatSection.addMenuItem(ui.newSeparator);
@@ -167,6 +163,11 @@ const Aiva = GObject.registerClass(
 
             // Send question to AI
             this.gemini.chat(userQuestion);
+
+            // Copy button
+            this.copyButton.connect('activate', (_self) => {
+                utils.copySelectedText(this);
+            });
         }
 
         _openSettings() {
