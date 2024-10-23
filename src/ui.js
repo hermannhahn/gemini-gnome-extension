@@ -6,22 +6,22 @@ export class AppLayout {
         console.log('ui loaded');
     }
 
-    tray = new St.BoxLayout({
+    static tray = new St.BoxLayout({
         style_class: 'panel-status-menu-box',
     });
 
-    icon = new St.Icon({
+    static icon = new St.Icon({
         style_class: 'google-gemini-icon',
     });
 
     // Create app items
-    item = new PopupMenu.PopupBaseMenuItem({
+    static item = new PopupMenu.PopupBaseMenuItem({
         reactive: false,
         can_focus: false,
     });
 
     // Search entry
-    searchEntry = new St.Entry({
+    static searchEntry = new St.Entry({
         name: 'aiEntry',
         style_class: 'ai-entry',
         can_focus: true,
@@ -31,60 +31,56 @@ export class AppLayout {
         y_expand: true,
     });
 
-    micButton = new St.Button({
+    static micButton = new St.Button({
         can_focus: true,
         toggle_mode: true,
         style_class: 'mic-icon',
     });
 
-    clearButton = new St.Button({
+    static clearButton = new St.Button({
         can_focus: true,
         toggle_mode: true,
         style_class: 'trash-icon',
     });
 
-    settingsButton = new St.Button({
+    static settingsButton = new St.Button({
         can_focus: true,
         toggle_mode: true,
         style_class: 'settings-icon',
     });
 
-    chatSection = new PopupMenu.PopupMenuSection({
+    static chatSection = new PopupMenu.PopupMenuSection({
         style_class: 'chat-section',
         x_expand: true,
         y_expand: true,
     });
 
-    scrollView = new St.ScrollView({
+    static scrollView = new St.ScrollView({
         style_class: 'chat-scroll-section',
         reactive: true,
         overlay_scrollbars: false,
     });
 
-    inputChat = new PopupMenu.PopupMenuItem('', {
+    static inputChat = new PopupMenu.PopupMenuItem('', {
         style_class: 'input-chat',
         reactive: true,
         can_focus: false,
         hover: true,
     });
 
-    responseChat = new PopupMenu.PopupMenuItem('', {
+    static responseChat = new PopupMenu.PopupMenuItem('', {
         style_class: 'response-chat',
         reactive: true,
         can_focus: false,
         hover: true,
     });
 
-    copyButton = new PopupMenu.PopupMenuItem('', {
+    static copyButton = new PopupMenu.PopupMenuItem('', {
         style_class: 'copy-icon',
         reactive: true,
         can_focus: false,
         hover: false,
     });
 
-    newSeparator = new PopupMenu.PopupSeparatorMenuItem();
-
-    get() {
-        return this;
-    }
+    static newSeparator = new PopupMenu.PopupSeparatorMenuItem();
 }
