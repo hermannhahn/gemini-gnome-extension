@@ -49,19 +49,18 @@ export class GoogleGemini {
     }
 
     /**
-     * @param {object} question
+     * @param {object} userQuestion
      *
      * @description Send question and add response to chat
      */
-    response(question) {
+    response(userQuestion) {
         // Create http session
-        this.chatHistory = question.chatHistory;
         let _httpSession = new Soup.Session();
         let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${this.GEMINIAPIKEY}`;
         let aiResponse = '...';
 
         // Compose request
-        var body = this._buildBody(question.userQuestion);
+        var body = this._buildBody(userQuestion);
         let message = Soup.Message.new('POST', url);
         let bytes = GLib.Bytes.new(body);
         message.set_request_body_from_bytes('application/json', bytes);
@@ -132,14 +131,14 @@ export class GoogleGemini {
                 //     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius lacinia, lectus quam laoreet libero, at laoreet lectus lectus eu quam. Maecenas vitae lacus sit amet justo ultrices condimentum. Maecenas id dolor vitae quam semper blandit. Aenean sed sapien ut ante elementum bibendum. Sed euismod, nisl id varius la';
                 if (aiResponse !== undefined) {
                     aiResponse = utils.textformat(aiResponse);
-                    question.responseChat.label.clutter_text.set_markup(
+                    this.aiva.responseChat.label.clutter_text.set_markup(
                         '<b>Gemini: </b> ' + aiResponse,
                     );
-                    question.searchEntry.clutter_text.reactive = true;
+                    this.aiva.searchEntry.clutter_text.reactive = true;
 
                     this.chatHistory.push({
                         role: 'user',
-                        parts: [{text: question.userQuestion}],
+                        parts: [{text: this.userQuestion}],
                     });
 
                     this.chatHistory.push({
@@ -148,8 +147,8 @@ export class GoogleGemini {
                     });
 
                     // Save history.json
-                    if (question.recursiveTalk) {
-                        utils.saveHistory(this.chatHistory);
+                    if (this.aiva.recursiveTalk) {
+                        utils.saveHistory(this.aiva.chatHistory);
                     }
                 }
             },
