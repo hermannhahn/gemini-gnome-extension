@@ -48,18 +48,31 @@ const Aiva = GObject.registerClass(
         _fetchSettings() {
             // Settings
             const settings = this.extension.settings;
+            let GEMINI_API_KEY = settings.get_string('gemini-api-key');
+            let AZURE_SPEECH_KEY = settings.get_string('azure-speech-key');
+            let AZURE_SPEECH_REGION = settings.get_string(
+                'azure-speech-region',
+            );
+            let AZURE_SPEECH_LANGUAGE = settings.get_string(
+                'azure-speech-language',
+            );
+            let AZURE_SPEECH_VOICE = settings.get_string('azure-speech-voice');
+            let LOG_HISTORY = settings.get_boolean('log-history');
+            let USERNAME = GLib.get_real_name();
+            let LOCATION = '';
+            let HISTORY_FILE = GLib.build_filenamev([EXT_DIR, 'history.json']);
+
+            // Get settings
             this.settings = {
-                geminiApiKey: settings.get_string('gemini-api-key'),
-                azureSpeechKey: settings.get_string('azure-speech-key'),
-                azureSpeechRegion: settings.get_string('azure-speech-region'),
-                azureSpeechLanguage: settings.get_string(
-                    'azure-speech-language',
-                ),
-                azureSpeechVoice: settings.get_string('azure-speech-voice'),
-                recursiveTalk: settings.get_boolean('log-history'),
-                username: GLib.get_real_name(),
-                location: '',
-                historyFile: GLib.build_filenamev([EXT_DIR, 'history.json']),
+                geminiApiKey: GEMINI_API_KEY,
+                azureSpeechKey: AZURE_SPEECH_KEY,
+                azureSpeechRegion: AZURE_SPEECH_REGION,
+                azureSpeechLanguage: AZURE_SPEECH_LANGUAGE,
+                azureSpeechVoice: AZURE_SPEECH_VOICE,
+                recursiveTalk: LOG_HISTORY,
+                username: USERNAME,
+                location: LOCATION,
+                historyFile: HISTORY_FILE,
             };
 
             // Chat History
