@@ -297,6 +297,7 @@ const Gemini = GObject.registerClass(
                     let decoder = new TextDecoder('utf-8');
 
                     // Get response
+                    let aiResponse = '...';
                     let response = decoder.decode(bytes.get_data());
                     log('[ AI-RES ] ' + response);
                     let res = JSON.parse(response);
@@ -325,44 +326,32 @@ const Gemini = GObject.registerClass(
                                     safetyRating.category ===
                                     'HARM_CATEGORY_SEXUALLY_EXPLICIT'
                                 ) {
-                                    this.responseChat?.label.clutter_text.set_markup(
-                                        '<b>Gemini: </b> ' +
-                                            _(
-                                                "Sorry, I can't answer this question. Possible sexually explicit content in the question or answer.",
-                                            ),
+                                    aiResponse = _(
+                                        "Sorry, I can't answer this question. Possible sexually explicit content in the question or answer.",
                                     );
                                 }
                                 if (
                                     safetyRating.category ===
                                     'HARM_CATEGORY_HATE_SPEECH'
                                 ) {
-                                    this.responseChat?.label.clutter_text.set_markup(
-                                        '<b>Gemini: </b> ' +
-                                            _(
-                                                "Sorry, I can't answer this question. Possible hate speech in the question or answer.",
-                                            ),
+                                    aiResponse = _(
+                                        "Sorry, I can't answer this question. Possible hate speech in the question or answer.",
                                     );
                                 }
                                 if (
                                     safetyRating.category ===
                                     'HARM_CATEGORY_HARASSMENT'
                                 ) {
-                                    this.responseChat?.label.clutter_text.set_markup(
-                                        '<b>Gemini: </b> ' +
-                                            _(
-                                                "Sorry, I can't answer this question. Possible harassment in the question or answer.",
-                                            ),
+                                    aiResponse = _(
+                                        "Sorry, I can't answer this question. Possible harassment in the question or answer.",
                                     );
                                 }
                                 if (
                                     safetyRating.category ===
                                     'HARM_CATEGORY_DANGEROUS_CONTENT'
                                 ) {
-                                    this.responseChat?.label.clutter_text.set_markup(
-                                        '<b>Gemini: </b> ' +
-                                            _(
-                                                "Sorry, I can't answer this question. Possible dangerous content in the question or answer.",
-                                            ),
+                                    aiResponse = _(
+                                        "Sorry, I can't answer this question. Possible dangerous content in the question or answer.",
                                     );
                                 }
                                 // Scroll down
@@ -374,7 +363,7 @@ const Gemini = GObject.registerClass(
                         }
                     }
 
-                    let aiResponse = res.candidates[0]?.content?.parts[0]?.text;
+                    aiResponse = res.candidates[0]?.content?.parts[0]?.text;
 
                     if (
                         aiResponse !== null &&
