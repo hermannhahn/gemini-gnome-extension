@@ -176,7 +176,7 @@ const Gemini = GObject.registerClass(
             this.scrollView.add_child(this.chatSection.actor);
 
             this.searchEntry.clutter_text.connect('activate', (actor) => {
-                this.aiResponse(actor.text);
+                this.chat(actor.text);
                 this.searchEntry.clutter_text.set_text('');
                 this.searchEntry.clutter_text.reactive = false;
             });
@@ -215,7 +215,7 @@ const Gemini = GObject.registerClass(
             }
         }
 
-        aiResponse(userQuestion) {
+        chat(userQuestion) {
             // Set temporary message
             let aiResponse = _('<b>Gemini: </b> ...');
 
@@ -261,7 +261,7 @@ const Gemini = GObject.registerClass(
             log(`[ USER ]: ${userQuestion}`);
 
             // Get ai response for user question
-            this.getAireponse(userQuestion);
+            this.response(userQuestion);
 
             // DEBUG
             // let debugPhrase =
@@ -271,7 +271,7 @@ const Gemini = GObject.registerClass(
             // this.typeText(responseChat, formatedResponse);
         }
 
-        getAireponse(userQuestion, destroyLoop = false) {
+        response(userQuestion, destroyLoop = false) {
             if (destroyLoop) {
                 this.destroyLoop();
             }
