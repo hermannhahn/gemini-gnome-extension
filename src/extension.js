@@ -15,10 +15,6 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import {Utils} from './utils/utils.js';
 import {AppLayout} from './ui.js';
 
-/**
- * @description return extension directory
- */
-
 const Aiva = GObject.registerClass(
     class Aiva extends PanelMenu.Button {
         /**
@@ -38,8 +34,15 @@ const Aiva = GObject.registerClass(
          * @description fetch settings
          */
         _fetchSettings() {
-            // Settings
+            /**
+             * @description get extension settings
+             */
             const {settings} = this.extension;
+
+            /**
+             * @description set/get user settings
+             */
+            this.userSettings = {};
             this.userSettings.GEMINI_API_KEY =
                 settings.get_string('gemini-api-key');
             this.userSettings.AZURE_SPEECH_KEY =
@@ -69,13 +72,19 @@ const Aiva = GObject.registerClass(
                 'history.json',
             ]);
 
-            // Chat History
+            /**
+             * @description set/get chat history
+             */
             this.chatHistory = [];
 
-            // UI
+            /**
+             * @description get ui layouts  [tray, icon, item, searchEntry, micButton, clearButton, settingsButton, chatSection, scrollView, inputChat, responseChat, copyButton, newSeparator]
+             */
             this.ui = new AppLayout();
 
-            // Player
+            /**
+             * @description set/get audio props
+             */
             this.audio = {
                 isPlaying: false,
                 isRecording: false,
@@ -83,7 +92,9 @@ const Aiva = GObject.registerClass(
                 pipeline: null,
             };
 
-            // Utils
+            /**
+             * @description utility functions [log, logError...]
+             */
             this.utils = new Utils(this);
         }
 
