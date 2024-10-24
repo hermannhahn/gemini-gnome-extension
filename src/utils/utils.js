@@ -6,7 +6,8 @@ import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js'
 import {convertMD} from './md2pango.js';
 
 export class Utils {
-    constructor() {
+    constructor(app) {
+        this.app = app;
         console.log('Utils loaded');
     }
 
@@ -191,19 +192,19 @@ export class Utils {
     createHistoryFile() {
         if (
             !GLib.file_test(
-                this.userSettings.HISTORY_FILE,
+                this.app.userSettings.HISTORY_FILE,
                 GLib.FileTest.IS_REGULAR,
             )
         ) {
             try {
                 let initialContent = JSON.stringify([], null, 2);
                 GLib.file_set_contents(
-                    this.userSettings.HISTORY_FILE,
+                    this.app.userSettings.HISTORY_FILE,
                     initialContent,
                 );
                 let recursiveHistory = [];
                 log(
-                    `History file created. : ${this.userSettings.HISTORY_FILE}`,
+                    `History file created. : ${this.app.userSettings.HISTORY_FILE}`,
                 );
                 recursiveHistory.push({
                     role: 'user',
@@ -229,13 +230,13 @@ export class Utils {
             } catch (e) {
                 logError(
                     e,
-                    `Failed to create file: ${this.userSettings.HISTORY_FILE}`,
+                    `Failed to create file: ${this.app.userSettings.HISTORY_FILE}`,
                 );
                 return [];
             }
         } else {
             log(
-                `The history.json file already exists: ${this.userSettings.HISTORY_FILE}`,
+                `The history.json file already exists: ${this.app.userSettings.HISTORY_FILE}`,
             );
             return this.loadHistoryFile();
         }
@@ -245,14 +246,14 @@ export class Utils {
     saveHistory(recursiveHistory) {
         try {
             GLib.file_set_contents(
-                this.userSettings.HISTORY_FILE,
+                this.app.userSettings.HISTORY_FILE,
                 JSON.stringify(recursiveHistory, null, 2),
             );
-            log(`History saved in: ${this.userSettings.HISTORY_FILE}`);
+            log(`History saved in: ${this.app.userSettings.HISTORY_FILE}`);
         } catch (e) {
             logError(
                 e,
-                `Failed to save history: ${this.userSettings.HISTORY_FILE}`,
+                `Failed to save history: ${this.app.userSettings.HISTORY_FILE}`,
             );
         }
     }
@@ -261,22 +262,24 @@ export class Utils {
     loadHistoryFile() {
         if (
             GLib.file_test(
-                this.userSettings.HISTORY_FILE,
+                this.app.userSettings.HISTORY_FILE,
                 GLib.FileTest.IS_REGULAR,
             )
         ) {
             try {
                 let file = Gio.File.new_for_path(
-                    this.userSettings.HISTORY_FILE,
+                    this.app.userSettings.HISTORY_FILE,
                 );
                 let [, contents] = file.load_contents(null);
                 let recursiveHistory = JSON.parse(contents);
-                log(`History loaded from: ${this.userSettings.HISTORY_FILE}`);
+                log(
+                    `History loaded from: ${this.app.userSettings.HISTORY_FILE}`,
+                );
                 return recursiveHistory;
             } catch (e) {
                 logError(
                     e,
-                    `Failed to load history: ${this.userSettings.HISTORY_FILE}`,
+                    `Failed to load history: ${this.app.userSettings.HISTORY_FILE}`,
                 );
                 return [];
             }
