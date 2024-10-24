@@ -205,9 +205,9 @@ export class Utils {
             try {
                 let initialContent = JSON.stringify([], null, 2);
                 GLib.file_set_contents(this.historyFilePath, initialContent);
-                let chatHistory = [];
+                let recursiveHistory = [];
                 log(`History file created. : ${this.historyFilePath}`);
-                chatHistory.push({
+                recursiveHistory.push({
                     role: 'user',
                     parts: [
                         {
@@ -215,7 +215,7 @@ export class Utils {
                         },
                     ],
                 });
-                chatHistory.push({
+                recursiveHistory.push({
                     role: 'model',
                     parts: [
                         {
@@ -226,8 +226,8 @@ export class Utils {
                     ],
                 });
                 // Save history.json
-                this.saveHistory(chatHistory);
-                return chatHistory;
+                this.saveHistory(recursiveHistory);
+                return recursiveHistory;
             } catch (e) {
                 logError(e, `Failed to create file: ${this.historyFilePath}`);
                 return [];
@@ -241,11 +241,11 @@ export class Utils {
     }
 
     // Save to history file
-    saveHistory(chatHistory) {
+    saveHistory(recursiveHistory) {
         try {
             GLib.file_set_contents(
                 this.historyFilePath,
-                JSON.stringify(chatHistory, null, 2),
+                JSON.stringify(recursiveHistory, null, 2),
             );
             log(`History saved in: ${this.historyFilePath}`);
         } catch (e) {
@@ -259,9 +259,9 @@ export class Utils {
             try {
                 let file = Gio.File.new_for_path(this.historyFilePath);
                 let [, contents] = file.load_contents(null);
-                let chatHistory = JSON.parse(contents);
+                let recursiveHistory = JSON.parse(contents);
                 log(`History loaded from: ${this.historyFilePath}`);
-                return chatHistory;
+                return recursiveHistory;
             } catch (e) {
                 logError(e, `Failed to load history: ${this.historyFilePath}`);
                 return [];
