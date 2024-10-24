@@ -649,7 +649,7 @@ const Gemini = GObject.registerClass(
             }
         }
 
-        removeNotificationByTitle(title) {
+        _removeNotificationByTitle(title) {
             // Obtenha todas as notificações ativas
             // eslint-disable-next-line no-unused-vars
             let [stdout, stderr, status] =
