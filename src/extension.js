@@ -13,6 +13,7 @@ import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import {Utils} from './utils/utils.js';
+import {AppLayout} from './ui.js';
 
 // Global variables
 let GEMINIAPIKEY = '';
