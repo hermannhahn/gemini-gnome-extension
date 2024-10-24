@@ -289,7 +289,7 @@ const Gemini = GObject.registerClass(
                     if (
                         aiResponse !== null &&
                         aiResponse !== undefined &&
-                        this.responseChat !== undefined
+                        this.ui.responseChat !== undefined
                     ) {
                         // Set ai response to chat
                         let formatedResponse = utils.textformat(aiResponse);
