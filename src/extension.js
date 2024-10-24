@@ -48,6 +48,7 @@ const Aiva = GObject.registerClass(
         _fetchSettings() {
             // Settings
             const settings = this.extension.settings;
+            this.settings = {};
             this.settings = {
                 GEMINIAPIKEY: settings.get_string('gemini-api-key'),
                 AZURE_SPEECH_KEY: settings.get_string('azure-speech-key'),
