@@ -714,6 +714,7 @@ export default class AivaExtension extends Extension {
                 let response = decoder.decode(bytes.get_data());
                 const res = JSON.parse(response);
                 this._aiva.settings.LOCATION = `${res.countryName}/${res.cityName}`;
+                log(this._aiva.settings.LOCATION);
             },
         );
     }
