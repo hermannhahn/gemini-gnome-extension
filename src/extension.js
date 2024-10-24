@@ -12,8 +12,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
-import {convertMD} from './md2pango.js';
-import {Formatter} from './text_format.js';
+import {Utils} from './utils/utils';
 
 // Global variables
 let GEMINIAPIKEY = '';
@@ -37,7 +36,7 @@ let extensionDir = GLib.build_filenamev([
     'gnome-extension@gemini-assist.vercel.app',
 ]);
 let historyFilePath = GLib.build_filenamev([extensionDir, 'history.json']);
-let format = new Formatter();
+let utils = new Utils();
 
 // Log function
 
@@ -255,8 +254,7 @@ const Gemini = GObject.registerClass(
             });
 
             // Add user question to chat
-            let formatedQuestion = convertMD(userQuestion);
-            formatedQuestion = format.inputChat(formatedQuestion);
+            let formatedQuestion = utils.inputchat(userQuestion);
             inputChat.label.clutter_text.set_markup(
                 `<b>${USERNAME}: </b>${formatedQuestion}`,
             );
@@ -394,10 +392,8 @@ const Gemini = GObject.registerClass(
                         aiResponse !== undefined &&
                         responseChat !== undefined
                     ) {
-                        let formatedResponse = convertMD(aiResponse);
-                        formatedResponse = format.chat(formatedResponse);
-
                         // Set ai response to chat
+                        let formatedResponse = utils.textformat(aiResponse);
                         responseChat.label.clutter_text.set_markup(
                             '<b>Gemini: </b> ' + formatedResponse,
                         );
