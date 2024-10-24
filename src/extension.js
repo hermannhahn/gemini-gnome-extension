@@ -458,7 +458,7 @@ const Gemini = GObject.registerClass(
             } else {
                 log('Audio already playing.');
                 // Kill player pid
-                GLib.spawn_command_line_async('kill ' + playingPid);
+                GLib.spawn_command_line_async('kill ' + this.player.playingPid);
                 this.player.isPlaying = false;
                 this.playAudio(audiofile);
             }
