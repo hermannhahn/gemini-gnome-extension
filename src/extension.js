@@ -27,8 +27,8 @@ const EXT_DIR = GLib.build_filenamev([
     'gnome-extension@gemini-assist.vercel.app',
 ]);
 
-const Gemini = GObject.registerClass(
-    class Gemini extends PanelMenu.Button {
+const Aiva = GObject.registerClass(
+    class Aiva extends PanelMenu.Button {
         /**
          * @description load settings
          */
@@ -47,7 +47,7 @@ const Gemini = GObject.registerClass(
          */
         _fetchSettings() {
             // Settings
-            const {settings} = this.extension;
+            const settings = this.extension.settings;
             this.settings = {
                 GEMINIAPIKEY: settings.get_string('gemini-api-key'),
                 AZURE_SPEECH_KEY: settings.get_string('azure-speech-key'),
@@ -691,18 +691,18 @@ const Gemini = GObject.registerClass(
     },
 );
 
-export default class GeminiExtension extends Extension {
+export default class AivaExtension extends Extension {
     enable() {
         let url = 'https://thisipcan.cyou/json';
         let _httpSession = new Soup.Session();
         let message = Soup.Message.new('GET', url);
-        this._gemini = new Gemini({
+        this._aiva = new Aiva({
             clipboard: St.Clipboard.get_default(),
             settings: this.getSettings(),
             openSettings: this.openPreferences,
             uuid: this.uuid,
         });
-        Main.panel.addToStatusArea('gvaGnomeExtension', this._gemini, 1);
+        Main.panel.addToStatusArea('gvaGnomeExtension', this._aiva, 1);
         _httpSession.send_and_read_async(
             message,
             GLib.PRIORITY_DEFAULT,
@@ -718,7 +718,7 @@ export default class GeminiExtension extends Extension {
     }
 
     disable() {
-        this._gemini.destroy();
-        this._gemini = null;
+        this._aiva.destroy();
+        this._aiva = null;
     }
 }
