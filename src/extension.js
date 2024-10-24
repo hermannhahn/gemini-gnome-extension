@@ -311,6 +311,7 @@ const Gemini = GObject.registerClass(
                         this.searchEntry.clutter_text.reactive = true;
                         return;
                     }
+                    aiResponse = res.candidates[0]?.content?.parts[0]?.text;
                     // SAFETY warning
                     if (res.candidates[0].finishReason === 'SAFETY') {
                         // get safety reason
@@ -354,6 +355,11 @@ const Gemini = GObject.registerClass(
                                         "Sorry, I can't answer this question. Possible dangerous content in the question or answer.",
                                     );
                                 }
+
+                                this.responseChat?.label.clutter_text.set_markup(
+                                    '<b>Gemini: </b> ' + aiResponse,
+                                );
+
                                 // Scroll down
                                 this.scrollToBottom(this.responseChat);
                                 // Enable searchEntry
@@ -362,8 +368,6 @@ const Gemini = GObject.registerClass(
                             }
                         }
                     }
-
-                    aiResponse = res.candidates[0]?.content?.parts[0]?.text;
 
                     if (
                         aiResponse !== null &&
