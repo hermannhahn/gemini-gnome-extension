@@ -83,6 +83,12 @@ const Gemini = GObject.registerClass(
             this.utils = new Utils();
         }
 
+        /**
+         *
+         * @param {*} extension
+         *
+         * @description init extension
+         */
         _init(extension) {
             this.keyLoopBind = 0;
             this.extension = extension;
