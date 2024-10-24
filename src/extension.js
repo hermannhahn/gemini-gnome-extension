@@ -96,6 +96,7 @@ const Aiva = GObject.registerClass(
         _init(extension) {
             this.keyLoopBind = 0;
             this.extension = extension;
+            this.userSettings = {};
             super._init(0.0, _('Gemini Voice Assistant for Ubuntu'));
             this._loadSettings();
             this.recursiveHistory = [];
