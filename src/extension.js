@@ -346,19 +346,21 @@ const Aiva = GObject.registerClass(
                             );
                         }
 
-                        // Add to history
+                        // Add to chat
+                        this.chatHistory.push({
+                            role: 'user',
+                            parts: [{text: userQuestion}],
+                        });
+                        this.chatHistory.push({
+                            role: 'model',
+                            parts: [{text: aiResponse}],
+                        });
+
+                        // Save history.json
                         if (this.settings.RECURSIVE_TALK) {
-                            this.chatHistory.push({
-                                role: 'user',
-                                parts: [{text: userQuestion}],
-                            });
-                            this.chatHistory.push({
-                                role: 'model',
-                                parts: [{text: aiResponse}],
-                            });
-                            // Save history.json
                             this.saveHistory();
                         }
+
                         // Scroll down
                         this.scrollToBottom();
                     }
