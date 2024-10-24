@@ -39,18 +39,15 @@ const Gemini = GObject.registerClass(
 
         _fetchSettings() {
             // Settings
-            const {userSettings} = this.extension;
+            const {settings} = this.extension;
             this.settings = {
-                GEMINIAPIKEY: userSettings.get_string('gemini-api-key'),
-                AZURE_SPEECH_KEY: userSettings.get_string('azure-speech-key'),
-                AZURE_SPEECH_REGION: userSettings.get_string(
-                    'azure-speech-region',
-                ),
-                AZURE_SPEECH_LANGUAGE: userSettings.get_string(
+                GEMINIAPIKEY: settings.get_string('gemini-api-key'),
+                AZURE_SPEECH_KEY: settings.get_string('azure-speech-key'),
+                AZURE_SPEECH_REGION: settings.get_string('azure-speech-region'),
+                AZURE_SPEECH_LANGUAGE: settings.get_string(
                     'azure-speech-language',
                 ),
-                AZURE_SPEECH_VOICE:
-                    userSettings.get_string('azure-speech-voice'),
+                AZURE_SPEECH_VOICE: settings.get_string('azure-speech-voice'),
                 RECURSIVE_TALK: false,
                 USERNAME: GLib.get_real_name(),
                 LOCATION: '',
