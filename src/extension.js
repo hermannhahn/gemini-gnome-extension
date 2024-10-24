@@ -48,19 +48,18 @@ const Aiva = GObject.registerClass(
         _fetchSettings() {
             // Settings
             const settings = this.extension.settings;
-            this.settings = {};
             this.settings = {
-                GEMINIAPIKEY: settings.get_string('gemini-api-key'),
-                AZURE_SPEECH_KEY: settings.get_string('azure-speech-key'),
-                AZURE_SPEECH_REGION: settings.get_string('azure-speech-region'),
-                AZURE_SPEECH_LANGUAGE: settings.get_string(
+                geminiApiKey: settings.get_string('gemini-api-key'),
+                azureSpeechKey: settings.get_string('azure-speech-key'),
+                azureSpeechRegion: settings.get_string('azure-speech-region'),
+                azureSpeechLanguage: settings.get_string(
                     'azure-speech-language',
                 ),
-                AZURE_SPEECH_VOICE: settings.get_string('azure-speech-voice'),
-                RECURSIVE_TALK: false,
-                USERNAME: GLib.get_real_name(),
-                LOCATION: '',
-                HISTORY_FILE: GLib.build_filenamev([EXT_DIR, 'history.json']),
+                azureSpeechVoice: settings.get_string('azure-speech-voice'),
+                recursiveTalk: settings.get_boolean('log-history'),
+                username: GLib.get_real_name(),
+                location: '',
+                historyFile: GLib.build_filenamev([EXT_DIR, 'history.json']),
             };
 
             // Chat History
