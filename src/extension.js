@@ -63,6 +63,7 @@ const Aiva = GObject.registerClass(
             let HISTORY_FILE = GLib.build_filenamev([EXT_DIR, 'history.json']);
 
             // Get settings
+            this.settings = {};
             this.settings = {
                 geminiApiKey: GEMINI_API_KEY,
                 azureSpeechKey: AZURE_SPEECH_KEY,
