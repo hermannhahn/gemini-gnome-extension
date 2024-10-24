@@ -18,14 +18,6 @@ import {AppLayout} from './ui.js';
 /**
  * @description return extension directory
  */
-const EXT_DIR = GLib.build_filenamev([
-    GLib.get_home_dir(),
-    '.local',
-    'share',
-    'gnome-shell',
-    'extensions',
-    'gnome-extension@gemini-assist.vercel.app',
-]);
 
 const Aiva = GObject.registerClass(
     class Aiva extends PanelMenu.Button {
@@ -64,8 +56,16 @@ const Aiva = GObject.registerClass(
                 settings.get_boolean('log-history');
             this.userSettings.USERNAME = GLib.get_real_name();
             this.userSettings.LOCATION = '';
+            this.userSettings.EXT_DIR = GLib.build_filenamev([
+                GLib.get_home_dir(),
+                '.local',
+                'share',
+                'gnome-shell',
+                'extensions',
+                'gnome-extension@gemini-assist.vercel.app',
+            ]);
             this.userSettings.HISTORY_FILE = GLib.build_filenamev([
-                EXT_DIR,
+                this.userSettings.EXT_DIR,
                 'history.json',
             ]);
 
