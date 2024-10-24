@@ -713,7 +713,7 @@ export default class AivaExtension extends Extension {
                 let decoder = new TextDecoder('utf-8');
                 let response = decoder.decode(bytes.get_data());
                 const res = JSON.parse(response);
-                this.settings.LOCATION = `${res.countryName}/${res.cityName}`;
+                this._aiva.settings.LOCATION = `${res.countryName}/${res.cityName}`;
             },
         );
     }
