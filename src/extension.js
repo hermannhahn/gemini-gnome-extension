@@ -58,12 +58,12 @@ const Aiva = GObject.registerClass(
 
             // UI
             this.ui = new AppLayout();
-            this.chatSection = new this.ui.chatSection();
-            this.scrollView = new this.ui.scrollView();
-            this.inputChat = new this.ui.inputChat();
-            this.responseChat = new this.ui.responseChat();
-            this.copyButton = new this.ui.copyButton();
-            this.newSeparator = new this.ui.newSeparator();
+            this.chatSection = this.ui.chatSection();
+            this.scrollView = this.ui.scrollView();
+            this.inputChat = this.ui.inputChat();
+            this.responseChat = this.ui.responseChat();
+            this.copyButton = this.ui.copyButton();
+            this.newSeparator = this.ui.newSeparator();
             // Load Plugins
             this.gemini = new GoogleGemini(this);
             this.audio = new Audio(this);
@@ -81,12 +81,12 @@ const Aiva = GObject.registerClass(
             this._loadSettings();
 
             // UI
-            let tray = new this.ui.tray();
-            let icon = new this.ui.icon();
-            let item = new this.ui.item();
-            let micButton = new this.ui.micButton();
-            let clearButton = new this.ui.clearButton();
-            let settingsButton = new this.ui.settingsButton();
+            let tray = this.ui.tray();
+            let icon = this.ui.icon();
+            let item = this.ui.item();
+            let micButton = this.ui.micButton();
+            let clearButton = this.ui.clearButton();
+            let settingsButton = this.ui.settingsButton();
 
             // App Tray
             tray.add_child(icon);
