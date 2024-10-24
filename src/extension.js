@@ -51,10 +51,10 @@ const Gemini = GObject.registerClass(
                 ),
                 AZURE_SPEECH_VOICE:
                     userSettings.get_string('azure-speech-voice'),
-                RECURSIVETALK: false,
+                RECURSIVE_TALK: false,
                 USERNAME: GLib.get_real_name(),
                 LOCATION: '',
-                extensionDir: GLib.build_filenamev([
+                EXT_DIR: GLib.build_filenamev([
                     GLib.get_home_dir(),
                     '.local',
                     'share',
@@ -62,8 +62,8 @@ const Gemini = GObject.registerClass(
                     'extensions',
                     'gnome-extension@gemini-assist.vercel.app',
                 ]),
-                historyFilePath: GLib.build_filenamev([
-                    this.extensionDir,
+                HISTORY_FILE: GLib.build_filenamev([
+                    this.settings.EXT_DIR,
                     'history.json',
                 ]),
             };
@@ -91,7 +91,7 @@ const Gemini = GObject.registerClass(
             this.extension = extension;
             super._init(0.0, _('Gemini Voice Assistant for Ubuntu'));
             this._loadSettings();
-            if (this.settings.RECURSIVETALK) {
+            if (this.settings.RECURSIVE_TALK) {
                 this.recursiveHistory = this.utils.loadHistoryFile();
             }
 
@@ -339,7 +339,7 @@ const Gemini = GObject.registerClass(
                         }
 
                         // Add to history
-                        if (this.settings.RECURSIVETALK) {
+                        if (this.settings.RECURSIVE_TALK) {
                             this.chatHistory.push({
                                 role: 'user',
                                 parts: [{text: userQuestion}],
@@ -438,7 +438,7 @@ const Gemini = GObject.registerClass(
 
         // Play audio
         playAudio(audiofile) {
-            if (!isPlaying) {
+            if (!this.player.isPlaying) {
                 log('Playing audio: ' + audiofile);
                 // Process sync, not async
                 const process = GLib.spawn_async(
@@ -449,8 +449,8 @@ const Gemini = GObject.registerClass(
                     null, // PID
                 );
                 if (process) {
-                    playingPid = process.pid;
-                    isPlaying = true;
+                    this.player.playingPid = process.pid;
+                    this.player.isPlaying = true;
                     log('Audio played successfully.');
                 } else {
                     log('Error playing audio.');
@@ -459,26 +459,23 @@ const Gemini = GObject.registerClass(
                 log('Audio already playing.');
                 // Kill player pid
                 GLib.spawn_command_line_async('kill ' + playingPid);
-                isPlaying = false;
+                this.player.isPlaying = false;
                 this.playAudio(audiofile);
             }
         }
 
         // Função para iniciar a gravação
         startRecording() {
-            if (isRecording) {
+            if (this.player.isRecording) {
                 // Stop recording
                 this.stopRecording();
                 return;
             }
-            // Notify listening...
-            this.gnomeNotify('Listening...', 'critical');
-
             // Definir o arquivo de saída no diretório da extensão
             this.outputPath = 'gva_temp_audio_XXXXXX.wav';
 
             // Pipeline GStreamer para capturar áudio do microfone e salvar como .wav
-            pipeline = new Gio.Subprocess({
+            this.player.pipeline = new Gio.Subprocess({
                 argv: [
                     'gst-launch-1.0',
                     'pulsesrc',
@@ -495,17 +492,17 @@ const Gemini = GObject.registerClass(
                     Gio.SubprocessFlags.STDERR_PIPE,
             });
 
-            pipeline.init(null);
-            isRecording = true;
+            this.player.pipeline.init(null);
+            this.player.isRecording = true;
         }
 
         stopRecording() {
-            if (!isRecording) {
+            if (!this.player.isRecording) {
                 return;
             }
 
             // Stop recording
-            pipeline.force_exit();
+            this.player.pipeline.force_exit();
 
             // Remove notification
             this.removeNotificationByTitle('Listening...');
@@ -514,7 +511,7 @@ const Gemini = GObject.registerClass(
             this.transcribeAudio(this.outputPath);
 
             //
-            isRecording = false;
+            this.player.isRecording = false;
         }
 
         // Função para transcrever o áudio gravado usando Microsoft Speech-to-Text API
