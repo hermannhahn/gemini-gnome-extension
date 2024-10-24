@@ -8,18 +8,6 @@ import {convertMD} from './md2pango.js';
 export class Utils {
     constructor() {
         console.log('Utils loaded');
-        this.extensionDir = GLib.build_filenamev([
-            GLib.get_home_dir(),
-            '.local',
-            'share',
-            'gnome-shell',
-            'extensions',
-            'gnome-extension@gemini-assist.vercel.app',
-        ]);
-        this.userSettings.HISTORY_FILE = GLib.build_filenamev([
-            this.extensionDir,
-            'history.json',
-        ]);
     }
 
     /**
