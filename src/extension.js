@@ -58,7 +58,12 @@ const Aiva = GObject.registerClass(
 
             // UI
             this.ui = new AppLayout();
-
+            this.chatSection = new this.ui.chatSection();
+            this.scrollView = new this.ui.scrollView();
+            this.inputChat = new this.ui.inputChat();
+            this.responseChat = new this.ui.responseChat();
+            this.copyButton = new this.ui.copyButton();
+            this.newSeparator = new this.ui.newSeparator();
             // Load Plugins
             this.gemini = new GoogleGemini(this);
             this.audio = new Audio(this);
@@ -76,12 +81,12 @@ const Aiva = GObject.registerClass(
             this._loadSettings();
 
             // UI
-            let tray = this.ui.tray;
-            let icon = this.ui.icon;
-            let item = this.ui.item;
-            let micButton = this.ui.micButton;
-            let clearButton = this.ui.clearButton;
-            let settingsButton = this.ui.settingsButton;
+            let tray = new this.ui.tray();
+            let icon = new this.ui.icon();
+            let item = new this.ui.item();
+            let micButton = new this.ui.micButton();
+            let clearButton = new this.ui.clearButton();
+            let settingsButton = new this.ui.settingsButton();
 
             // App Tray
             tray.add_child(icon);
@@ -89,12 +94,12 @@ const Aiva = GObject.registerClass(
 
             // Search Entry
             // when in focus and enter is pressed
-            this.ui.searchEntry.clutter_text.connect('activate', (actor) => {
+            this.searchEntry.clutter_text.connect('activate', (actor) => {
                 this.chat(actor.text);
-                this.ui.searchEntry.clutter_text.set_text('');
-                this.ui.searchEntry.clutter_text.reactive = false;
+                this.searchEntry.clutter_text.set_text('');
+                this.searchEntry.clutter_text.reactive = false;
             });
-            item.add_child(this.ui.searchEntry);
+            item.add_child(this.searchEntry);
 
             // Mic Button
             // when clicked start or stop record
@@ -106,11 +111,11 @@ const Aiva = GObject.registerClass(
             // Clear History Button
             // when clicked clear history
             clearButton.connect('clicked', (_self) => {
-                this.ui.searchEntry.clutter_text.set_text('');
+                this.searchEntry.clutter_text.set_text('');
                 this.chatHistory = [];
-                this.menu.box.remove_child(this.ui.scrollView);
-                this.ui.scrollView.add_child(this.ui.chatSection.actor);
-                this.menu.box.add_child(this.ui.scrollView);
+                this.menu.box.remove_child(this.scrollView);
+                this.scrollView.add_child(this.chatSection.actor);
+                this.menu.box.add_child(this.scrollView);
             });
             item.add_child(clearButton);
 
@@ -124,7 +129,7 @@ const Aiva = GObject.registerClass(
 
             // Scrollbar
             // add scroll bar to chat if needed
-            this.ui.scrollView.add_child(this.ui.chatSection.actor); // Add scroll to chat section
+            this.scrollView.add_child(this.chatSection.actor); // Add scroll to chat section
 
             log(this.menu); // Remove
             log(this.menu.box); // Remove
@@ -132,7 +137,7 @@ const Aiva = GObject.registerClass(
             this.menu.addMenuItem(item);
 
             // Add chat section to app
-            this.menu.box.add_child(this.ui.scrollView);
+            this.menu.box.add_child(this.scrollView);
 
             // Open settings if gemini api key is not configured
             if (this.GEMINIAPIKEY === '') {
@@ -144,26 +149,26 @@ const Aiva = GObject.registerClass(
             // Add user question to chat
             userQuestion = utils.inputformat(userQuestion);
             log('Question: ' + userQuestion);
-            this.ui.inputChat.label.clutter_text.set_markup(
+            this.inputChat.label.clutter_text.set_markup(
                 `<b>${_('Me')}: </b>${userQuestion}`,
             );
 
             // Question
-            this.ui.inputChat.label.clutter_text.reactive = true;
-            this.ui.inputChat.label.clutter_text.selectable = true;
-            this.ui.inputChat.label.clutter_text.hover = false;
-            this.ui.inputChat.label.x_expand = true;
+            this.inputChat.label.clutter_text.reactive = true;
+            this.inputChat.label.clutter_text.selectable = true;
+            this.inputChat.label.clutter_text.hover = false;
+            this.inputChat.label.x_expand = true;
 
             // Add user question and ai response to chat
-            this.ui.chatSection.addMenuItem(this.ui.newSeparator);
-            this.ui.chatSection.addMenuItem(this.ui.inputChat);
-            this.ui.chatSection.addMenuItem(this.ui.responseChat);
+            this.chatSection.addMenuItem(this.newSeparator);
+            this.chatSection.addMenuItem(this.inputChat);
+            this.chatSection.addMenuItem(this.responseChat);
 
             // Send question to AI
             this.gemini.chat(userQuestion);
 
             // Copy button
-            this.ui.copyButton.connect('activate', (_self) => {
+            this.copyButton.connect('activate', (_self) => {
                 utils.copySelectedText(this);
             });
         }
