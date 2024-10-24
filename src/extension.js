@@ -16,17 +16,22 @@ import {Utils} from './utils/utils.js';
 import {AppLayout} from './ui.js';
 
 /**
- *
- * @param {*} message
+ * @description return extension directory
  */
-function log(message) {
-    if (message) {
-        console.log(`[ DEBUG ] ${message}`);
-    }
-}
+const EXT_DIR = GLib.build_filenamev([
+    GLib.get_home_dir(),
+    '.local',
+    'share',
+    'gnome-shell',
+    'extensions',
+    'gnome-extension@gemini-assist.vercel.app',
+]);
 
 const Gemini = GObject.registerClass(
     class Gemini extends PanelMenu.Button {
+        /**
+         * @description load settings
+         */
         _loadSettings() {
             this._settingsChangedId = this.extension.settings.connect(
                 'changed',
@@ -37,6 +42,9 @@ const Gemini = GObject.registerClass(
             this._fetchSettings();
         }
 
+        /**
+         * @description fetch settings
+         */
         _fetchSettings() {
             // Settings
             const {settings} = this.extension;
@@ -51,19 +59,7 @@ const Gemini = GObject.registerClass(
                 RECURSIVE_TALK: false,
                 USERNAME: GLib.get_real_name(),
                 LOCATION: '',
-                EXT_DIR: GLib.build_filenamev([
-                    GLib.get_home_dir(),
-                    '.local',
-                    'share',
-                    'gnome-shell',
-                    'extensions',
-                    'gnome-extension@gemini-assist.vercel.app',
-                ]),
-                HISTORY_FILE: GLib.build_filenamev([
-                    this.settings.EXT_DIR,
-                    'history.json',
-                ])
-                }
+                HISTORY_FILE: GLib.build_filenamev([EXT_DIR, 'history.json']),
             };
 
             // Chat History
