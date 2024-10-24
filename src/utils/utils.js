@@ -227,13 +227,16 @@ export class Utils {
                 });
                 // Save history.json
                 this.saveHistory(chatHistory);
+                return chatHistory;
             } catch (e) {
                 logError(e, `Failed to create file: ${this.historyFilePath}`);
+                return [];
             }
         } else {
             log(
                 `The history.json file already exists: ${this.historyFilePath}`,
             );
+            return this.loadHistoryFile();
         }
     }
 
@@ -264,8 +267,7 @@ export class Utils {
                 return [];
             }
         } else {
-            this.createHistoryFile();
-            return [];
+            return this.createHistoryFile();
         }
     }
 
