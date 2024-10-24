@@ -2,10 +2,6 @@ import St from 'gi://St';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 export class AppLayout {
-    constructor() {
-        console.log('ui loaded');
-    }
-
     tray = new St.BoxLayout({
         style_class: 'panel-status-menu-box',
     });
