@@ -431,6 +431,18 @@ export class Utils {
         return randomPhrase;
     }
 
+    // Função para converter arquivo de áudio em base64
+    encodeFileToBase64(filePath) {
+        try {
+            const file = Gio.File.new_for_path(filePath);
+            const [, contents] = file.load_contents(null);
+            return GLib.base64_encode(contents);
+        } catch (error) {
+            log('Erro ao ler o arquivo: ' + error);
+            return null;
+        }
+    }
+
     extractCodeAndTTS(text, lang = 'en-US') {
         // Expressão regular para capturar o código entre triplo acento grave
         const regex = /`{3}([\s\S]*?)`{3}/;
