@@ -47,24 +47,24 @@ const Aiva = GObject.registerClass(
          */
         _fetchSettings() {
             // Settings
-            const userSettings = this.extension.settings;
-            this.settings.GEMINI_API_KEY =
-                userSettings.get_string('gemini-api-key');
-            this.settings.AZURE_SPEECH_KEY =
-                userSettings.get_string('azure-speech-key');
-            this.settings.AZURE_SPEECH_REGION = userSettings.get_string(
+            const {settings} = this.extension;
+            this.userSettings.GEMINI_API_KEY =
+                settings.get_string('gemini-api-key');
+            this.userSettings.AZURE_SPEECH_KEY =
+                settings.get_string('azure-speech-key');
+            this.userSettings.AZURE_SPEECH_REGION = settings.get_string(
                 'azure-speech-region',
             );
-            this.settings.AZURE_SPEECH_LANGUAGE = userSettings.get_string(
+            this.userSettings.AZURE_SPEECH_LANGUAGE = settings.get_string(
                 'azure-speech-language',
             );
-            this.settings.AZURE_SPEECH_VOICE =
-                userSettings.get_string('azure-speech-voice');
-            this.settings.RECURSIVE_TALK =
-                userSettings.get_boolean('log-history');
-            this.settings.USERNAME = GLib.get_real_name();
-            this.settings.LOCATION = '';
-            this.settings.HISTORY_FILE = GLib.build_filenamev([
+            this.userSettings.AZURE_SPEECH_VOICE =
+                settings.get_string('azure-speech-voice');
+            this.userSettings.RECURSIVE_TALK =
+                settings.get_boolean('log-history');
+            this.userSettings.USERNAME = GLib.get_real_name();
+            this.userSettings.LOCATION = '';
+            this.userSettings.HISTORY_FILE = GLib.build_filenamev([
                 EXT_DIR,
                 'history.json',
             ]);
