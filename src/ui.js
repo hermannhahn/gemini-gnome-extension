@@ -6,22 +6,22 @@ export class AppLayout {
         console.log('ui loaded');
     }
 
-    static tray = new St.BoxLayout({
+    static tray = St.BoxLayout({
         style_class: 'panel-status-menu-box',
     });
 
-    static icon = new St.Icon({
+    static icon = St.Icon({
         style_class: 'google-gemini-icon',
     });
 
     // Create app items
-    static item = new PopupMenu.PopupBaseMenuItem({
+    static item = PopupMenu.PopupBaseMenuItem({
         reactive: false,
         can_focus: false,
     });
 
     // Search entry
-    static searchEntry = new St.Entry({
+    static searchEntry = St.Entry({
         name: 'aiEntry',
         style_class: 'ai-entry',
         can_focus: true,
@@ -31,56 +31,56 @@ export class AppLayout {
         y_expand: true,
     });
 
-    static micButton = new St.Button({
+    static micButton = St.Button({
         can_focus: true,
         toggle_mode: true,
         style_class: 'mic-icon',
     });
 
-    static clearButton = new St.Button({
+    static clearButton = St.Button({
         can_focus: true,
         toggle_mode: true,
         style_class: 'trash-icon',
     });
 
-    static settingsButton = new St.Button({
+    static settingsButton = St.Button({
         can_focus: true,
         toggle_mode: true,
         style_class: 'settings-icon',
     });
 
-    static chatSection = new PopupMenu.PopupMenuSection({
+    static chatSection = PopupMenu.PopupMenuSection({
         style_class: 'chat-section',
         x_expand: true,
         y_expand: true,
     });
 
-    static scrollView = new St.ScrollView({
+    static scrollView = St.ScrollView({
         style_class: 'chat-scroll-section',
         reactive: true,
         overlay_scrollbars: false,
     });
 
-    static inputChat = new PopupMenu.PopupMenuItem('', {
+    static inputChat = PopupMenu.PopupMenuItem('', {
         style_class: 'input-chat',
         reactive: true,
         can_focus: false,
         hover: true,
     });
 
-    static responseChat = new PopupMenu.PopupMenuItem('', {
+    static responseChat = PopupMenu.PopupMenuItem('', {
         style_class: 'response-chat',
         reactive: true,
         can_focus: false,
         hover: true,
     });
 
-    static copyButton = new PopupMenu.PopupMenuItem('', {
+    static copyButton = PopupMenu.PopupMenuItem('', {
         style_class: 'copy-icon',
         reactive: true,
         can_focus: false,
         hover: false,
     });
 
-    static newSeparator = new PopupMenu.PopupSeparatorMenuItem();
+    static newSeparator = PopupMenu.PopupSeparatorMenuItem();
 }
