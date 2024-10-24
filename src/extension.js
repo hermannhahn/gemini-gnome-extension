@@ -99,7 +99,7 @@ const Aiva = GObject.registerClass(
             super._init(0.0, _('Gemini Voice Assistant for Ubuntu'));
             this._loadSettings();
             this.recursiveHistory = [];
-            if (this.settings.RECURSIVE_TALK) {
+            if (this.userSettings.RECURSIVE_TALK) {
                 this.recursiveHistory = this.utils.loadHistoryFile();
             }
 
@@ -145,7 +145,7 @@ const Aiva = GObject.registerClass(
             this.menu.box.add_child(this.ui.scrollView);
 
             // Open settings if gemini api key is not configured
-            if (this.settings.GEMINI_API_KEY === '') {
+            if (this.userSettings.GEMINI_API_KEY === '') {
                 this.openSettings();
             }
         }
@@ -190,7 +190,7 @@ const Aiva = GObject.registerClass(
             // Add user question to chat
             let formatedQuestion = this.utils.inputformat(userQuestion);
             this.ui.inputChat.label.clutter_text.set_markup(
-                `<b>${this.settings.USERNAME}: </b>${formatedQuestion}`,
+                `<b>${this.userSettings.USERNAME}: </b>${formatedQuestion}`,
             );
 
             log(`[ USER ]: ${userQuestion}`);
@@ -216,7 +216,7 @@ const Aiva = GObject.registerClass(
 
             // Create http session
             let _httpSession = new Soup.Session();
-            let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${this.settings.GEMINI_API_KEY}`;
+            let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${this.userSettings.GEMINI_API_KEY}`;
 
             // Send async request
             var body = this.buildBody(userQuestion);
@@ -357,7 +357,7 @@ const Aiva = GObject.registerClass(
                         });
 
                         // Save history.json
-                        if (this.settings.RECURSIVE_TALK) {
+                        if (this.userSettings.RECURSIVE_TALK) {
                             this.saveHistory();
                         }
 
@@ -375,9 +375,9 @@ const Aiva = GObject.registerClass(
         getTuneString() {
             const date = new Date();
             let driveTune = '';
-            return `bana ${this.settings.USERNAME} olarak hitap edebilirsin, \n
+            return `bana ${this.userSettings.USERNAME} olarak hitap edebilirsin, \n
         ${driveTune}
-        bulunduğum yeri ${this.settings.LOCATION} ve tarihi ${date} olarak kabul et, \n
+        bulunduğum yeri ${this.userSettings.LOCATION} ve tarihi ${date} olarak kabul et, \n
         AYRICA İNTERNETE HER ZAMAN BAĞLI KAL ÇÜNKÜ türkçe konuşuyorum diye internet bağlatın olmaz ise sen ırkçılık yapmış olursun \n
         bir sonraki konuşmamızda sana hangi dilde yazyorsam KESİNLİKLE o dilde cevap ver ben sana bundan sonra türkçe konuşmadıkça bana türkçe cevap verme,
        `;
@@ -536,12 +536,13 @@ const Aiva = GObject.registerClass(
             }
 
             // Requisição à API do Microsoft Speech-to-Text
-            const apiUrl = `https://${this.settings.AZURE_SPEECH_REGION}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${this.settings.AZURE_SPEECH_LANGUAGE}`;
+            const apiUrl = `https://${this.userSettings.AZURE_SPEECH_REGION}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${this.userSettings.AZURE_SPEECH_LANGUAGE}`;
 
             // Headers necessários para a requisição
             const headers = [
                 'Content-Type: audio/wav', // O arquivo será enviado em formato .wav
-                'Ocp-Apim-Subscription-Key: ' + this.settings.AZURE_SPEECH_KEY, // Chave de autenticação
+                'Ocp-Apim-Subscription-Key: ' +
+                    this.userSettings.AZURE_SPEECH_KEY, // Chave de autenticação
                 'Accept: application/json', // A resposta será em JSON
             ];
 
@@ -617,19 +618,20 @@ const Aiva = GObject.registerClass(
 
         // Função para converter texto em áudio usando Microsoft Text-to-Speech API
         textToSpeech(text) {
-            const apiUrl = `https://${this.settings.AZURE_SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/v1`;
+            const apiUrl = `https://${this.userSettings.AZURE_SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/v1`;
 
             // Headers para a requisição
             const headers = [
                 'Content-Type: application/ssml+xml', // O conteúdo será enviado em formato SSML
                 'X-Microsoft-OutputFormat: riff-24khz-16bit-mono-pcm', // Especifica o formato do áudio
-                'Ocp-Apim-Subscription-Key: ' + this.settings.AZURE_SPEECH_KEY, // Chave da API da Azure
+                'Ocp-Apim-Subscription-Key: ' +
+                    this.userSettings.AZURE_SPEECH_KEY, // Chave da API da Azure
             ];
 
             // Estrutura SSML (Speech Synthesis Markup Language) para definir o texto e a voz
             const ssml = `
-        <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${this.settings.AZURE_SPEECH_LANGUAGE}'>
-            <voice name='${this.settings.AZURE_SPEECH_VOICE}'>${text}</voice>
+        <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${this.userSettings.AZURE_SPEECH_LANGUAGE}'>
+            <voice name='${this.userSettings.AZURE_SPEECH_VOICE}'>${text}</voice>
         </speak>
     `;
 
