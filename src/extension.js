@@ -84,7 +84,7 @@ const Aiva = GObject.registerClass(
             };
 
             // Utils
-            this.utils = new Utils();
+            this.utils = new Utils(this);
         }
 
         /**
