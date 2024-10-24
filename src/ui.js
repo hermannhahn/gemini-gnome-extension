@@ -91,5 +91,7 @@ export class AppLayout {
 
         // Separator
         this.newSeparator = new PopupMenu.PopupSeparatorMenuItem();
+
+        return this;
     }
 }
