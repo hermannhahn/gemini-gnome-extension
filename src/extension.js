@@ -13,17 +13,8 @@ import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import {Utils} from './utils/utils.js';
-import {AppLayout} from './ui.js';
 
 // Global variables
-let GEMINIAPIKEY = '';
-let AZURE_SPEECH_KEY = '';
-let AZURE_SPEECH_REGION = ''; // Ex: "eastus"
-let AZURE_SPEECH_LANGUAGE = ''; // Ex: "en-US"
-let AZURE_SPEECH_VOICE = ''; // Ex: "en-US-JennyNeural"
-let USERNAME = GLib.get_real_name();
-let LOCATION = '';
-let RECURSIVETALK = true;
 let pipeline;
 let isRecording = false;
 let isPlaying = false;
@@ -65,40 +56,33 @@ const Gemini = GObject.registerClass(
 
         _fetchSettings() {
             const {settings} = this.extension;
-            GEMINIAPIKEY = settings.get_string('gemini-api-key');
-            AZURE_SPEECH_KEY = settings.get_string('azure-speech-key');
-            AZURE_SPEECH_REGION = settings.get_string('azure-speech-region');
-            AZURE_SPEECH_LANGUAGE = settings.get_string(
+            this.settings.GEMINIAPIKEY = settings.get_string('gemini-api-key');
+            this.settings.AZURE_SPEECH_KEY =
+                settings.get_string('azure-speech-key');
+            this.settings.AZURE_SPEECH_REGION = settings.get_string(
+                'azure-speech-region',
+            );
+            this.settings.AZURE_SPEECH_LANGUAGE = settings.get_string(
                 'azure-speech-language',
             );
-            AZURE_SPEECH_VOICE = settings.get_string('azure-speech-voice');
-            RECURSIVETALK = settings.get_boolean('log-history');
+            this.settings.AZURE_SPEECH_VOICE =
+                settings.get_string('azure-speech-voice');
+            this.settings.RECURSIVETALK = settings.get_boolean('log-history');
+            this.settings.USERNAME = GLib.get_real_name();
+            this.settings.LOCATION = '';
+            this.chatHistory = [];
+            this._ui();
         }
 
-        _init(extension) {
-            this.keyLoopBind = 0;
-            this.extension = extension;
-            super._init(0.0, _('Gemini Voice Assistant for Ubuntu'));
-            this._loadSettings();
-            if (RECURSIVETALK) {
-                this.loadHistoryFile();
-            } else {
-                this.chatHistory = [];
-            }
-
-            // Create Tray
-            let tray = new St.BoxLayout({
+        _ui() {
+            this.tray = new St.BoxLayout({
                 style_class: 'panel-status-menu-box',
             });
-            this.tray = tray;
             this.icon = new St.Icon({
                 style_class: 'google-gemini-icon',
             });
-            tray.add_child(this.icon);
-            this.add_child(tray);
-
             // Create app item section
-            let item = new PopupMenu.PopupBaseMenuItem({
+            this.item = new PopupMenu.PopupBaseMenuItem({
                 reactive: false,
                 can_focus: false,
             });
@@ -115,21 +99,21 @@ const Gemini = GObject.registerClass(
             });
 
             // Create voice activation button
-            let micButton = new St.Button({
+            this.micButton = new St.Button({
                 can_focus: true,
                 toggle_mode: true,
                 style_class: 'mic-icon',
             });
 
             // Create clear history button
-            let clearButton = new St.Button({
+            this.clearButton = new St.Button({
                 can_focus: true,
                 toggle_mode: true,
                 style_class: 'trash-icon',
             });
 
             // Create settings button
-            let settingsButton = new St.Button({
+            this.settingsButton = new St.Button({
                 can_focus: true,
                 toggle_mode: true,
                 style_class: 'settings-icon',
@@ -149,6 +133,45 @@ const Gemini = GObject.registerClass(
                 overlay_scrollbars: false,
             });
 
+            // Create input and response chat items
+            this.inputChat = new PopupMenu.PopupMenuItem('', {
+                style_class: 'input-chat',
+                reactive: true,
+                can_focus: false,
+                hover: true,
+            });
+            this.responseChat = new PopupMenu.PopupMenuItem('', {
+                style_class: 'response-chat',
+                reactive: true,
+                can_focus: false,
+                hover: true,
+            });
+
+            // Create copy button
+            this.copyButton = new PopupMenu.PopupMenuItem('', {
+                style_class: 'copy-icon',
+                reactive: true,
+                can_focus: false,
+                hover: false,
+            });
+
+            // Separator
+            this.newSeparator = new PopupMenu.PopupSeparatorMenuItem();
+        }
+
+        _init(extension) {
+            this.keyLoopBind = 0;
+            this.extension = extension;
+            super._init(0.0, _('Gemini Voice Assistant for Ubuntu'));
+            this._loadSettings();
+            if (this.settings.RECURSIVETALK) {
+                this.chatHistory = utils.loadHistoryFile();
+            }
+
+            // Tray
+            this.tray.add_child(this.icon);
+            this.add_child(this.tray);
+
             // Add scroll to chat section
             this.scrollView.add_child(this.chatSection.actor);
 
@@ -157,10 +180,10 @@ const Gemini = GObject.registerClass(
                 this.searchEntry.clutter_text.set_text('');
                 this.searchEntry.clutter_text.reactive = false;
             });
-            micButton.connect('clicked', (_self) => {
+            this.micButton.connect('clicked', (_self) => {
                 this.startRecording();
             });
-            clearButton.connect('clicked', (_self) => {
+            this.clearButton.connect('clicked', (_self) => {
                 this.searchEntry.clutter_text.set_text('');
                 this.chatHistory = [];
                 this.menu.box.remove_child(this.scrollView);
@@ -168,26 +191,26 @@ const Gemini = GObject.registerClass(
                 this.scrollView.add_child(this.chatSection.actor);
                 this.menu.box.add_child(this.scrollView);
             });
-            settingsButton.connect('clicked', (_self) => {
+            this.settingsButton.connect('clicked', (_self) => {
                 this.openSettings();
                 // Close App
                 this.menu.close();
             });
 
             // Add search entry, mic button, clear button and settings button to menu
-            item.add_child(this.searchEntry);
-            item.add_child(micButton);
-            item.add_child(clearButton);
-            item.add_child(settingsButton);
+            this.item.add_child(this.searchEntry);
+            this.item.add_child(this.micButton);
+            this.item.add_child(this.clearButton);
+            this.item.add_child(this.settingsButton);
 
             // Add items to app
-            this.menu.addMenuItem(item);
+            this.menu.addMenuItem(this.item);
 
             // Add chat section to app
             this.menu.box.add_child(this.scrollView);
 
             // Open settings if gemini api key is not configured
-            if (GEMINIAPIKEY === '') {
+            if (this.settings.GEMINIAPIKEY === '') {
                 this.openSettings();
             }
         }
@@ -196,74 +219,49 @@ const Gemini = GObject.registerClass(
             // Set temporary message
             let aiResponse = _('<b>Gemini: </b> ...');
 
-            // Create input and response chat items
-            const inputChat = new PopupMenu.PopupMenuItem('', {
-                style_class: 'input-chat',
-                reactive: true,
-                can_focus: false,
-                hover: true,
-            });
-            const responseChat = new PopupMenu.PopupMenuItem('', {
-                style_class: 'response-chat',
-                reactive: true,
-                can_focus: false,
-                hover: true,
-            });
-
-            // Create copy button
-            const copyButton = new PopupMenu.PopupMenuItem('', {
-                style_class: 'copy-icon',
-                reactive: true,
-                can_focus: false,
-                hover: false,
-            });
-
-            // Separator
-            const newSeparator = new PopupMenu.PopupSeparatorMenuItem();
-
             // Enable text selection
-            inputChat.label.clutter_text.reactive = true;
-            inputChat.label.clutter_text.selectable = true;
+            this.inputChat.label.clutter_text.reactive = true;
+            this.inputChat.label.clutter_text.selectable = true;
 
             // Disable clutter_text hover
-            inputChat.label.clutter_text.hover = false;
+            this.inputChat.label.clutter_text.hover = false;
 
             // Add ai response to chat
-            responseChat.label.clutter_text.set_markup(aiResponse);
+            this.responseChat.label.clutter_text.set_markup(aiResponse);
 
             // Enable text selection
-            responseChat.label.clutter_text.reactive = true;
-            responseChat.label.clutter_text.selectable = true;
+            this.responseChat.label.clutter_text.reactive = true;
+            this.responseChat.label.clutter_text.selectable = true;
 
             // Disable clutter_text hover
-            responseChat.label.clutter_text.hover = false;
+            this.responseChat.label.clutter_text.hover = false;
 
             // Chat settings
-            inputChat.label.x_expand = true;
-            responseChat.label.x_expand = true;
+            this.inputChat.label.x_expand = true;
+            this.responseChat.label.x_expand = true;
             this.chatSection.style_class += 'm-w-100';
             this.scrollView.style_class += 'm-w-100';
 
             // Add user question and ai response to chat
-            this.chatSection.addMenuItem(newSeparator);
-            this.chatSection.addMenuItem(inputChat);
-            this.chatSection.addMenuItem(responseChat);
+            this.chatSection.addMenuItem(this.newSeparator);
+            this.chatSection.addMenuItem(this.inputChat);
+            this.chatSection.addMenuItem(this.responseChat);
 
             // Set mouse click to copy response to clipboard
-            copyButton.connect('activate', (_self) => {
-                this._copySelectedText(responseChat, copyButton);
+            this.copyButton.connect('activate', (_self) => {
+                this._copySelectedText(this.responseChat, this.copyButton);
             });
 
             // Add user question to chat
             let formatedQuestion = utils.inputformat(userQuestion);
-            inputChat.label.clutter_text.set_markup(
-                `<b>${USERNAME}: </b>${formatedQuestion}`,
+            this.inputChat.label.clutter_text.set_markup(
+                `<b>${this.settings.USERNAME}: </b>${formatedQuestion}`,
             );
 
             log(`[ USER ]: ${userQuestion}`);
 
             // Get ai response for user question
-            this.getAireponse(responseChat, userQuestion, copyButton);
+            this.getAireponse(userQuestion);
 
             // DEBUG
             // let debugPhrase =
@@ -273,32 +271,20 @@ const Gemini = GObject.registerClass(
             // this.typeText(responseChat, formatedResponse);
         }
 
-        getAireponse(
-            responseChat,
-            question,
-            copyButton = null,
-            newKey = undefined,
-            destroyLoop = false,
-        ) {
+        getAireponse(userQuestion, destroyLoop = false) {
             if (destroyLoop) {
                 this.destroyLoop();
             }
 
             // Create http session
             let _httpSession = new Soup.Session();
-            let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${GEMINIAPIKEY}`;
-
-            // Get gemini api key
-            if (newKey !== undefined) {
-                this.extension.settings.set_string('gemini-api-key', newKey);
-                GEMINIAPIKEY = newKey;
-            }
+            let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${this.settings.GEMINIAPIKEY}`;
 
             // Scroll down
-            this.scrollToBottom(responseChat);
+            this.scrollToBottom(this.responseChat);
 
             // Send async request
-            var body = this.buildBody(question);
+            var body = this.buildBody(userQuestion);
             let message = Soup.Message.new('POST', url);
             let bytes = GLib.Bytes.new(body);
             message.set_request_body_from_bytes('application/json', bytes);
@@ -315,9 +301,11 @@ const Gemini = GObject.registerClass(
                     log('[ AI-RES ] ' + response);
                     let res = JSON.parse(response);
                     if (res.error?.code !== 401 && res.error !== undefined) {
-                        responseChat?.label.clutter_text.set_markup(response);
+                        this.responseChat?.label.clutter_text.set_markup(
+                            response,
+                        );
                         // Scroll down
-                        this.scrollToBottom(responseChat);
+                        this.scrollToBottom(this.responseChat);
                         // Enable searchEntry
                         this.searchEntry.clutter_text.reactive = true;
                         return;
@@ -337,7 +325,7 @@ const Gemini = GObject.registerClass(
                                     safetyRating.category ===
                                     'HARM_CATEGORY_SEXUALLY_EXPLICIT'
                                 ) {
-                                    responseChat?.label.clutter_text.set_markup(
+                                    this.responseChat?.label.clutter_text.set_markup(
                                         '<b>Gemini: </b> ' +
                                             _(
                                                 "Sorry, I can't answer this question. Possible sexually explicit content in the question or answer.",
@@ -348,7 +336,7 @@ const Gemini = GObject.registerClass(
                                     safetyRating.category ===
                                     'HARM_CATEGORY_HATE_SPEECH'
                                 ) {
-                                    responseChat?.label.clutter_text.set_markup(
+                                    this.responseChat?.label.clutter_text.set_markup(
                                         '<b>Gemini: </b> ' +
                                             _(
                                                 "Sorry, I can't answer this question. Possible hate speech in the question or answer.",
@@ -359,7 +347,7 @@ const Gemini = GObject.registerClass(
                                     safetyRating.category ===
                                     'HARM_CATEGORY_HARASSMENT'
                                 ) {
-                                    responseChat?.label.clutter_text.set_markup(
+                                    this.responseChat?.label.clutter_text.set_markup(
                                         '<b>Gemini: </b> ' +
                                             _(
                                                 "Sorry, I can't answer this question. Possible harassment in the question or answer.",
@@ -370,7 +358,7 @@ const Gemini = GObject.registerClass(
                                     safetyRating.category ===
                                     'HARM_CATEGORY_DANGEROUS_CONTENT'
                                 ) {
-                                    responseChat?.label.clutter_text.set_markup(
+                                    this.responseChat?.label.clutter_text.set_markup(
                                         '<b>Gemini: </b> ' +
                                             _(
                                                 "Sorry, I can't answer this question. Possible dangerous content in the question or answer.",
@@ -378,7 +366,7 @@ const Gemini = GObject.registerClass(
                                     );
                                 }
                                 // Scroll down
-                                this.scrollToBottom(responseChat);
+                                this.scrollToBottom(this.responseChat);
                                 // Enable searchEntry
                                 this.searchEntry.clutter_text.reactive = true;
                                 return;
@@ -391,21 +379,21 @@ const Gemini = GObject.registerClass(
                     if (
                         aiResponse !== null &&
                         aiResponse !== undefined &&
-                        responseChat !== undefined
+                        this.responseChat !== undefined
                     ) {
                         // Set ai response to chat
                         let formatedResponse = utils.textformat(aiResponse);
-                        responseChat.label.clutter_text.set_markup(
+                        this.responseChat.label.clutter_text.set_markup(
                             '<b>Gemini: </b> ' + formatedResponse,
                         );
 
                         // Add copy button to chat
-                        if (copyButton) {
-                            this.chatSection.addMenuItem(copyButton);
+                        if (this.copyButton) {
+                            this.chatSection.addMenuItem(this.copyButton);
                         }
 
                         // Scroll down
-                        this.scrollToBottom(responseChat);
+                        this.scrollToBottom(this.responseChat);
 
                         // Enable searchEntry
                         this.searchEntry.clutter_text.reactive = true;
@@ -430,10 +418,10 @@ const Gemini = GObject.registerClass(
                         }
 
                         // Add to history
-                        if (RECURSIVETALK) {
+                        if (this.settings.RECURSIVETALK) {
                             this.chatHistory.push({
                                 role: 'user',
-                                parts: [{text: question}],
+                                parts: [{text: userQuestion}],
                             });
                             this.chatHistory.push({
                                 role: 'model',
@@ -443,7 +431,7 @@ const Gemini = GObject.registerClass(
                             this.saveHistory();
                         }
                         // Scroll down
-                        this.scrollToBottom(responseChat);
+                        this.scrollToBottom(this.responseChat);
                     }
                 },
             );
@@ -476,9 +464,9 @@ const Gemini = GObject.registerClass(
             // VERTEX SOMETIMES DOESNT SUPPORT INTERNET CONNECTION
             //  IF YOU TRANSLATE TO ENGLISH
             let driveTune = '';
-            return `bana ${USERNAME} olarak hitap edebilirsin, \n
+            return `bana ${this.settings.USERNAME} olarak hitap edebilirsin, \n
         ${driveTune}
-        bulunduğum yeri ${LOCATION} ve tarihi ${date} olarak kabul et, \n
+        bulunduğum yeri ${this.settings.LOCATION} ve tarihi ${date} olarak kabul et, \n
         AYRICA İNTERNETE HER ZAMAN BAĞLI KAL ÇÜNKÜ türkçe konuşuyorum diye internet bağlatın olmaz ise sen ırkçılık yapmış olursun \n
         bir sonraki konuşmamızda sana hangi dilde yazyorsam KESİNLİKLE o dilde cevap ver ben sana bundan sonra türkçe konuşmadıkça bana türkçe cevap verme,
        `;
@@ -519,7 +507,7 @@ const Gemini = GObject.registerClass(
                     GLib.file_set_contents(historyFilePath, initialContent);
                     this.chatHistory = [];
                     log(`History file created. : ${historyFilePath}`);
-                    if (RECURSIVETALK) {
+                    if (this.settings.RECURSIVETALK) {
                         this.chatHistory.push({
                             role: 'user',
                             parts: [
@@ -559,22 +547,6 @@ const Gemini = GObject.registerClass(
                 log(`History saved in: ${historyFilePath}`);
             } catch (e) {
                 logError(e, `Failed to save history: ${historyFilePath}`);
-            }
-        }
-
-        // Load history file
-        loadHistoryFile() {
-            if (GLib.file_test(historyFilePath, GLib.FileTest.IS_REGULAR)) {
-                try {
-                    let file = Gio.File.new_for_path(historyFilePath);
-                    let [, contents] = file.load_contents(null);
-                    this.chatHistory = JSON.parse(contents);
-                    log(`History loaded from: ${historyFilePath}`);
-                } catch (e) {
-                    logError(e, `Failed to load history: ${historyFilePath}`);
-                }
-            } else {
-                this.createHistoryFile();
             }
         }
 
@@ -802,12 +774,12 @@ const Gemini = GObject.registerClass(
             }
 
             // Requisição à API do Microsoft Speech-to-Text
-            const apiUrl = `https://${AZURE_SPEECH_REGION}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${AZURE_SPEECH_LANGUAGE}`;
+            const apiUrl = `https://${this.settings.AZURE_SPEECH_REGION}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${this.settings.AZURE_SPEECH_LANGUAGE}`;
 
             // Headers necessários para a requisição
             const headers = [
                 'Content-Type: audio/wav', // O arquivo será enviado em formato .wav
-                'Ocp-Apim-Subscription-Key: ' + AZURE_SPEECH_KEY, // Chave de autenticação
+                'Ocp-Apim-Subscription-Key: ' + this.settings.AZURE_SPEECH_KEY, // Chave de autenticação
                 'Accept: application/json', // A resposta será em JSON
             ];
 
@@ -952,7 +924,9 @@ const Gemini = GObject.registerClass(
 
             // If tts is more then 100 characters, change tts text
             if (tts.length > 1000) {
-                tts = this.randomPhraseToShowOnScreen(AZURE_SPEECH_LANGUAGE);
+                tts = this.randomPhraseToShowOnScreen(
+                    this.settings.AZURE_SPEECH_LANGUAGE,
+                );
             }
 
             if (match) {
@@ -975,19 +949,19 @@ const Gemini = GObject.registerClass(
 
         // Função para converter texto em áudio usando Microsoft Text-to-Speech API
         textToSpeech(text) {
-            const apiUrl = `https://${AZURE_SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/v1`;
+            const apiUrl = `https://${this.settings.AZURE_SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/v1`;
 
             // Headers para a requisição
             const headers = [
                 'Content-Type: application/ssml+xml', // O conteúdo será enviado em formato SSML
                 'X-Microsoft-OutputFormat: riff-24khz-16bit-mono-pcm', // Especifica o formato do áudio
-                'Ocp-Apim-Subscription-Key: ' + AZURE_SPEECH_KEY, // Chave da API da Azure
+                'Ocp-Apim-Subscription-Key: ' + this.settings.AZURE_SPEECH_KEY, // Chave da API da Azure
             ];
 
             // Estrutura SSML (Speech Synthesis Markup Language) para definir o texto e a voz
             const ssml = `
-        <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${AZURE_SPEECH_LANGUAGE}'>
-            <voice name='${AZURE_SPEECH_VOICE}'>${text}</voice>
+        <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${this.settings.AZURE_SPEECH_LANGUAGE}'>
+            <voice name='${this.settings.AZURE_SPEECH_VOICE}'>${text}</voice>
         </speak>
     `;
 
@@ -1079,7 +1053,7 @@ export default class GeminiExtension extends Extension {
                 let decoder = new TextDecoder('utf-8');
                 let response = decoder.decode(bytes.get_data());
                 const res = JSON.parse(response);
-                LOCATION = `${res.countryName}/${res.cityName}`;
+                this.settings.LOCATION = `${res.countryName}/${res.cityName}`;
             },
         );
     }
