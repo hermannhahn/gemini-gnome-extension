@@ -56,6 +56,7 @@ const Gemini = GObject.registerClass(
 
         _fetchSettings() {
             const {settings} = this.extension;
+            this.settings = {};
             this.settings.GEMINIAPIKEY = settings.get_string('gemini-api-key');
             this.settings.AZURE_SPEECH_KEY =
                 settings.get_string('azure-speech-key');
