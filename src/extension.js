@@ -15,24 +15,6 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import {Utils} from './utils/utils.js';
 import {AppLayout} from './ui.js';
 
-// Global variables
-let pipeline;
-let isRecording = false;
-let isPlaying = false;
-let playingPid = null;
-let extensionDir = GLib.build_filenamev([
-    GLib.get_home_dir(),
-    '.local',
-    'share',
-    'gnome-shell',
-    'extensions',
-    'gnome-extension@gemini-assist.vercel.app',
-]);
-let historyFilePath = GLib.build_filenamev([extensionDir, 'history.json']);
-let utils = new Utils();
-
-// Log function
-
 /**
  *
  * @param {*} message
@@ -56,24 +38,52 @@ const Gemini = GObject.registerClass(
         }
 
         _fetchSettings() {
-            const {settings} = this.extension;
-            this.settings = {};
-            this.settings.GEMINIAPIKEY = settings.get_string('gemini-api-key');
-            this.settings.AZURE_SPEECH_KEY =
-                settings.get_string('azure-speech-key');
-            this.settings.AZURE_SPEECH_REGION = settings.get_string(
-                'azure-speech-region',
-            );
-            this.settings.AZURE_SPEECH_LANGUAGE = settings.get_string(
-                'azure-speech-language',
-            );
-            this.settings.AZURE_SPEECH_VOICE =
-                settings.get_string('azure-speech-voice');
-            this.settings.RECURSIVETALK = settings.get_boolean('log-history');
-            this.settings.USERNAME = GLib.get_real_name();
-            this.settings.LOCATION = '';
+            // Settings
+            const {userSettings} = this.extension;
+            this.settings = {
+                GEMINIAPIKEY: userSettings.get_string('gemini-api-key'),
+                AZURE_SPEECH_KEY: userSettings.get_string('azure-speech-key'),
+                AZURE_SPEECH_REGION: userSettings.get_string(
+                    'azure-speech-region',
+                ),
+                AZURE_SPEECH_LANGUAGE: userSettings.get_string(
+                    'azure-speech-language',
+                ),
+                AZURE_SPEECH_VOICE:
+                    userSettings.get_string('azure-speech-voice'),
+                RECURSIVETALK: false,
+                USERNAME: GLib.get_real_name(),
+                LOCATION: '',
+                extensionDir: GLib.build_filenamev([
+                    GLib.get_home_dir(),
+                    '.local',
+                    'share',
+                    'gnome-shell',
+                    'extensions',
+                    'gnome-extension@gemini-assist.vercel.app',
+                ]),
+                historyFilePath: GLib.build_filenamev([
+                    this.extensionDir,
+                    'history.json',
+                ]),
+            };
+
+            // Chat History
             this.chatHistory = [];
+
+            // UI
             this.ui = new AppLayout();
+
+            // Player
+            this.player = {
+                isPlaying: false,
+                isRecording: false,
+                playingPid: null,
+                pipeline: null,
+            };
+
+            // Utils
+            this.utils = new Utils();
         }
 
         _init(extension) {
@@ -82,7 +92,7 @@ const Gemini = GObject.registerClass(
             super._init(0.0, _('Gemini Voice Assistant for Ubuntu'));
             this._loadSettings();
             if (this.settings.RECURSIVETALK) {
-                this.chatHistory = utils.loadHistoryFile();
+                this.recursiveHistory = this.utils.loadHistoryFile();
             }
 
             // Tray
@@ -170,7 +180,7 @@ const Gemini = GObject.registerClass(
             });
 
             // Add user question to chat
-            let formatedQuestion = utils.inputformat(userQuestion);
+            let formatedQuestion = this.utils.inputformat(userQuestion);
             this.ui.inputChat.label.clutter_text.set_markup(
                 `<b>${this.settings.USERNAME}: </b>${formatedQuestion}`,
             );
@@ -292,7 +302,8 @@ const Gemini = GObject.registerClass(
                         this.ui.responseChat !== undefined
                     ) {
                         // Set ai response to chat
-                        let formatedResponse = utils.textformat(aiResponse);
+                        let formatedResponse =
+                            this.utils.textformat(aiResponse);
                         this.ui.responseChat.label.clutter_text.set_markup(
                             '<b>Gemini: </b> ' + formatedResponse,
                         );
@@ -309,7 +320,7 @@ const Gemini = GObject.registerClass(
                         this.ui.searchEntry.clutter_text.reactive = true;
 
                         // Extract code and tts from response
-                        let answer = utils.extractCodeAndTTS(aiResponse);
+                        let answer = this.utils.extractCodeAndTTS(aiResponse);
 
                         // Speech response
                         if (answer.tts !== null) {
@@ -348,7 +359,7 @@ const Gemini = GObject.registerClass(
         }
 
         scrollToBottom() {
-            utils.scrollToBottom(this.ui.responseChat, this.ui.scrollView);
+            this.utils.scrollToBottom(this.ui.responseChat, this.ui.scrollView);
         }
 
         getTuneString() {
@@ -364,7 +375,7 @@ const Gemini = GObject.registerClass(
 
         buildBody(input) {
             const stringfiedHistory = JSON.stringify([
-                ...this.chatHistory,
+                ...this.recursiveHistory,
                 {
                     role: 'user',
                     parts: [{text: input}],
@@ -387,57 +398,6 @@ const Gemini = GObject.registerClass(
         destroy() {
             this.destroyLoop();
             super.destroy();
-        }
-
-        // Create history.json file if not exist
-        createHistoryFile() {
-            if (!GLib.file_test(historyFilePath, GLib.FileTest.IS_REGULAR)) {
-                try {
-                    let initialContent = JSON.stringify([], null, 2);
-                    GLib.file_set_contents(historyFilePath, initialContent);
-                    this.chatHistory = [];
-                    log(`History file created. : ${historyFilePath}`);
-                    if (this.settings.RECURSIVETALK) {
-                        this.chatHistory.push({
-                            role: 'user',
-                            parts: [
-                                {
-                                    text: _('Hi, who are you?'),
-                                },
-                            ],
-                        });
-                        this.chatHistory.push({
-                            role: 'model',
-                            parts: [
-                                {
-                                    text: _(
-                                        'Hi! I am Gemini, your helpfull assistant.',
-                                    ),
-                                },
-                            ],
-                        });
-                        // Save history.json
-                        this.saveHistory();
-                    }
-                } catch (e) {
-                    logError(e, `Failed to create file: ${historyFilePath}`);
-                }
-            } else {
-                log(`The history.json file already exists: ${historyFilePath}`);
-            }
-        }
-
-        // Save to history file
-        saveHistory() {
-            try {
-                GLib.file_set_contents(
-                    historyFilePath,
-                    JSON.stringify(this.chatHistory, null, 2),
-                );
-                log(`History saved in: ${historyFilePath}`);
-            } catch (e) {
-                logError(e, `Failed to save history: ${historyFilePath}`);
-            }
         }
 
         executeCommand(cmd) {
@@ -501,90 +461,6 @@ const Gemini = GObject.registerClass(
                 GLib.spawn_command_line_async('kill ' + playingPid);
                 isPlaying = false;
                 this.playAudio(audiofile);
-            }
-        }
-
-        gnomeNotify(text, type = 'normal') {
-            const command =
-                'notify-send -u ' +
-                type +
-                "-a 'Gemini Voice Assist' '" +
-                text +
-                "'";
-            const process = GLib.spawn_async(
-                null, // pasta de trabalho
-                ['/bin/sh', '-c', command], // comando e argumentos
-                null, // opções
-                GLib.SpawnFlags.SEARCH_PATH, // flags
-                null, // PID
-            );
-
-            if (process) {
-                log('Notification sent successfully.');
-            } else {
-                log('Error sending notification.');
-            }
-        }
-
-        _copySelectedText() {
-            let selectedText =
-                this.responseChat.label.clutter_text.get_selection();
-            if (selectedText) {
-                this.extension.clipboard.set_text(
-                    St.ClipboardType.CLIPBOARD,
-                    // Get text selection
-                    selectedText,
-                );
-                // Create label
-                if (this.copyButton) {
-                    this.copyButton.label.clutter_text.set_markup(
-                        _('[ Selected Text Copied to clipboard ]'),
-                    );
-                    GLib.timeout_add(GLib.PRIORITY_DEFAULT, 3000, () => {
-                        this.copyButton.label.clutter_text.set_markup('');
-                        return false; // Para garantir que o timeout execute apenas uma vez
-                    });
-                }
-                log(`Texto copiado: ${selectedText}`);
-            } else {
-                this.extension.clipboard.set_text(
-                    St.ClipboardType.CLIPBOARD,
-                    // Get text selection
-                    this.responseChat.label.text,
-                );
-                if (this.copyButton) {
-                    this.copyButton.label.clutter_text.set_markup(
-                        _('[ Copied to clipboard ]'),
-                    );
-                    GLib.timeout_add(GLib.PRIORITY_DEFAULT, 3000, () => {
-                        this.copyButton.label.clutter_text.set_markup('');
-                        return false; // Para garantir que o timeout execute apenas uma vez
-                    });
-                }
-                log(`Texto copiado: ${this.responseChat.label.text}`);
-            }
-        }
-
-        _removeNotificationByTitle(title) {
-            // Obtenha todas as notificações ativas
-            // eslint-disable-next-line no-unused-vars
-            let [stdout, stderr, status] =
-                GLib.spawn_command_line_async('notify-send -l');
-            let notifications = stdout.toString().split('\n');
-
-            // Pesquise a notificação com o título fornecido
-            for (let i = 0; i < notifications.length; i++) {
-                let notification = notifications[i];
-                if (notification.includes(title)) {
-                    // Obtenha o ID da notificação
-                    let notificationId = notification.split('\t')[0];
-
-                    // Remova a notificação
-                    GLib.spawn_command_line_async(
-                        'notify-send -c ' + notificationId,
-                    );
-                    break;
-                }
             }
         }
 
