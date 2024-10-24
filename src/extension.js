@@ -250,7 +250,7 @@ const Gemini = GObject.registerClass(
 
             // Set mouse click to copy response to clipboard
             this.copyButton.connect('activate', (_self) => {
-                this._copySelectedText(this.responseChat, this.copyButton);
+                this._copySelectedText();
             });
 
             // Add user question to chat
@@ -277,12 +277,12 @@ const Gemini = GObject.registerClass(
                 this.destroyLoop();
             }
 
+            // Scroll down
+            this.scrollToBottom();
+
             // Create http session
             let _httpSession = new Soup.Session();
             let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${this.settings.GEMINIAPIKEY}`;
-
-            // Scroll down
-            this.scrollToBottom();
 
             // Send async request
             var body = this.buildBody(userQuestion);
@@ -437,9 +437,6 @@ const Gemini = GObject.registerClass(
 
         getTuneString() {
             const date = new Date();
-            // PLEASE DO NOT TRANSLATE FINE TUNE BECAUSE
-            // VERTEX SOMETIMES DOESNT SUPPORT INTERNET CONNECTION
-            //  IF YOU TRANSLATE TO ENGLISH
             let driveTune = '';
             return `bana ${this.settings.USERNAME} olarak hitap edebilirsin, \n
         ${driveTune}
@@ -613,8 +610,9 @@ const Gemini = GObject.registerClass(
             }
         }
 
-        _copySelectedText(responseChat, copyButton = null) {
-            let selectedText = responseChat.label.clutter_text.get_selection();
+        _copySelectedText() {
+            let selectedText =
+                this.responseChat.label.clutter_text.get_selection();
             if (selectedText) {
                 this.extension.clipboard.set_text(
                     St.ClipboardType.CLIPBOARD,
@@ -622,12 +620,12 @@ const Gemini = GObject.registerClass(
                     selectedText,
                 );
                 // Create label
-                if (copyButton) {
-                    copyButton.label.clutter_text.set_markup(
+                if (this.copyButton) {
+                    this.copyButton.label.clutter_text.set_markup(
                         _('[ Selected Text Copied to clipboard ]'),
                     );
                     GLib.timeout_add(GLib.PRIORITY_DEFAULT, 3000, () => {
-                        copyButton.label.clutter_text.set_markup('');
+                        this.copyButton.label.clutter_text.set_markup('');
                         return false; // Para garantir que o timeout execute apenas uma vez
                     });
                 }
@@ -636,18 +634,18 @@ const Gemini = GObject.registerClass(
                 this.extension.clipboard.set_text(
                     St.ClipboardType.CLIPBOARD,
                     // Get text selection
-                    responseChat.label.text,
+                    this.responseChat.label.text,
                 );
-                if (copyButton) {
-                    copyButton.label.clutter_text.set_markup(
+                if (this.copyButton) {
+                    this.copyButton.label.clutter_text.set_markup(
                         _('[ Copied to clipboard ]'),
                     );
                     GLib.timeout_add(GLib.PRIORITY_DEFAULT, 3000, () => {
-                        copyButton.label.clutter_text.set_markup('');
+                        this.copyButton.label.clutter_text.set_markup('');
                         return false; // Para garantir que o timeout execute apenas uma vez
                     });
                 }
-                log(`Texto copiado: ${responseChat.label.text}`);
+                log(`Texto copiado: ${this.responseChat.label.text}`);
             }
         }
 
