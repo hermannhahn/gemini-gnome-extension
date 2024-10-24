@@ -86,45 +86,45 @@ const Gemini = GObject.registerClass(
             }
 
             // Tray
-            this.tray.add_child(this.icon);
-            this.add_child(this.tray);
+            this.ui.tray.add_child(this.ui.icon);
+            this.add_child(this.ui.tray);
 
             // Add scroll to chat section
-            this.scrollView.add_child(this.chatSection.actor);
+            this.ui.scrollView.add_child(this.ui.chatSection.actor);
 
-            this.searchEntry.clutter_text.connect('activate', (actor) => {
+            this.ui.searchEntry.clutter_text.connect('activate', (actor) => {
                 this.chat(actor.text);
-                this.searchEntry.clutter_text.set_text('');
-                this.searchEntry.clutter_text.reactive = false;
+                this.ui.searchEntry.clutter_text.set_text('');
+                this.ui.searchEntry.clutter_text.reactive = false;
             });
-            this.micButton.connect('clicked', (_self) => {
+            this.ui.micButton.connect('clicked', (_self) => {
                 this.startRecording();
             });
-            this.clearButton.connect('clicked', (_self) => {
-                this.searchEntry.clutter_text.set_text('');
+            this.ui.clearButton.connect('clicked', (_self) => {
+                this.ui.searchEntry.clutter_text.set_text('');
                 this.chatHistory = [];
-                this.menu.box.remove_child(this.scrollView);
-                this.chatSection = new PopupMenu.PopupMenuSection();
-                this.scrollView.add_child(this.chatSection.actor);
-                this.menu.box.add_child(this.scrollView);
+                this.menu.box.remove_child(this.ui.scrollView);
+                this.ui.chatSection = new PopupMenu.PopupMenuSection();
+                this.ui.scrollView.add_child(this.ui.chatSection.actor);
+                this.menu.box.add_child(this.ui.scrollView);
             });
-            this.settingsButton.connect('clicked', (_self) => {
+            this.ui.settingsButton.connect('clicked', (_self) => {
                 this.openSettings();
                 // Close App
                 this.menu.close();
             });
 
             // Add search entry, mic button, clear button and settings button to menu
-            this.item.add_child(this.searchEntry);
-            this.item.add_child(this.micButton);
-            this.item.add_child(this.clearButton);
-            this.item.add_child(this.settingsButton);
+            this.ui.item.add_child(this.ui.searchEntry);
+            this.ui.item.add_child(this.ui.micButton);
+            this.ui.item.add_child(this.ui.clearButton);
+            this.ui.item.add_child(this.ui.settingsButton);
 
             // Add items to app
-            this.menu.addMenuItem(this.item);
+            this.menu.addMenuItem(this.ui.item);
 
             // Add chat section to app
-            this.menu.box.add_child(this.scrollView);
+            this.menu.box.add_child(this.ui.scrollView);
 
             // Open settings if gemini api key is not configured
             if (this.settings.GEMINIAPIKEY === '') {
@@ -137,41 +137,41 @@ const Gemini = GObject.registerClass(
             let aiResponse = _('<b>Gemini: </b> ...');
 
             // Enable text selection
-            this.inputChat.label.clutter_text.reactive = true;
-            this.inputChat.label.clutter_text.selectable = true;
+            this.ui.inputChat.label.clutter_text.reactive = true;
+            this.ui.inputChat.label.clutter_text.selectable = true;
 
             // Disable clutter_text hover
-            this.inputChat.label.clutter_text.hover = false;
+            this.ui.inputChat.label.clutter_text.hover = false;
 
             // Add ai response to chat
-            this.responseChat.label.clutter_text.set_markup(aiResponse);
+            this.ui.responseChat.label.clutter_text.set_markup(aiResponse);
 
             // Enable text selection
-            this.responseChat.label.clutter_text.reactive = true;
-            this.responseChat.label.clutter_text.selectable = true;
+            this.ui.responseChat.label.clutter_text.reactive = true;
+            this.ui.responseChat.label.clutter_text.selectable = true;
 
             // Disable clutter_text hover
-            this.responseChat.label.clutter_text.hover = false;
+            this.ui.responseChat.label.clutter_text.hover = false;
 
             // Chat settings
-            this.inputChat.label.x_expand = true;
-            this.responseChat.label.x_expand = true;
-            this.chatSection.style_class += 'm-w-100';
-            this.scrollView.style_class += 'm-w-100';
+            this.ui.inputChat.label.x_expand = true;
+            this.ui.responseChat.label.x_expand = true;
+            this.ui.chatSection.style_class += 'm-w-100';
+            this.ui.scrollView.style_class += 'm-w-100';
 
             // Add user question and ai response to chat
-            this.chatSection.addMenuItem(this.newSeparator);
-            this.chatSection.addMenuItem(this.inputChat);
-            this.chatSection.addMenuItem(this.responseChat);
+            this.ui.chatSection.addMenuItem(this.ui.newSeparator);
+            this.ui.chatSection.addMenuItem(this.ui.inputChat);
+            this.ui.chatSection.addMenuItem(this.ui.responseChat);
 
             // Set mouse click to copy response to clipboard
-            this.copyButton.connect('activate', (_self) => {
+            this.ui.copyButton.connect('activate', (_self) => {
                 this._copySelectedText();
             });
 
             // Add user question to chat
             let formatedQuestion = utils.inputformat(userQuestion);
-            this.inputChat.label.clutter_text.set_markup(
+            this.ui.inputChat.label.clutter_text.set_markup(
                 `<b>${this.settings.USERNAME}: </b>${formatedQuestion}`,
             );
 
@@ -219,13 +219,13 @@ const Gemini = GObject.registerClass(
                     log('[ AI-RES ] ' + response);
                     let res = JSON.parse(response);
                     if (res.error?.code !== 401 && res.error !== undefined) {
-                        this.responseChat?.label.clutter_text.set_markup(
+                        this.ui.responseChat?.label.clutter_text.set_markup(
                             response,
                         );
                         // Scroll down
                         this.scrollToBottom();
                         // Enable searchEntry
-                        this.searchEntry.clutter_text.reactive = true;
+                        this.ui.searchEntry.clutter_text.reactive = true;
                         return;
                     }
                     aiResponse = res.candidates[0]?.content?.parts[0]?.text;
@@ -273,14 +273,14 @@ const Gemini = GObject.registerClass(
                                     );
                                 }
 
-                                this.responseChat?.label.clutter_text.set_markup(
+                                this.ui.responseChat?.label.clutter_text.set_markup(
                                     '<b>Gemini: </b> ' + aiResponse,
                                 );
 
                                 // Scroll down
                                 this.scrollToBottom();
                                 // Enable searchEntry
-                                this.searchEntry.clutter_text.reactive = true;
+                                this.ui.searchEntry.clutter_text.reactive = true;
                                 return;
                             }
                         }
@@ -293,20 +293,20 @@ const Gemini = GObject.registerClass(
                     ) {
                         // Set ai response to chat
                         let formatedResponse = utils.textformat(aiResponse);
-                        this.responseChat.label.clutter_text.set_markup(
+                        this.ui.responseChat.label.clutter_text.set_markup(
                             '<b>Gemini: </b> ' + formatedResponse,
                         );
 
                         // Add copy button to chat
-                        if (this.copyButton) {
-                            this.chatSection.addMenuItem(this.copyButton);
+                        if (this.ui.copyButton) {
+                            this.ui.chatSection.addMenuItem(this.ui.copyButton);
                         }
 
                         // Scroll down
                         this.scrollToBottom();
 
                         // Enable searchEntry
-                        this.searchEntry.clutter_text.reactive = true;
+                        this.ui.searchEntry.clutter_text.reactive = true;
 
                         // Extract code and tts from response
                         let answer = utils.extractCodeAndTTS(aiResponse);
@@ -348,7 +348,7 @@ const Gemini = GObject.registerClass(
         }
 
         scrollToBottom() {
-            utils.scrollToBottom(this.responseChat, this.scrollView);
+            utils.scrollToBottom(this.ui.responseChat, this.ui.scrollView);
         }
 
         getTuneString() {
