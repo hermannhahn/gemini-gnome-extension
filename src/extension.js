@@ -62,7 +62,8 @@ const Gemini = GObject.registerClass(
                 HISTORY_FILE: GLib.build_filenamev([
                     this.settings.EXT_DIR,
                     'history.json',
-                ]),
+                ])
+                }
             };
 
             // Chat History
