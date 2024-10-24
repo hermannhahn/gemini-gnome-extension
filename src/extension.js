@@ -281,7 +281,7 @@ const Gemini = GObject.registerClass(
             let url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${this.settings.GEMINIAPIKEY}`;
 
             // Scroll down
-            this.scrollToBottom(this.responseChat);
+            this.scrollToBottom();
 
             // Send async request
             var body = this.buildBody(userQuestion);
@@ -306,7 +306,7 @@ const Gemini = GObject.registerClass(
                             response,
                         );
                         // Scroll down
-                        this.scrollToBottom(this.responseChat);
+                        this.scrollToBottom();
                         // Enable searchEntry
                         this.searchEntry.clutter_text.reactive = true;
                         return;
@@ -361,7 +361,7 @@ const Gemini = GObject.registerClass(
                                 );
 
                                 // Scroll down
-                                this.scrollToBottom(this.responseChat);
+                                this.scrollToBottom();
                                 // Enable searchEntry
                                 this.searchEntry.clutter_text.reactive = true;
                                 return;
@@ -386,13 +386,13 @@ const Gemini = GObject.registerClass(
                         }
 
                         // Scroll down
-                        this.scrollToBottom(this.responseChat);
+                        this.scrollToBottom();
 
                         // Enable searchEntry
                         this.searchEntry.clutter_text.reactive = true;
 
                         // Extract code and tts from response
-                        let answer = this.extractCodeAndTTS(aiResponse);
+                        let answer = utils.extractCodeAndTTS(aiResponse);
 
                         // Speech response
                         if (answer.tts !== null) {
@@ -424,31 +424,14 @@ const Gemini = GObject.registerClass(
                             this.saveHistory();
                         }
                         // Scroll down
-                        this.scrollToBottom(this.responseChat);
+                        this.scrollToBottom();
                     }
                 },
             );
         }
 
-        scrollToBottom(responseChat) {
-            // Força uma nova disposição do layout
-            responseChat.queue_relayout();
-
-            // Conecta ao sinal que notifica quando o layout estiver pronto
-            responseChat.connect('notify::height', (_self) => {
-                // Aguardar o ajuste da rolagem após o próximo loop do evento
-                GLib.idle_add(GLib.PRIORITY_DEFAULT, () => {
-                    let vscrollBar = this.scrollView.get_vscroll_bar();
-                    let adjustment = vscrollBar.get_adjustment();
-
-                    // Define o valor superior e garante a rolagem até o final
-                    adjustment.set_value(
-                        adjustment.upper - adjustment.page_size,
-                    );
-
-                    return GLib.SOURCE_REMOVE; // Remove o callback após execução
-                });
-            });
+        scrollToBottom() {
+            utils.scrollToBottom(this.responseChat, this.scrollView);
         }
 
         getTuneString() {
@@ -743,18 +726,6 @@ const Gemini = GObject.registerClass(
             isRecording = false;
         }
 
-        // Função para converter arquivo de áudio em base64
-        encodeFileToBase64(filePath) {
-            try {
-                const file = Gio.File.new_for_path(filePath);
-                const [, contents] = file.load_contents(null);
-                return GLib.base64_encode(contents);
-            } catch (error) {
-                log('Erro ao ler o arquivo: ' + error);
-                return null;
-            }
-        }
-
         // Função para transcrever o áudio gravado usando Microsoft Speech-to-Text API
         transcribeAudio(audioPath) {
             // Carregar o arquivo de áudio em formato binário
@@ -844,100 +815,6 @@ const Gemini = GObject.registerClass(
                     this.removeWavFiles();
                 }
             });
-        }
-
-        randomPhraseToShowOnScreen() {
-            const phrases = [
-                _('I will show it on screen.'),
-                _('Displaying now.'),
-                _('Here it is on screen.'),
-                _('Showing on screen.'),
-                _('On the screen now.'),
-            ];
-
-            const randomPhrase =
-                phrases[Math.floor(Math.random() * phrases.length)];
-            return randomPhrase;
-        }
-
-        randomPhraseToWaitResponse() {
-            const phrases = [
-                _('Thinking...'),
-                _('Let me see...'),
-                _('Just a moment...'),
-                _('Hmm, let me think about that...'),
-                _('Give me a second...'),
-                _('Let me check...'),
-                _('Working on it...'),
-                _('Hold on a sec...'),
-                _('One moment, please...'),
-                _('Let me figure this out...'),
-                _("I'll get back to you in a sec..."),
-                _('Just thinking this through...'),
-                _("Let's see what I can find..."),
-                _('Give me a moment to process this...'),
-                _('Let me look into that...'),
-                _("I'm on it..."),
-                _("I'll need a moment for that..."),
-                _('Let me dig deeper...'),
-                _("I'm thinking it over..."),
-                _('Give me a moment to sort this out...'),
-            ];
-
-            const randomPhrase =
-                phrases[Math.floor(Math.random() * phrases.length)];
-            return randomPhrase;
-        }
-
-        extractCodeAndTTS(text) {
-            // Expressão regular para capturar o código entre triplo acento grave
-            const regex = /`{3}([\s\S]*?)`{3}/;
-            const match = text.match(regex);
-            let tts = text;
-            // tts = text.replace(regex, '').trim();
-            // Replace * char with space
-            // tts = tts.split('*').join(' ');
-            tts = tts
-                .replace(/&/g, '')
-                .replace(/</g, '')
-                .replace(/>/g, '')
-                .replace(/\*/g, '')
-                .replace(/`{3}/g, '')
-                .replace(/<code>/g, '') // Remove tags de abertura <code>
-                .replace(/<\/code>/g, '') // Remove tags de fechamento <code>
-                .replace(/\[red\](.*?)\[\/red\]/g, '')
-                .replace(/\[green\](.*?)\[\/green\]/g, '')
-                .replace(/\[yellow\](.*?)\[\/yellow\]/g, '')
-                .replace(/\[cyan\](.*?)\[\/cyan\]/g, '')
-                .replace(/\[white\](.*?)\[\/white\]/g, '')
-                .replace(/\[black\](.*?)\[\/black\]/g, '')
-                .replace(/\[gray\](.*?)\[\/gray\]/g, '')
-                .replace(/\[brown\](.*?)\[\/brown\]/g, '')
-                .replace(/\[blue\](.*?)\[\/blue\]/g, '');
-
-            // If tts is more then 100 characters, change tts text
-            if (tts.length > 1000) {
-                tts = this.randomPhraseToShowOnScreen(
-                    this.settings.AZURE_SPEECH_LANGUAGE,
-                );
-            }
-
-            if (match) {
-                // const code = match[1]; // Captura o conteúdo entre os acentos graves
-                // If found more match, add to code result
-                let code = match[1];
-                let nextMatch = text.match(regex);
-                while (nextMatch) {
-                    code += nextMatch[1];
-                    text = text.replace(nextMatch[0], '');
-                    nextMatch = text.match(regex);
-                }
-                // Remove o bloco de código do texto original para formar o TTS
-                return {code, tts};
-            } else {
-                // Se não encontrar código, retorna apenas o texto original no campo tts
-                return {code: null, tts};
-            }
         }
 
         // Função para converter texto em áudio usando Microsoft Text-to-Speech API
